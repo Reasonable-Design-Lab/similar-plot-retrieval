@@ -5,9 +5,27 @@
   const COLORS = { site1: "#ff6b35", site2: "#9d7bff" };
   const EMPTY_COLLECTION = { type: "FeatureCollection", features: [] };
   const FILTER_LEVELS = [
-    { id: "1+2", label: "1 + 2", stage: "Filter 1+2" },
-    { id: "1+2+3", label: "1 + 2 + 3", stage: "Filter 1+2+3" },
-    { id: "1+2+3+4", label: "1 + 2 + 3 + 4", stage: "Filter 1+2+3+4" }
+    {
+      id: "1+2",
+      label: "Plot similarity",
+      combination: "Filters 1 + 2",
+      stage: "Filter 1+2",
+      explanation: "Matches Business 1 land use and either (a) both plot width and shape (aspect ratio) are within ±20%, or (b) final allowable gross floor area (GFA) is within ±20% of the selected site."
+    },
+    {
+      id: "1+2+3",
+      label: "Plot + nearby land use",
+      combination: "Filters 1 + 2 + 3",
+      stage: "Filter 1+2+3",
+      explanation: "Includes Plot similarity, then checks neighbouring non-road plots: 0–2 educational plots, at least 1 residential plot, and at least 1 B1-family (Business 1-related) plot."
+    },
+    {
+      id: "1+2+3+4",
+      label: "Plot + land use + roads",
+      combination: "Filters 1 + 2 + 3 + 4",
+      stage: "Filter 1+2+3+4",
+      explanation: "Includes Plot + nearby land use, then checks bordering roads. Both the total road count and the count for each road type must be within ±1 of the selected site."
+    }
   ];
   const DEFAULT_FILTER_LEVEL = FILTER_LEVELS[0].id;
   const DATASETS = [
@@ -27,6 +45,7 @@
     activeSimilaritySite: null,
     activeCandidates: [],
     selectedFilterLevel: DEFAULT_FILTER_LEVEL,
+    expandedFilterInfo: null,
     webMcpLifecycle: null
   };
 
@@ -44,6 +63,10 @@
     metricAspect: document.getElementById("metricAspect"),
     filterControls: document.getElementById("filterControls"),
     filterInputs: Array.from(document.querySelectorAll('input[name="filterCombination"]')),
+    filterInfoButtons: Array.from(document.querySelectorAll(".filter-info-button")),
+    filterExplanation: document.getElementById("filterExplanation"),
+    filterExplanationTitle: document.getElementById("filterExplanationTitle"),
+    filterExplanationText: document.getElementById("filterExplanationText"),
     findSimilarButton: document.getElementById("findSimilarButton"),
     similarHint: document.getElementById("similarHint"),
     resultsSection: document.getElementById("resultsSection"),
@@ -105,6 +128,26 @@
     const selected = getFilterDefinition(level);
     state.selectedFilterLevel = selected.id;
     els.filterInputs.forEach((input) => { input.checked = input.value === selected.id; });
+    hideFilterExplanation();
+  }
+
+  function hideFilterExplanation() {
+    state.expandedFilterInfo = null;
+    els.filterExplanation.classList.add("hidden");
+    els.filterInfoButtons.forEach((button) => button.setAttribute("aria-expanded", "false"));
+  }
+
+  function toggleFilterExplanation(level) {
+    const filter = getFilterDefinition(level);
+    const wasOpen = state.expandedFilterInfo === filter.id && !els.filterExplanation.classList.contains("hidden");
+    hideFilterExplanation();
+    if (wasOpen) return;
+    state.expandedFilterInfo = filter.id;
+    els.filterExplanationTitle.textContent = `${filter.label} · ${filter.combination}`;
+    els.filterExplanationText.textContent = filter.explanation;
+    els.filterExplanation.classList.remove("hidden");
+    const activeButton = els.filterInfoButtons.find((button) => button.dataset.filterInfo === filter.id);
+    if (activeButton) activeButton.setAttribute("aria-expanded", "true");
   }
 
   function escapeHtml(value) {
@@ -231,9 +274,9 @@
       layout: { "line-cap": "round", "line-join": "round" },
       paint: {
         "line-color": ["get", "color"],
-        "line-width": 7,
-        "line-opacity": 0.13,
-        "line-blur": 5
+        "line-width": 5,
+        "line-opacity": 0.06,
+        "line-blur": 4
       }
     });
 
@@ -245,8 +288,8 @@
       layout: { "line-cap": "butt", "line-join": "round" },
       paint: {
         "line-color": ["get", "color"],
-        "line-width": ["interpolate", ["linear"], ["zoom"], 9, 1.4, 13, 2.7],
-        "line-opacity": 0.92,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 9, 1.2, 13, 2.2],
+        "line-opacity": 0.5,
         "line-dasharray": [0, 3, 2]
       }
     });
@@ -259,7 +302,7 @@
       filter: ["==", ["get", "Role"], "Reference"],
       paint: {
         "fill-color": ["match", ["get", "__site"], "site1", COLORS.site1, COLORS.site2],
-        "fill-opacity": ["case", ["==", ["get", "Role"], "Reference"], 0.78, 0.36]
+        "fill-opacity": ["case", ["==", ["get", "Role"], "Reference"], 0.78, 0.62]
       }
     });
 
@@ -271,8 +314,8 @@
       filter: ["==", ["get", "Role"], "Reference"],
       paint: {
         "line-color": ["match", ["get", "__site"], "site1", "#d94816", "#7048e8"],
-        "line-width": ["case", ["==", ["get", "Role"], "Reference"], 4.5, 2],
-        "line-opacity": ["case", ["==", ["get", "Role"], "Reference"], 1, 0.82]
+        "line-width": ["case", ["==", ["get", "Role"], "Reference"], 4.5, 2.8],
+        "line-opacity": ["case", ["==", ["get", "Role"], "Reference"], 1, 0.96]
       }
     });
 
@@ -485,6 +528,7 @@
   function clearSimilar() {
     state.activeSimilaritySite = null;
     state.activeCandidates = [];
+    hideFilterExplanation();
     setCandidateVisibility(null);
     const links = state.map && state.map.getSource("links");
     if (links) links.setData(EMPTY_COLLECTION);
@@ -500,11 +544,11 @@
     els.findSimilarButton.disabled = candidates.length === 0;
     els.findSimilarButton.querySelector("span").textContent = "Find similar plots";
     if (!candidates.length) {
-      els.similarHint.textContent = `No plots match Filter ${filter.label} for this site.`;
+      els.similarHint.textContent = `No plots match “${filter.label}” for this site.`;
     } else if (isShowing) {
-      els.similarHint.textContent = `Showing ${candidates.length} plots for Filter ${filter.label}.`;
+      els.similarHint.textContent = `Showing ${candidates.length} plots with “${filter.label}”.`;
     } else {
-      els.similarHint.textContent = `${candidates.length} plots match Filter ${filter.label}. Run the retrieval to display them.`;
+      els.similarHint.textContent = `“${filter.label}” returns ${candidates.length} plots. Run the retrieval to display them.`;
     }
   }
 
@@ -625,8 +669,8 @@
     updateRetrievalControls(dataset);
     showOverview();
     setStatus(candidates.length
-      ? `${candidates.length} plots connected · Filter ${filter.label}`
-      : `No plots match Filter ${filter.label}`);
+      ? `${candidates.length} plots connected · ${filter.label}`
+      : `No plots match ${filter.label}`);
   }
 
   function showOverview() {
@@ -663,6 +707,9 @@
         if (state.activeSimilaritySite === dataset.id) revealSimilar();
         else updateRetrievalControls(dataset);
       });
+    });
+    els.filterInfoButtons.forEach((button) => {
+      button.addEventListener("click", () => toggleFilterExplanation(button.dataset.filterInfo));
     });
     els.findSimilarButton.addEventListener("click", revealSimilar);
     els.overviewButton.addEventListener("click", showOverview);
