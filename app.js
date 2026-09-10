@@ -4,9 +4,15 @@
   const SINGAPORE_BOUNDS = [[103.59, 1.13], [104.08, 1.49]];
   const COLORS = { site1: "#ff6b35", site2: "#9d7bff" };
   const EMPTY_COLLECTION = { type: "FeatureCollection", features: [] };
+  const FILTER_LEVELS = [
+    { id: "1+2", label: "1 + 2", stage: "Filter 1+2" },
+    { id: "1+2+3", label: "1 + 2 + 3", stage: "Filter 1+2+3" },
+    { id: "1+2+3+4", label: "1 + 2 + 3 + 4", stage: "Filter 1+2+3+4" }
+  ];
+  const DEFAULT_FILTER_LEVEL = FILTER_LEVELS[0].id;
   const DATASETS = [
-    { id: "site1", label: "Site 1", url: "data/SITE1-like_similar_plots.geojson" },
-    { id: "site2", label: "Site 2", url: "data/SITE2-like_similar_plots.geojson" }
+    { id: "site1", label: "Site 1", url: "data/SITE1-like_similar_plots_v2.geojson" },
+    { id: "site2", label: "Site 2", url: "data/SITE2-like_similar_plots_v2.geojson" }
   ];
 
   const state = {
@@ -19,6 +25,8 @@
     mapReady: false,
     buildingsEnabled: false,
     activeSimilaritySite: null,
+    activeCandidates: [],
+    selectedFilterLevel: DEFAULT_FILTER_LEVEL,
     webMcpLifecycle: null
   };
 
@@ -34,6 +42,8 @@
     metricGfa: document.getElementById("metricGfa"),
     metricGpr: document.getElementById("metricGpr"),
     metricAspect: document.getElementById("metricAspect"),
+    filterControls: document.getElementById("filterControls"),
+    filterInputs: Array.from(document.querySelectorAll('input[name="filterCombination"]')),
     findSimilarButton: document.getElementById("findSimilarButton"),
     similarHint: document.getElementById("similarHint"),
     resultsSection: document.getElementById("resultsSection"),
@@ -76,6 +86,25 @@
   function formatArea(value) {
     const number = Number(value);
     return Number.isFinite(number) ? `${formatNumber(number, 0)} m²` : "—";
+  }
+
+  function featureLookupKey(siteId, uuid) {
+    return `${siteId}::${uuid}`;
+  }
+
+  function getFilterDefinition(level) {
+    return FILTER_LEVELS.find((filter) => filter.id === level) || FILTER_LEVELS[0];
+  }
+
+  function getCandidatesForLevel(dataset, level) {
+    if (!dataset) return [];
+    return dataset.candidatesByLevel[level || state.selectedFilterLevel] || [];
+  }
+
+  function setFilterLevel(level) {
+    const selected = getFilterDefinition(level);
+    state.selectedFilterLevel = selected.id;
+    els.filterInputs.forEach((input) => { input.checked = input.value === selected.id; });
   }
 
   function escapeHtml(value) {
@@ -146,7 +175,7 @@
       const response = await fetch(dataset.url);
       if (!response.ok) throw new Error(`Could not load ${dataset.url}`);
       const collection = await response.json();
-      const features = collection.features.map((feature, index) => {
+      const sourceFeatures = collection.features.map((feature, index) => {
         const cloned = JSON.parse(JSON.stringify(feature));
         cloned.properties = {
           ...cloned.properties,
@@ -154,15 +183,31 @@
           __datasetLabel: dataset.label,
           __featureIndex: index
         };
-        const id = cloned.properties.UUID || `${dataset.id}-${index}`;
-        cloned.id = id;
-        state.featuresById.set(String(id), cloned);
+        cloned.id = `${dataset.id}-${index}`;
         return cloned;
       });
-      const reference = features.find((feature) => feature.properties.Role === "Reference") || features[0];
-      const candidates = features.filter((feature) => feature.properties.Role === "Candidate")
-        .sort((a, b) => matchScore(b) - matchScore(a));
-      return [dataset.id, { ...dataset, features, reference, candidates }];
+      const reference = sourceFeatures.find((feature) => feature.properties.Role === "Reference") || sourceFeatures[0];
+      const candidateMap = new Map();
+      const candidateIdsByLevel = Object.fromEntries(FILTER_LEVELS.map((filter) => [filter.id, new Set()]));
+
+      sourceFeatures.filter((feature) => feature.properties.Role === "Candidate").forEach((feature) => {
+        const uuid = String(feature.properties.UUID || feature.id);
+        if (!candidateMap.has(uuid)) candidateMap.set(uuid, feature);
+        const filter = FILTER_LEVELS.find((item) => item.stage === feature.properties["Filter stage"]);
+        if (filter) candidateIdsByLevel[filter.id].add(uuid);
+      });
+
+      const candidates = Array.from(candidateMap.values()).sort((a, b) => matchScore(b) - matchScore(a));
+      const candidatesByLevel = Object.fromEntries(FILTER_LEVELS.map((filter) => [
+        filter.id,
+        candidates.filter((feature) => candidateIdsByLevel[filter.id].has(String(feature.properties.UUID || feature.id)))
+      ]));
+      const features = [reference, ...candidates];
+      features.forEach((feature) => {
+        const uuid = feature.properties.UUID || feature.id;
+        state.featuresById.set(featureLookupKey(dataset.id, String(uuid)), feature);
+      });
+      return [dataset.id, { ...dataset, features, reference, candidates, candidatesByLevel }];
     }));
 
     state.datasets = Object.fromEntries(loaded);
@@ -343,19 +388,19 @@
     map.on("click", "plots-fill", (event) => {
       const rendered = event.features && event.features[0];
       if (!rendered) return;
-      const original = state.featuresById.get(String(rendered.properties.UUID || rendered.id));
+      const original = state.featuresById.get(featureLookupKey(rendered.properties.__site, String(rendered.properties.UUID || rendered.id)));
       if (original) selectFeature(original, true);
     });
 
     map.on("click", "reference-labels", (event) => {
       const rendered = event.features && event.features[0];
-      const original = rendered && state.featuresById.get(String(rendered.properties.uuid));
+      const original = rendered && state.featuresById.get(featureLookupKey(rendered.properties.__site, String(rendered.properties.uuid)));
       if (original) selectFeature(original, true);
     });
 
     map.on("click", "reference-marker", (event) => {
       const rendered = event.features && event.features[0];
-      const original = rendered && state.featuresById.get(String(rendered.properties.uuid));
+      const original = rendered && state.featuresById.get(featureLookupKey(rendered.properties.__site, String(rendered.properties.uuid)));
       if (original) selectFeature(original, true);
     });
 
@@ -419,13 +464,18 @@
     source.setData({ type: "FeatureCollection", features: [selected] });
   }
 
-  function setCandidateVisibility(siteId) {
+  function setCandidateVisibility(siteId, candidates) {
     if (!state.map) return;
-    const filter = siteId
-      ? ["any",
-          ["==", ["get", "Role"], "Reference"],
-          ["all", ["==", ["get", "Role"], "Candidate"], ["==", ["get", "__site"], siteId]]
+    const candidateIds = (candidates || []).map((feature) => String(feature.properties.UUID || feature.id));
+    const candidateFilter = candidateIds.length
+      ? ["all",
+          ["==", ["get", "Role"], "Candidate"],
+          ["==", ["get", "__site"], siteId],
+          ["in", ["get", "UUID"], ["literal", candidateIds]]
         ]
+      : ["==", ["get", "Role"], "__none__"];
+    const filter = siteId
+      ? ["any", ["==", ["get", "Role"], "Reference"], candidateFilter]
       : ["==", ["get", "Role"], "Reference"];
     ["plots-fill", "plots-outline"].forEach((layerId) => {
       if (state.map.getLayer(layerId)) state.map.setFilter(layerId, filter);
@@ -434,12 +484,28 @@
 
   function clearSimilar() {
     state.activeSimilaritySite = null;
+    state.activeCandidates = [];
     setCandidateVisibility(null);
     const links = state.map && state.map.getSource("links");
     if (links) links.setData(EMPTY_COLLECTION);
     els.resultsSection.classList.add("hidden");
     els.resultsList.innerHTML = "";
     els.resultCount.textContent = "0";
+  }
+
+  function updateRetrievalControls(dataset) {
+    const candidates = getCandidatesForLevel(dataset);
+    const filter = getFilterDefinition(state.selectedFilterLevel);
+    const isShowing = state.activeSimilaritySite === dataset.id;
+    els.findSimilarButton.disabled = candidates.length === 0;
+    els.findSimilarButton.querySelector("span").textContent = "Find similar plots";
+    if (!candidates.length) {
+      els.similarHint.textContent = `No plots match Filter ${filter.label} for this site.`;
+    } else if (isShowing) {
+      els.similarHint.textContent = `Showing ${candidates.length} plots for Filter ${filter.label}.`;
+    } else {
+      els.similarHint.textContent = `${candidates.length} plots match Filter ${filter.label}. Run the retrieval to display them.`;
+    }
   }
 
   function makePopup(feature) {
@@ -464,11 +530,17 @@
 
   function selectFeature(feature, shouldFocus) {
     const p = feature.properties;
+    const previousSite = state.selectedFeature && state.selectedFeature.properties.__site;
     if (state.activeSimilaritySite && state.activeSimilaritySite !== p.__site) clearSimilar();
+    if (p.Role === "Reference" && previousSite && previousSite !== p.__site) setFilterLevel(DEFAULT_FILTER_LEVEL);
     state.selectedFeature = feature;
     const dataset = state.datasets[p.__site];
     const isReference = p.Role === "Reference";
-    const candidatePosition = dataset.candidates.findIndex((candidate) => candidate.properties.UUID === p.UUID);
+    const visibleCandidates = state.activeSimilaritySite === dataset.id
+      ? state.activeCandidates
+      : getCandidatesForLevel(dataset);
+    let candidatePosition = visibleCandidates.findIndex((candidate) => candidate.properties.UUID === p.UUID);
+    if (candidatePosition < 0) candidatePosition = dataset.candidates.findIndex((candidate) => candidate.properties.UUID === p.UUID);
 
     updateTabState(p.__site);
     updateSelectionSource(feature);
@@ -482,15 +554,21 @@
     els.metricGpr.textContent = formatNumber(p["Master Plan GPR"], 1);
     els.metricAspect.textContent = formatNumber(p["Aspect ratio"], 2);
 
-    els.findSimilarButton.disabled = !isReference || dataset.candidates.length === 0;
-    els.findSimilarButton.querySelector("span").textContent = isReference ? "Find similar plots" : "Viewing similar plot";
-    els.similarHint.textContent = isReference
-      ? (dataset.candidates.length ? `Run the retrieval to reveal similar plots on the map.` : "No candidate plots are currently available for this site.")
-      : `${Math.round(matchScore(feature) * 100)}% composite similarity to ${dataset.label}.`;
+    els.filterControls.classList.toggle("hidden", !isReference);
+    if (isReference) {
+      updateRetrievalControls(dataset);
+    } else {
+      els.findSimilarButton.disabled = true;
+      els.findSimilarButton.querySelector("span").textContent = "Viewing similar plot";
+      els.similarHint.textContent = `${Math.round(matchScore(feature) * 100)}% composite similarity to ${dataset.label}.`;
+    }
 
     if (!isReference) {
       els.resultsSection.classList.remove("hidden");
-      renderResults(dataset, p.UUID);
+      renderResults(dataset, visibleCandidates, p.UUID);
+    } else if (state.activeSimilaritySite === dataset.id) {
+      els.resultsSection.classList.remove("hidden");
+      renderResults(dataset, state.activeCandidates);
     } else {
       els.resultsSection.classList.add("hidden");
     }
@@ -500,10 +578,14 @@
     setStatus(`${isReference ? dataset.label : "Similar plot"} selected`);
   }
 
-  function renderResults(dataset, activeUuid) {
-    els.resultCount.textContent = String(dataset.candidates.length);
+  function renderResults(dataset, candidates, activeUuid) {
+    els.resultCount.textContent = String(candidates.length);
     els.resultsList.innerHTML = "";
-    dataset.candidates.forEach((feature, index) => {
+    if (!candidates.length) {
+      els.resultsList.innerHTML = '<p class="empty-results">No plots matched this filter combination.</p>';
+      return;
+    }
+    candidates.forEach((feature, index) => {
       const p = feature.properties;
       const button = document.createElement("button");
       button.type = "button";
@@ -522,11 +604,13 @@
     const reference = state.selectedFeature;
     if (!reference || reference.properties.Role !== "Reference") return;
     const dataset = state.datasets[reference.properties.__site];
-    if (!dataset.candidates.length) return;
+    const candidates = getCandidatesForLevel(dataset);
+    const filter = getFilterDefinition(state.selectedFilterLevel);
     state.activeSimilaritySite = dataset.id;
-    setCandidateVisibility(dataset.id);
+    state.activeCandidates = candidates;
+    setCandidateVisibility(dataset.id, candidates);
     const start = getCenter(reference);
-    const lines = dataset.candidates.map((candidate, index) => ({
+    const lines = candidates.map((candidate, index) => ({
       type: "Feature",
       geometry: { type: "LineString", coordinates: curveBetween(start, getCenter(candidate)) },
       properties: {
@@ -537,9 +621,12 @@
     }));
     state.map.getSource("links").setData({ type: "FeatureCollection", features: lines });
     els.resultsSection.classList.remove("hidden");
-    renderResults(dataset);
+    renderResults(dataset, candidates);
+    updateRetrievalControls(dataset);
     showOverview();
-    setStatus(`${dataset.candidates.length} similar plots connected`);
+    setStatus(candidates.length
+      ? `${candidates.length} plots connected · Filter ${filter.label}`
+      : `No plots match Filter ${filter.label}`);
   }
 
   function showOverview() {
@@ -561,8 +648,20 @@
     document.querySelectorAll(".site-tab").forEach((button) => {
       button.addEventListener("click", () => {
         clearSimilar();
+        setFilterLevel(DEFAULT_FILTER_LEVEL);
         const dataset = state.datasets[button.dataset.site];
         if (dataset && dataset.reference) selectFeature(dataset.reference, true);
+      });
+    });
+    els.filterInputs.forEach((input) => {
+      input.addEventListener("change", () => {
+        if (!input.checked) return;
+        setFilterLevel(input.value);
+        const selected = state.selectedFeature;
+        if (!selected || selected.properties.Role !== "Reference") return;
+        const dataset = state.datasets[selected.properties.__site];
+        if (state.activeSimilaritySite === dataset.id) revealSimilar();
+        else updateRetrievalControls(dataset);
       });
     });
     els.findSimilarButton.addEventListener("click", revealSimilar);
@@ -596,29 +695,36 @@
       void Promise.resolve(context.registerTool({
         name: "explore_site_matches",
         title: "Explore site matches",
-        description: "Select Site 01 or Site 02 on the visible Singapore map and optionally reveal every similar parcel in its dataset.",
+        description: "Select Site 1 or Site 2 on the visible Singapore map and optionally reveal the similar parcels returned by one filter combination.",
         inputSchema: {
           type: "object",
           properties: {
             site: { type: "string", enum: ["site1", "site2"], description: "Reference site to explore." },
-            revealSimilar: { type: "boolean", description: "Whether to return to the overview and draw animated links to all candidates." }
+            filterCombination: { type: "string", enum: ["1+2", "1+2+3", "1+2+3+4"], description: "Filter combination used for similarity retrieval." },
+            revealSimilar: { type: "boolean", description: "Whether to return to the overview and draw animated links to matching candidates." }
           },
           required: ["site"],
           additionalProperties: false
         },
         annotations: { readOnlyHint: false, untrustedContentHint: false },
         async execute(input) {
-          if (!input || !["site1", "site2"].includes(input.site) || ("revealSimilar" in input && typeof input.revealSimilar !== "boolean")) {
-            throw new TypeError("site must be site1 or site2, and revealSimilar must be a boolean when provided.");
+          if (!input || !["site1", "site2"].includes(input.site) ||
+              ("filterCombination" in input && !FILTER_LEVELS.some((filter) => filter.id === input.filterCombination)) ||
+              ("revealSimilar" in input && typeof input.revealSimilar !== "boolean")) {
+            throw new TypeError("site and filterCombination must use supported values, and revealSimilar must be a boolean when provided.");
           }
           const dataset = state.datasets[input.site];
           if (!dataset || !dataset.reference) throw new Error("The requested reference site is not available.");
+          clearSimilar();
+          setFilterLevel(input.filterCombination || DEFAULT_FILTER_LEVEL);
           selectFeature(dataset.reference, input.revealSimilar === false);
-          if (input.revealSimilar !== false && dataset.candidates.length) revealSimilar();
+          if (input.revealSimilar !== false) revealSimilar();
           await waitForMapMove();
+          const candidates = getCandidatesForLevel(dataset);
           return {
             selectedSite: dataset.label,
-            similarPlotsShown: input.revealSimilar === false ? 0 : dataset.candidates.length,
+            filterCombination: state.selectedFilterLevel,
+            similarPlotsShown: input.revealSimilar === false ? 0 : candidates.length,
             view: input.revealSimilar === false ? "parcel" : "singapore-overview"
           };
         }

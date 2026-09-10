@@ -89,6 +89,16 @@ button { color: inherit; }
 .detail-list > div { min-height: 49px; padding: 12px 0; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .detail-list dt { color: var(--muted); font-size: .8rem; }
 .detail-list dd { margin: 0; font-size: .86rem; font-weight: 620; text-align: right; }
+.filter-controls { margin: 18px 0 0; padding: 0; border: 0; }
+.filter-controls legend { margin-bottom: 8px; color: var(--muted); font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.filter-options { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.filter-option { position: relative; cursor: pointer; }
+.filter-option + .filter-option { border-left: 1px solid var(--line); }
+.filter-option input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.filter-option span { min-height: 37px; padding: 0 5px; display: grid; place-items: center; background: #fff; color: var(--muted); font-size: .72rem; font-weight: 650; transition: background .16s ease, color .16s ease; }
+.filter-option:hover span { background: #f5f6f7; color: var(--ink); }
+.filter-option input:checked + span { background: #1c2025; color: #fff; }
+.filter-option input:focus-visible + span { outline: 2px solid #1c2025; outline-offset: -3px; }
 .similar-hint { margin: 14px 0 12px; color: var(--muted); font-size: .78rem; line-height: 1.45; }
 
 .primary-button {
@@ -121,6 +131,7 @@ button { color: inherit; }
 .result-copy strong { display: block; font-size: .8rem; margin-bottom: 2px; }
 .result-copy small { color: var(--muted); font-size: .7rem; }
 .match-score { color: #3e4751; font-size: .72rem; font-weight: 700; }
+.empty-results { margin: 12px 0 2px; color: var(--muted); font-size: .76rem; line-height: 1.45; }
 
 .map-actions { position: absolute; z-index: 4; top: 20px; right: 20px; display: flex; gap: 8px; }
 .icon-button, .text-button { min-height: 42px; border: 1px solid rgba(23,25,28,.13); border-radius: 8px; background: rgba(255,255,255,.96); box-shadow: 0 8px 22px rgba(27,35,43,.1); cursor: pointer; transition: background .18s ease; }
