@@ -18,6 +18,7 @@
     dashFrame: null,
     mapReady: false,
     buildingsEnabled: false,
+    activeSimilaritySite: null,
     webMcpLifecycle: null
   };
 
@@ -210,6 +211,7 @@
       type: "fill",
       source: "plots",
       slot: "top",
+      filter: ["==", ["get", "Role"], "Reference"],
       paint: {
         "fill-color": ["match", ["get", "__site"], "site1", COLORS.site1, COLORS.site2],
         "fill-opacity": ["case", ["==", ["get", "Role"], "Reference"], 0.78, 0.36]
@@ -221,6 +223,7 @@
       type: "line",
       source: "plots",
       slot: "top",
+      filter: ["==", ["get", "Role"], "Reference"],
       paint: {
         "line-color": ["match", ["get", "__site"], "site1", "#d94816", "#7048e8"],
         "line-width": ["case", ["==", ["get", "Role"], "Reference"], 4.5, 2],
@@ -416,6 +419,29 @@
     source.setData({ type: "FeatureCollection", features: [selected] });
   }
 
+  function setCandidateVisibility(siteId) {
+    if (!state.map) return;
+    const filter = siteId
+      ? ["any",
+          ["==", ["get", "Role"], "Reference"],
+          ["all", ["==", ["get", "Role"], "Candidate"], ["==", ["get", "__site"], siteId]]
+        ]
+      : ["==", ["get", "Role"], "Reference"];
+    ["plots-fill", "plots-outline"].forEach((layerId) => {
+      if (state.map.getLayer(layerId)) state.map.setFilter(layerId, filter);
+    });
+  }
+
+  function clearSimilar() {
+    state.activeSimilaritySite = null;
+    setCandidateVisibility(null);
+    const links = state.map && state.map.getSource("links");
+    if (links) links.setData(EMPTY_COLLECTION);
+    els.resultsSection.classList.add("hidden");
+    els.resultsList.innerHTML = "";
+    els.resultCount.textContent = "0";
+  }
+
   function makePopup(feature) {
     if (state.popup) state.popup.remove();
     const p = feature.properties;
@@ -437,8 +463,9 @@
   }
 
   function selectFeature(feature, shouldFocus) {
-    state.selectedFeature = feature;
     const p = feature.properties;
+    if (state.activeSimilaritySite && state.activeSimilaritySite !== p.__site) clearSimilar();
+    state.selectedFeature = feature;
     const dataset = state.datasets[p.__site];
     const isReference = p.Role === "Reference";
     const candidatePosition = dataset.candidates.findIndex((candidate) => candidate.properties.UUID === p.UUID);
@@ -458,7 +485,7 @@
     els.findSimilarButton.disabled = !isReference || dataset.candidates.length === 0;
     els.findSimilarButton.querySelector("span").textContent = isReference ? "Find similar plots" : "Viewing similar plot";
     els.similarHint.textContent = isReference
-      ? (dataset.candidates.length ? `${dataset.candidates.length} candidate${dataset.candidates.length === 1 ? "" : "s"} available in this dataset.` : "No candidate plots are currently available for this site.")
+      ? (dataset.candidates.length ? `Run the retrieval to reveal similar plots on the map.` : "No candidate plots are currently available for this site.")
       : `${Math.round(matchScore(feature) * 100)}% composite similarity to ${dataset.label}.`;
 
     if (!isReference) {
@@ -496,6 +523,8 @@
     if (!reference || reference.properties.Role !== "Reference") return;
     const dataset = state.datasets[reference.properties.__site];
     if (!dataset.candidates.length) return;
+    state.activeSimilaritySite = dataset.id;
+    setCandidateVisibility(dataset.id);
     const start = getCenter(reference);
     const lines = dataset.candidates.map((candidate, index) => ({
       type: "Feature",
@@ -531,6 +560,7 @@
   function wireControls() {
     document.querySelectorAll(".site-tab").forEach((button) => {
       button.addEventListener("click", () => {
+        clearSimilar();
         const dataset = state.datasets[button.dataset.site];
         if (dataset && dataset.reference) selectFeature(dataset.reference, true);
       });
