@@ -16,7 +16,6 @@
 
       <aside class="side-panel" aria-label="Similar plot retrieval">
         <div class="panel-intro">
-          <p class="eyebrow">PARCEL COMPARISON</p>
           <h1>Similar Plot Retrieval</h1>
           <p>Select a reference site, review its attributes, then retrieve similar plots.</p>
         </div>
@@ -54,20 +53,33 @@
           </dl>
 
           <fieldset id="filterControls" class="filter-controls">
-            <legend>Filter combination</legend>
+            <legend>Similarity level</legend>
             <div class="filter-options">
-              <label class="filter-option">
-                <input type="radio" name="filterCombination" value="1+2" checked />
-                <span>1 + 2</span>
-              </label>
-              <label class="filter-option">
-                <input type="radio" name="filterCombination" value="1+2+3" />
-                <span>1 + 2 + 3</span>
-              </label>
-              <label class="filter-option">
-                <input type="radio" name="filterCombination" value="1+2+3+4" />
-                <span>1 + 2 + 3 + 4</span>
-              </label>
+              <div class="filter-option">
+                <label class="filter-choice">
+                  <input type="radio" name="filterCombination" value="1+2" checked />
+                  <span class="filter-copy"><strong>Plot similarity</strong><small>Filters 1 + 2</small></span>
+                </label>
+                <button class="filter-info-button" type="button" data-filter-info="1+2" aria-label="Explain Plot similarity" aria-controls="filterExplanation" aria-expanded="false">i</button>
+              </div>
+              <div class="filter-option">
+                <label class="filter-choice">
+                  <input type="radio" name="filterCombination" value="1+2+3" />
+                  <span class="filter-copy"><strong>Plot + nearby land use</strong><small>Filters 1 + 2 + 3</small></span>
+                </label>
+                <button class="filter-info-button" type="button" data-filter-info="1+2+3" aria-label="Explain Plot and nearby land-use similarity" aria-controls="filterExplanation" aria-expanded="false">i</button>
+              </div>
+              <div class="filter-option">
+                <label class="filter-choice">
+                  <input type="radio" name="filterCombination" value="1+2+3+4" />
+                  <span class="filter-copy"><strong>Plot + land use + roads</strong><small>Filters 1 + 2 + 3 + 4</small></span>
+                </label>
+                <button class="filter-info-button" type="button" data-filter-info="1+2+3+4" aria-label="Explain full plot, land-use, and road similarity" aria-controls="filterExplanation" aria-expanded="false">i</button>
+              </div>
+            </div>
+            <div id="filterExplanation" class="filter-explanation hidden" role="region" aria-labelledby="filterExplanationTitle" aria-live="polite">
+              <strong id="filterExplanationTitle"></strong>
+              <p id="filterExplanationText"></p>
             </div>
           </fieldset>
 
