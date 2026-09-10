@@ -8,21 +8,18 @@
     {
       id: "1+2",
       label: "Plot similarity",
-      combination: "Filters 1 + 2",
       stage: "Filter 1+2",
       explanation: "Matches Business 1 land use and either (a) both plot width and shape (aspect ratio) are within ±20%, or (b) final allowable gross floor area (GFA) is within ±20% of the selected site."
     },
     {
       id: "1+2+3",
       label: "Plot + nearby land use",
-      combination: "Filters 1 + 2 + 3",
       stage: "Filter 1+2+3",
       explanation: "Includes Plot similarity, then checks neighbouring non-road plots: 0–2 educational plots, at least 1 residential plot, and at least 1 B1-family (Business 1-related) plot."
     },
     {
       id: "1+2+3+4",
       label: "Plot + land use + roads",
-      combination: "Filters 1 + 2 + 3 + 4",
       stage: "Filter 1+2+3+4",
       explanation: "Includes Plot + nearby land use, then checks bordering roads. Both the total road count and the count for each road type must be within ±1 of the selected site."
     }
@@ -143,7 +140,7 @@
     hideFilterExplanation();
     if (wasOpen) return;
     state.expandedFilterInfo = filter.id;
-    els.filterExplanationTitle.textContent = `${filter.label} · ${filter.combination}`;
+    els.filterExplanationTitle.textContent = filter.label;
     els.filterExplanationText.textContent = filter.explanation;
     els.filterExplanation.classList.remove("hidden");
     const activeButton = els.filterInfoButtons.find((button) => button.dataset.filterInfo === filter.id);
