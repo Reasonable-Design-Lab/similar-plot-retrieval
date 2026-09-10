@@ -213,7 +213,7 @@
       slot: "top",
       paint: {
         "fill-color": ["match", ["get", "__site"], "site1", COLORS.site1, COLORS.site2],
-        "fill-opacity": ["case", ["==", ["get", "Role"], "Reference"], 0.62, 0.3]
+        "fill-opacity": ["case", ["==", ["get", "Role"], "Reference"], 0.78, 0.36]
       }
     });
 
@@ -223,9 +223,9 @@
       source: "plots",
       slot: "top",
       paint: {
-        "line-color": ["match", ["get", "__site"], "site1", "#ffb08f", "#c7b7ff"],
-        "line-width": ["case", ["==", ["get", "Role"], "Reference"], 3, 1.5],
-        "line-opacity": ["case", ["==", ["get", "Role"], "Reference"], 1, 0.72]
+        "line-color": ["match", ["get", "__site"], "site1", "#d94816", "#7048e8"],
+        "line-width": ["case", ["==", ["get", "Role"], "Reference"], 4.5, 2],
+        "line-opacity": ["case", ["==", ["get", "Role"], "Reference"], 1, 0.82]
       }
     });
 
@@ -234,7 +234,34 @@
       type: "fill",
       source: "selection",
       slot: "top",
-      paint: { "fill-color": ["get", "color"], "fill-opacity": 0.18 }
+      paint: { "fill-color": ["get", "color"], "fill-opacity": 0.72 }
+    });
+
+    map.addLayer({
+      id: "selection-glow",
+      type: "line",
+      source: "selection",
+      slot: "top",
+      layout: { "line-join": "round" },
+      paint: {
+        "line-color": ["get", "color"],
+        "line-width": 16,
+        "line-opacity": 0.4,
+        "line-blur": 5
+      }
+    });
+
+    map.addLayer({
+      id: "selection-casing",
+      type: "line",
+      source: "selection",
+      slot: "top",
+      layout: { "line-join": "round" },
+      paint: {
+        "line-color": "#ffffff",
+        "line-width": 9,
+        "line-opacity": 0.98
+      }
     });
 
     map.addLayer({
@@ -244,10 +271,9 @@
       slot: "top",
       layout: { "line-join": "round" },
       paint: {
-        "line-color": "#ffffff",
-        "line-width": 4,
-        "line-opacity": 0.94,
-        "line-blur": 0.2
+        "line-color": ["get", "color"],
+        "line-width": 5,
+        "line-opacity": 1
       }
     });
 
@@ -272,7 +298,12 @@
         "text-offset": [0, -1.6],
         "text-allow-overlap": true
       },
-      paint: { "text-color": "#ffffff", "text-halo-color": "#0a0d12", "text-halo-width": 1.3 }
+      paint: {
+        "text-color": ["match", ["get", "__site"], "site1", "#c83c0d", "#6438dc"],
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 2.4,
+        "text-halo-blur": 0.5
+      }
     });
 
     map.on("mouseenter", "plots-fill", () => { map.getCanvas().style.cursor = "pointer"; });
@@ -556,7 +587,7 @@
       bearing: 0,
       antialias: true,
       attributionControl: true,
-      config: { basemap: { lightPreset: "dusk", show3dObjects: false, showPointOfInterestLabels: false } }
+      config: { basemap: { lightPreset: "day", show3dObjects: false, showPointOfInterestLabels: false } }
     });
     state.map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), "bottom-right");
     state.map.addControl(new mapboxgl.ScaleControl({ maxWidth: 110, unit: "metric" }), "bottom-right");
