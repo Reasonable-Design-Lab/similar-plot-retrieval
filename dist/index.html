@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Explore two Singapore reference sites and their most similar land parcels on an interactive 3D map." />
+    <meta name="theme-color" content="#0a0d12" />
+    <title>Singapore Site Similarity Explorer</title>
+    <link rel="preconnect" href="https://api.mapbox.com" />
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.30.0/mapbox-gl.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <div id="map" aria-label="Interactive map of Singapore reference sites and similar plots"></div>
+
+      <header class="topbar glass-panel">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span></div>
+        <div class="brand-copy">
+          <p class="eyebrow">TARA / PARCEL ANALYSIS</p>
+          <h1>Site Similarity Explorer</h1>
+        </div>
+        <div class="topbar-actions">
+          <button id="overviewButton" class="icon-button" type="button" aria-label="Return to Singapore overview" title="Singapore overview">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h6v6H4zM14 5h6v6h-6zM4 15h6v4H4zM14 15h6v4h-6z"/></svg>
+          </button>
+          <button id="pitchButton" class="text-button" type="button" aria-pressed="false">
+            <span class="button-icon">3D</span><span>Buildings</span>
+          </button>
+        </div>
+      </header>
+
+      <aside class="side-panel glass-panel" aria-label="Site explorer">
+        <div class="panel-intro">
+          <p class="eyebrow">SINGAPORE STUDY AREA</p>
+          <div class="panel-heading-row">
+            <h2>Compare reference sites</h2>
+            <span class="dataset-count" id="datasetCount">Loading…</span>
+          </div>
+          <p>Select a reference parcel to inspect its planning profile and reveal the closest matches.</p>
+        </div>
+
+        <div class="site-switcher" role="group" aria-label="Reference sites">
+          <button class="site-tab" type="button" data-site="site1" aria-pressed="false">
+            <span class="legend-dot site1"></span>
+            <span><strong>Site 01</strong><small id="site1Zone">Reference</small></span>
+            <span class="tab-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="site-tab" type="button" data-site="site2" aria-pressed="false">
+            <span class="legend-dot site2"></span>
+            <span><strong>Site 02</strong><small id="site2Zone">Reference</small></span>
+            <span class="tab-arrow" aria-hidden="true">↗</span>
+          </button>
+        </div>
+
+        <section id="selectionEmpty" class="empty-state">
+          <div class="empty-orbit" aria-hidden="true"><span></span></div>
+          <h3>Choose a parcel on the map</h3>
+          <p>Click either highlighted reference site to begin.</p>
+        </section>
+
+        <section id="siteDetails" class="site-details hidden" aria-live="polite">
+          <div class="detail-header">
+            <div>
+              <p id="detailRole" class="eyebrow">REFERENCE PARCEL</p>
+              <h3 id="detailTitle">Site 01</h3>
+            </div>
+            <span id="detailBadge" class="zone-badge">Business 1</span>
+          </div>
+
+          <dl class="metrics-grid">
+            <div><dt>Site area</dt><dd id="metricArea">—</dd></div>
+            <div><dt>Allowable GFA</dt><dd id="metricGfa">—</dd></div>
+            <div><dt>Plot ratio</dt><dd id="metricGpr">—</dd></div>
+            <div><dt>Aspect ratio</dt><dd id="metricAspect">—</dd></div>
+          </dl>
+
+          <button id="findSimilarButton" class="primary-button" type="button">
+            <span>Find similar plots</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+          <p id="similarHint" class="similar-hint"></p>
+
+          <div id="resultsSection" class="results-section hidden">
+            <div class="results-heading">
+              <div><p class="eyebrow">CONNECTED PARCELS</p><h3>Similar plots</h3></div>
+              <span id="resultCount" class="result-count">0</span>
+            </div>
+            <div id="resultsList" class="results-list"></div>
+          </div>
+        </section>
+
+        <footer class="panel-footer">
+          <div><span class="legend-dot site1"></span><span>Site 01 family</span></div>
+          <div><span class="legend-dot site2"></span><span>Site 02 family</span></div>
+          <div><span class="legend-line"></span><span>Similarity link</span></div>
+        </footer>
+      </aside>
+
+      <div id="mapStatus" class="map-status glass-panel" role="status" aria-live="polite">
+        <span class="status-dot"></span><span>Preparing map</span>
+      </div>
+
+      <div id="tokenNotice" class="token-notice hidden" role="dialog" aria-labelledby="tokenTitle">
+        <div class="token-card">
+          <p class="eyebrow">ONE-TIME SETUP</p>
+          <h2 id="tokenTitle">Add your Mapbox public token</h2>
+          <p>Open <code>dist/config.js</code>, replace the placeholder with a public token beginning with <code>pk.</code>, then reload this page.</p>
+          <a href="https://account.mapbox.com/access-tokens/" target="_blank" rel="noreferrer">Open Mapbox tokens ↗</a>
+        </div>
+      </div>
+    </main>
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.30.0/mapbox-gl.js"></script>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
