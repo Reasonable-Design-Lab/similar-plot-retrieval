@@ -53,6 +53,24 @@
             <div><dt>Aspect ratio</dt><dd id="metricAspect">—</dd></div>
           </dl>
 
+          <fieldset id="filterControls" class="filter-controls">
+            <legend>Filter combination</legend>
+            <div class="filter-options">
+              <label class="filter-option">
+                <input type="radio" name="filterCombination" value="1+2" checked />
+                <span>1 + 2</span>
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="filterCombination" value="1+2+3" />
+                <span>1 + 2 + 3</span>
+              </label>
+              <label class="filter-option">
+                <input type="radio" name="filterCombination" value="1+2+3+4" />
+                <span>1 + 2 + 3 + 4</span>
+              </label>
+            </div>
+          </fieldset>
+
           <p id="similarHint" class="similar-hint"></p>
           <button id="findSimilarButton" class="primary-button" type="button">
             <span>Find similar plots</span>
