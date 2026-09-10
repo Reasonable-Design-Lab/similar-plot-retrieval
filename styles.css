@@ -22,13 +22,13 @@ button, a { font: inherit; }
 button { color: inherit; }
 
 .app-shell { position: relative; isolation: isolate; }
-#map { position: absolute; inset: 0; background: radial-gradient(circle at 70% 30%, #27303b, #0b0e13 65%); }
+#map { position: absolute; inset: 0; background: #e7edf1; }
 #map::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(90deg, rgba(4, 6, 9, 0.26), transparent 30%, transparent 76%, rgba(4, 6, 9, 0.12));
+  background: linear-gradient(90deg, rgba(10, 18, 26, 0.1), transparent 26%, transparent 82%, rgba(10, 18, 26, 0.025));
 }
 
 .glass-panel {
@@ -109,8 +109,8 @@ button { color: inherit; }
   transition: .2s ease;
 }
 .site-tab:hover { background: rgba(255,255,255,.065); }
-.site-tab.active[data-site="site1"] { border-color: rgba(255,107,53,.52); background: rgba(255,107,53,.08); }
-.site-tab.active[data-site="site2"] { border-color: rgba(157,123,255,.52); background: rgba(157,123,255,.08); }
+.site-tab.active[data-site="site1"] { border-color: rgba(255,107,53,.9); background: rgba(255,107,53,.18); box-shadow: inset 0 0 0 1px rgba(255,107,53,.35), 0 0 22px rgba(255,107,53,.14); }
+.site-tab.active[data-site="site2"] { border-color: rgba(157,123,255,.9); background: rgba(157,123,255,.18); box-shadow: inset 0 0 0 1px rgba(157,123,255,.35), 0 0 22px rgba(157,123,255,.14); }
 .site-tab strong { display: block; font-size: .86rem; margin-bottom: 3px; }
 .site-tab small { display: block; color: var(--muted); font-size: .7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px; }
 .tab-arrow { color: var(--dim); font-size: .85rem; }
