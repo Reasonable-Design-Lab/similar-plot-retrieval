@@ -8,13 +8,19 @@ An English-language, interactive Mapbox GL JS site for comparing two Singapore r
 - smooth transitions from the Singapore overview to a selected parcel; and
 - pitched 3D building views using the Mapbox Standard style.
 
-## Add your Mapbox token
+## Quick local launch
 
-Open `dist/config.js` and replace `pk.YOUR_MAPBOX_PUBLIC_TOKEN` with a Mapbox **public** access token. Because this is a static website, the token is visible to visitors by design. In Mapbox, restrict its allowed URLs to your GitHub Pages domain and any local address you use for testing.
+1. Open `mapbox-token.txt` and replace the placeholder with a Mapbox public token beginning with `pk.`.
+2. Double-click `Launch Site.cmd`.
+3. Keep the terminal window open while testing; press `Ctrl+C` to stop.
 
-## Run locally
+The launcher generates `dist/config.js`, starts the local server, and opens the website automatically. If the token is missing, it opens the token text file in Notepad for you.
 
-From PowerShell:
+Browser-based maps expose public (`pk.`) tokens by design. Before publishing, restrict the token to your local and deployed URLs in the Mapbox dashboard.
+
+## Run locally from PowerShell
+
+Alternatively, from PowerShell:
 
 ```powershell
 .\start-local.ps1
@@ -38,3 +44,4 @@ Replace the two files in `dist/data` while keeping these names:
 Each collection should contain one feature with `Role: "Reference"`; any features with `Role: "Candidate"` become searchable similar plots automatically.
 
 The current data contains four candidates for Site 01. Site 02 currently contains only its reference parcel, so the interface displays a clear empty-candidate state until candidate features are added.
+
