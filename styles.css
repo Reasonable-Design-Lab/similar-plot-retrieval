@@ -97,7 +97,6 @@ button { color: inherit; }
 .filter-choice input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 .filter-copy { min-height: 50px; padding: 8px 12px; display: flex; flex-direction: column; justify-content: center; transition: background .16s ease, color .16s ease; }
 .filter-copy strong { font-size: .875rem; line-height: 1.25; }
-.filter-copy small { margin-top: 3px; color: var(--muted); font-size: .75rem; line-height: 1.2; }
 .filter-choice:hover .filter-copy { background: #f5f6f7; }
 .filter-choice input:checked + .filter-copy { background: #eef0f2; box-shadow: inset 3px 0 0 #1c2025; }
 .filter-choice input:focus-visible + .filter-copy { outline: 2px solid #1c2025; outline-offset: -3px; }
