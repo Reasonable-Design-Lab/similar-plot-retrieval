@@ -5,8 +5,8 @@
   const COLORS = { site1: "#ff6b35", site2: "#9d7bff" };
   const EMPTY_COLLECTION = { type: "FeatureCollection", features: [] };
   const DATASETS = [
-    { id: "site1", label: "Site 01", url: "data/SITE1-like_similar_plots.geojson" },
-    { id: "site2", label: "Site 02", url: "data/SITE2-like_similar_plots.geojson" }
+    { id: "site1", label: "Site 1", url: "data/SITE1-like_similar_plots.geojson" },
+    { id: "site2", label: "Site 2", url: "data/SITE2-like_similar_plots.geojson" }
   ];
 
   const state = {
@@ -24,7 +24,6 @@
   const els = {
     tokenNotice: document.getElementById("tokenNotice"),
     mapStatus: document.getElementById("mapStatus"),
-    datasetCount: document.getElementById("datasetCount"),
     selectionEmpty: document.getElementById("selectionEmpty"),
     siteDetails: document.getElementById("siteDetails"),
     detailRole: document.getElementById("detailRole"),
@@ -282,10 +281,34 @@
       .map((dataset) => ({
         type: "Feature",
         geometry: { type: "Point", coordinates: getCenter(dataset.reference) },
-        properties: { label: dataset.label, __site: dataset.id, uuid: dataset.reference.properties.UUID }
+        properties: { label: dataset.label.toUpperCase(), __site: dataset.id, uuid: dataset.reference.properties.UUID }
       }));
 
     map.addSource("reference-labels", { type: "geojson", data: { type: "FeatureCollection", features: labels } });
+    map.addLayer({
+      id: "reference-marker-halo",
+      type: "circle",
+      source: "reference-labels",
+      slot: "top",
+      paint: {
+        "circle-radius": 16,
+        "circle-color": ["match", ["get", "__site"], "site1", COLORS.site1, COLORS.site2],
+        "circle-opacity": 0.18,
+        "circle-blur": 0.35
+      }
+    });
+    map.addLayer({
+      id: "reference-marker",
+      type: "circle",
+      source: "reference-labels",
+      slot: "top",
+      paint: {
+        "circle-radius": 7.5,
+        "circle-color": ["match", ["get", "__site"], "site1", COLORS.site1, COLORS.site2],
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-width": 3
+      }
+    });
     map.addLayer({
       id: "reference-labels",
       type: "symbol",
@@ -293,15 +316,16 @@
       slot: "top",
       layout: {
         "text-field": ["get", "label"],
-        "text-size": 12,
+        "text-size": 13,
         "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"],
-        "text-offset": [0, -1.6],
+        "text-offset": [1.25, 0],
+        "text-anchor": "left",
         "text-allow-overlap": true
       },
       paint: {
         "text-color": ["match", ["get", "__site"], "site1", "#c83c0d", "#6438dc"],
         "text-halo-color": "#ffffff",
-        "text-halo-width": 2.4,
+        "text-halo-width": 3,
         "text-halo-blur": 0.5
       }
     });
@@ -310,6 +334,8 @@
     map.on("mouseleave", "plots-fill", () => { map.getCanvas().style.cursor = ""; });
     map.on("mouseenter", "reference-labels", () => { map.getCanvas().style.cursor = "pointer"; });
     map.on("mouseleave", "reference-labels", () => { map.getCanvas().style.cursor = ""; });
+    map.on("mouseenter", "reference-marker", () => { map.getCanvas().style.cursor = "pointer"; });
+    map.on("mouseleave", "reference-marker", () => { map.getCanvas().style.cursor = ""; });
 
     map.on("click", "plots-fill", (event) => {
       const rendered = event.features && event.features[0];
@@ -319,6 +345,12 @@
     });
 
     map.on("click", "reference-labels", (event) => {
+      const rendered = event.features && event.features[0];
+      const original = rendered && state.featuresById.get(String(rendered.properties.uuid));
+      if (original) selectFeature(original, true);
+    });
+
+    map.on("click", "reference-marker", (event) => {
       const rendered = event.features && event.features[0];
       const original = rendered && state.featuresById.get(String(rendered.properties.uuid));
       if (original) selectFeature(original, true);
@@ -358,7 +390,7 @@
     const bounds = getBounds(feature);
     const mobile = window.innerWidth <= 700;
     state.map.fitBounds(bounds, {
-      padding: mobile ? { top: 100, right: 55, bottom: Math.round(window.innerHeight * 0.48) + 40, left: 55 } : { top: 120, right: 160, bottom: 90, left: 470 },
+      padding: mobile ? { top: 100, right: 55, bottom: Math.round(window.innerHeight * 0.48) + 40, left: 55 } : { top: 120, right: 160, bottom: 90, left: 410 },
       maxZoom: 17.4,
       pitch: 58,
       bearing: 14,
@@ -415,7 +447,7 @@
     updateSelectionSource(feature);
     els.selectionEmpty.classList.add("hidden");
     els.siteDetails.classList.remove("hidden");
-    els.detailRole.textContent = isReference ? "REFERENCE PARCEL" : `SIMILAR PLOT ${String(candidatePosition + 1).padStart(2, "0")}`;
+    els.detailRole.textContent = isReference ? "REFERENCE SITE" : `SIMILAR PLOT ${String(candidatePosition + 1).padStart(2, "0")}`;
     els.detailTitle.textContent = isReference ? dataset.label : `${dataset.label} match ${String(candidatePosition + 1).padStart(2, "0")}`;
     els.detailBadge.textContent = normalizeZone(p.Zone);
     els.metricArea.textContent = formatArea(p["KG site area m²"]);
@@ -485,7 +517,7 @@
     if (!state.map) return;
     const mobile = window.innerWidth <= 700;
     state.map.fitBounds(SINGAPORE_BOUNDS, {
-      padding: mobile ? { top: 88, right: 28, bottom: Math.round(window.innerHeight * 0.47) + 25, left: 28 } : { top: 105, right: 70, bottom: 58, left: 430 },
+      padding: mobile ? { top: 88, right: 28, bottom: Math.round(window.innerHeight * 0.47) + 25, left: 28 } : { top: 105, right: 70, bottom: 58, left: 390 },
       pitch: 0,
       bearing: 0,
       duration: 1500,
@@ -587,7 +619,7 @@
       bearing: 0,
       antialias: true,
       attributionControl: true,
-      config: { basemap: { lightPreset: "day", show3dObjects: false, showPointOfInterestLabels: false } }
+      config: { basemap: { theme: "monochrome", lightPreset: "day", show3dObjects: false, showPointOfInterestLabels: false, showTransitLabels: false } }
     });
     state.map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), "bottom-right");
     state.map.addControl(new mapboxgl.ScaleControl({ maxWidth: 110, unit: "metric" }), "bottom-right");
@@ -603,8 +635,6 @@
       wireControls();
       registerWebMcpTool();
       state.mapReady = true;
-      const total = allPlots.features.length;
-      els.datasetCount.textContent = `${total} parcel${total === 1 ? "" : "s"}`;
       Object.values(state.datasets).forEach((dataset) => {
         const zone = dataset.reference ? normalizeZone(dataset.reference.properties.Zone) : "No reference";
         const target = dataset.id === "site1" ? els.site1Zone : els.site2Zone;
