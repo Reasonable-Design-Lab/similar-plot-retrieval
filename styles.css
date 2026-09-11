@@ -104,9 +104,8 @@ button { color: inherit; }
 .filter-choice[aria-pressed="true"] { background: #eef0f2; box-shadow: inset 3px 0 0 #1c2025; }
 .filter-choice:focus-visible { outline: 2px solid #1c2025; outline-offset: -3px; }
 .filter-choice:disabled { cursor: progress; opacity: .68; }
-.filter-prefix { color: var(--muted); font-size: .75rem; font-weight: 800; letter-spacing: .1em; line-height: 1.2; }
-.filter-choice strong { margin-top: 2px; font-size: .98rem; line-height: 1.18; }
-.filter-choice small { margin-top: 3px; color: var(--muted); font-size: .75rem; line-height: 1.25; }
+.filter-label { color: var(--muted); font-size: .82rem; line-height: 1.38; }
+.filter-label strong { color: var(--ink); font-size: .96rem; font-weight: 800; }
 .filter-info-button { width: 27px; height: 27px; align-self: center; justify-self: center; padding: 0; border: 1px solid #cdd2d7; border-radius: 50%; background: transparent; color: var(--muted); font-family: Georgia, serif; font-size: .8rem; font-style: italic; font-weight: 700; cursor: pointer; transition: background .16s ease, color .16s ease, border-color .16s ease; }
 .filter-info-button:hover, .filter-info-button[aria-expanded="true"] { border-color: #1c2025; background: #1c2025; color: #fff; }
 .filter-info-button:focus-visible { outline: 2px solid #1c2025; outline-offset: 2px; }
