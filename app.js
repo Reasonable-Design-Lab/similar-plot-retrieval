@@ -14,7 +14,7 @@
       id: "1+2",
       label: "Similar plots",
       stage: "Filter 1+2",
-      explanation: "Compares plots with the selected reference site. A plot is included when either both its width and aspect ratio are within ±20% of the reference, or its final allowable GFA is within ±20%. This is an OR rule, so similar development capacity can qualify even when a plot looks different."
+      explanation: "Starts with Business 1 land use. A plot is included when either both its width and aspect ratio are within ±20% of the reference, or its final allowable GFA is within ±20%. This is an OR rule, so similar development capacity can qualify even when a plot looks different."
     },
     {
       id: "1+2+3",
@@ -31,8 +31,8 @@
   ];
   const DEFAULT_FILTER_LEVEL = FILTER_LEVELS[0].id;
   const DATASETS = [
-    { id: "site1", label: "Site 1", landUse: "Business", url: "data/SITE1-like_similar_plots_v2.geojson" },
-    { id: "site2", label: "Site 2", landUse: "Residential", url: "data/SITE2-like_similar_plots_v2.geojson" }
+    { id: "site1", label: "Site 1", url: "data/SITE1-like_similar_plots_v2.geojson" },
+    { id: "site2", label: "Site 2", url: "data/SITE2-like_similar_plots_v2.geojson" }
   ];
 
   const state = {
@@ -101,10 +101,6 @@
       .replace(/Zone$/i, "")
       .replace(/Business\s*1/i, "Business 1")
       .trim();
-  }
-
-  function featureZoneLabel(feature, dataset) {
-    return feature.properties.Role === "Reference" ? dataset.landUse : normalizeZone(feature.properties.Zone);
   }
 
   function formatNumber(value, digits) {
@@ -633,7 +629,7 @@
     const matchRow = isReference ? "" : `<dt>Matched by</dt><dd>${escapeHtml(matchBasis(feature))}</dd>`;
     const html = `<div class="map-popup">
       <div class="popup-kicker">${escapeHtml(roleLabel.toUpperCase())}</div>
-      <h4>${escapeHtml(featureZoneLabel(feature, dataset))}</h4>
+      <h4>${escapeHtml(normalizeZone(p.Zone))}</h4>
       <dl>
         <dt>Site area</dt><dd>${escapeHtml(formatArea(p["KG site area m²"]))}</dd>
         <dt>Allowable GFA</dt><dd>${escapeHtml(formatGfa(p["Final allowable GFA m²"]))}</dd>
@@ -665,7 +661,7 @@
     els.siteDetails.classList.remove("hidden");
     els.detailRole.textContent = isReference ? "REFERENCE SITE" : `SIMILAR PLOT ${String(candidatePosition + 1).padStart(2, "0")}`;
     els.detailTitle.textContent = isReference ? dataset.label : `${dataset.label} match ${String(candidatePosition + 1).padStart(2, "0")}`;
-    els.detailBadge.textContent = featureZoneLabel(feature, dataset);
+    els.detailBadge.textContent = normalizeZone(p.Zone);
     els.metricArea.textContent = formatArea(p["KG site area m²"]);
     els.metricGfa.textContent = formatGfa(p["Final allowable GFA m²"]);
     els.metricGpr.textContent = formatNumber(p["Master Plan GPR"], 1);
@@ -925,7 +921,7 @@
       registerWebMcpTool();
       state.mapReady = true;
       Object.values(state.datasets).forEach((dataset) => {
-        const zone = dataset.reference ? dataset.landUse : "No reference";
+        const zone = dataset.reference ? normalizeZone(dataset.reference.properties.Zone) : "No reference";
         const target = dataset.id === "site1" ? els.site1Zone : els.site2Zone;
         target.textContent = zone;
       });
