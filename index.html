@@ -6,6 +6,7 @@
     <meta name="description" content="Retrieve similar Singapore land parcels from two reference sites on an interactive 3D map." />
     <meta name="theme-color" content="#f3f4f5" />
     <title>Similar Plot Retrieval</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2317191c'/%3E%3Cpath d='M7 21 11 8l9-2 5 6-3 12-10 2Z' fill='%23c9acd1' stroke='%23fff' stroke-width='1.5'/%3E%3Ccircle cx='20' cy='13' r='3.5' fill='%23f4c18b'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://api.mapbox.com" />
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.30.0/mapbox-gl.css" />
     <link rel="stylesheet" href="styles.css" />
@@ -17,7 +18,7 @@
       <aside class="side-panel" aria-label="Similar plot retrieval">
         <div class="panel-intro">
           <h1>Similar Plot Retrieval</h1>
-          <p>Select a reference site, review its attributes, then retrieve similar plots.</p>
+          <p>Select a reference site, then choose how much of its plot and surroundings should match.</p>
         </div>
 
         <div class="site-switcher" role="group" aria-label="Reference sites">
@@ -52,30 +53,43 @@
             <div><dt>Aspect ratio</dt><dd id="metricAspect">—</dd></div>
           </dl>
 
-          <fieldset id="filterControls" class="filter-controls">
-            <legend>Similarity level</legend>
+          <details class="method-note">
+            <summary>How matching works</summary>
+            <p>All results are Business 1 plots. The first view accepts either similar plot dimensions <strong>or</strong> similar allowable GFA. A plot can therefore look different but still offer similar development capacity.</p>
+            <p>Dimensions use width and aspect ratio rather than an exact outline-to-outline comparison. The next views add neighbouring land uses and road frontage.</p>
+          </details>
+
+          <fieldset id="filterControls" class="filter-controls" aria-busy="false">
+            <legend>Choose a view</legend>
             <div class="filter-options">
               <div class="filter-option">
-                <label class="filter-choice">
-                  <input type="radio" name="filterCombination" value="1+2" checked />
-                  <span class="filter-copy"><strong>Plot similarity</strong></span>
-                </label>
-                <button class="filter-info-button" type="button" data-filter-info="1+2" aria-label="Explain Plot similarity" aria-controls="filterExplanation" aria-expanded="false">i</button>
+                <button class="filter-choice" type="button" data-filter-mode="1+2" aria-pressed="false">
+                  <span class="filter-prefix">SHOW</span>
+                  <strong>Similar plots</strong>
+                  <small>Dimensions or allowable GFA</small>
+                </button>
+                <button class="filter-info-button" type="button" data-filter-info="1+2" aria-label="Explain plot similarity" aria-controls="filterExplanation" aria-expanded="false">i</button>
               </div>
               <div class="filter-option">
-                <label class="filter-choice">
-                  <input type="radio" name="filterCombination" value="1+2+3" />
-                  <span class="filter-copy"><strong>Plot + nearby land use</strong></span>
-                </label>
-                <button class="filter-info-button" type="button" data-filter-info="1+2+3" aria-label="Explain Plot and nearby land-use similarity" aria-controls="filterExplanation" aria-expanded="false">i</button>
+                <button class="filter-choice" type="button" data-filter-mode="1+2+3" aria-pressed="false">
+                  <span class="filter-prefix">SHOW WITH</span>
+                  <strong>Similar neighbours</strong>
+                  <small>Adds nearby non-road land uses</small>
+                </button>
+                <button class="filter-info-button" type="button" data-filter-info="1+2+3" aria-label="Explain neighbour similarity" aria-controls="filterExplanation" aria-expanded="false">i</button>
               </div>
               <div class="filter-option">
-                <label class="filter-choice">
-                  <input type="radio" name="filterCombination" value="1+2+3+4" />
-                  <span class="filter-copy"><strong>Plot + land use + roads</strong></span>
-                </label>
-                <button class="filter-info-button" type="button" data-filter-info="1+2+3+4" aria-label="Explain full plot, land-use, and road similarity" aria-controls="filterExplanation" aria-expanded="false">i</button>
+                <button class="filter-choice" type="button" data-filter-mode="1+2+3+4" aria-pressed="false">
+                  <span class="filter-prefix">SHOW WITH</span>
+                  <strong>Similar road frontage</strong>
+                  <small>Adds bordering road counts and types</small>
+                </button>
+                <button class="filter-info-button" type="button" data-filter-info="1+2+3+4" aria-label="Explain road-frontage similarity" aria-controls="filterExplanation" aria-expanded="false">i</button>
               </div>
+            </div>
+            <div id="similarityLoading" class="similarity-loading hidden" role="status" aria-live="polite">
+              <span class="loading-spinner" aria-hidden="true"></span>
+              <span id="similarityLoadingText">Updating similar plots</span>
             </div>
             <div id="filterExplanation" class="filter-explanation hidden" role="region" aria-labelledby="filterExplanationTitle" aria-live="polite">
               <strong id="filterExplanationTitle"></strong>
@@ -83,11 +97,7 @@
             </div>
           </fieldset>
 
-          <p id="similarHint" class="similar-hint"></p>
-          <button id="findSimilarButton" class="primary-button" type="button">
-            <span>Find similar plots</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-          </button>
+          <p id="similarHint" class="similar-hint">Choose a view to display matching plots.</p>
 
           <div id="resultsSection" class="results-section hidden">
             <div class="results-heading">
