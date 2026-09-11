@@ -4,6 +4,15 @@
   const SINGAPORE_BOUNDS = [[103.59, 1.13], [104.08, 1.49]];
   const COLORS = { site1: "#C9ACD1", site2: "#F4C18B" };
   const OUTLINE_COLORS = { site1: "#76507F", site2: "#9A5B19" };
+  const NEIGHBOUR_COLORS = {
+    business: "#88949F",
+    residential: "#5F8FCB",
+    commercial: "#A875B5",
+    education: "#D99B32",
+    green: "#63A36F",
+    community: "#4F9B98",
+    other: "#9B958C"
+  };
   const EMPTY_COLLECTION = { type: "FeatureCollection", features: [] };
   const MANUAL_EXCLUSIONS = new Set([
     // Data-quality review: a 165 m² sliver was returned against the 19,679 m² Site 1 reference.
@@ -31,8 +40,8 @@
   ];
   const DEFAULT_FILTER_LEVEL = FILTER_LEVELS[0].id;
   const DATASETS = [
-    { id: "site1", label: "Site 1", url: "data/SITE1-like_similar_plots_v2.geojson" },
-    { id: "site2", label: "Site 2", url: "data/SITE2-like_similar_plots_v2.geojson" }
+    { id: "site1", label: "Site 1", url: "data/SITE1-like_similar_plots_v2.geojson", neighbourUrl: "data/SITE1_similar_plot_nonroad_neighbours.geojson" },
+    { id: "site2", label: "Site 2", url: "data/SITE2-like_similar_plots_v2.geojson", neighbourUrl: "data/SITE2_similar_plot_nonroad_neighbours.geojson" }
   ];
 
   const state = {
@@ -46,6 +55,9 @@
     buildingsEnabled: false,
     activeSimilaritySite: null,
     activeCandidates: [],
+    activeNeighbourCandidateKey: null,
+    activeNeighbours: [],
+    neighbourRequestId: 0,
     selectedFilterLevel: null,
     expandedFilterInfo: null,
     retrievalRequestId: 0,
@@ -108,6 +120,30 @@
   function plotDisplayName(feature) {
     if (feature.properties.Role === "Reference") return normalizeZone(feature.properties.Zone);
     return feature.properties["Short address"] || normalizeZone(feature.properties.Zone);
+  }
+
+  function neighbourZoneColor(zone) {
+    const value = String(zone || "").toLowerCase();
+    if (value.includes("educational")) return NEIGHBOUR_COLORS.education;
+    if (value.includes("residential")) return NEIGHBOUR_COLORS.residential;
+    if (value.includes("commercial") || value.includes("hotel")) return NEIGHBOUR_COLORS.commercial;
+    if (value.includes("park") || value.includes("open space") || value.includes("openspace") || value.includes("sports")) return NEIGHBOUR_COLORS.green;
+    if (value.includes("civic") || value.includes("worship") || value.includes("health")) return NEIGHBOUR_COLORS.community;
+    if (value.includes("business")) return NEIGHBOUR_COLORS.business;
+    return NEIGHBOUR_COLORS.other;
+  }
+
+  function neighbourRouteLabel(routes) {
+    const values = Array.isArray(routes) ? routes : [];
+    if (values.includes("direct") && values.includes("across-road")) return "Direct / across one road";
+    if (values.includes("direct")) return "Direct neighbour";
+    if (values.includes("across-road")) return "Across one road";
+    return "Nearby plot";
+  }
+
+  function compactKgId(value) {
+    const text = String(value || "").replace(/^UUID_/i, "");
+    return text ? `…${text.slice(-8)}` : "Not available";
   }
 
   function formatNumber(value, digits) {
@@ -251,9 +287,9 @@
     return coords;
   }
 
-  async function fetchGeoJson(url) {
+  async function fetchGeoJson(url, timeoutMs = 15000) {
     const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 15000);
+    const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
     try {
       const response = await fetch(url, { signal: controller.signal });
       if (!response.ok) throw new Error(`${url} returned HTTP ${response.status}`);
@@ -323,6 +359,8 @@
     map.addSource("plots", { type: "geojson", data: allPlots, generateId: true });
     map.addSource("selection", { type: "geojson", data: EMPTY_COLLECTION });
     map.addSource("links", { type: "geojson", data: EMPTY_COLLECTION });
+    map.addSource("neighbours", { type: "geojson", data: EMPTY_COLLECTION, generateId: true });
+    map.addSource("neighbour-selection", { type: "geojson", data: EMPTY_COLLECTION });
 
     map.addLayer({
       id: "links-glow",
@@ -374,6 +412,51 @@
         "line-color": ["match", ["get", "__site"], "site1", OUTLINE_COLORS.site1, OUTLINE_COLORS.site2],
         "line-width": ["case", ["==", ["get", "Role"], "Reference"], 3.8, 2.4],
         "line-opacity": ["case", ["==", ["get", "Role"], "Reference"], 1, 0.96]
+      }
+    });
+
+    map.addLayer({
+      id: "neighbours-fill",
+      type: "fill",
+      source: "neighbours",
+      slot: "top",
+      paint: {
+        "fill-color": ["get", "zone_color"],
+        "fill-opacity": 0.58
+      }
+    });
+
+    map.addLayer({
+      id: "neighbours-outline",
+      type: "line",
+      source: "neighbours",
+      slot: "top",
+      layout: { "line-join": "round" },
+      paint: {
+        "line-color": ["get", "zone_color"],
+        "line-width": 1.8,
+        "line-opacity": 0.95
+      }
+    });
+
+    map.addLayer({
+      id: "neighbour-selection-fill",
+      type: "fill",
+      source: "neighbour-selection",
+      slot: "top",
+      paint: { "fill-color": ["get", "zone_color"], "fill-opacity": 0.82 }
+    });
+
+    map.addLayer({
+      id: "neighbour-selection-outline",
+      type: "line",
+      source: "neighbour-selection",
+      slot: "top",
+      layout: { "line-join": "round" },
+      paint: {
+        "line-color": "#ffffff",
+        "line-width": 4.5,
+        "line-opacity": 1
       }
     });
 
@@ -479,12 +562,19 @@
       }
     });
 
+    map.on("mouseenter", "neighbours-fill", () => { map.getCanvas().style.cursor = "pointer"; });
+    map.on("mouseleave", "neighbours-fill", () => { map.getCanvas().style.cursor = ""; });
     map.on("mouseenter", "plots-fill", () => { map.getCanvas().style.cursor = "pointer"; });
     map.on("mouseleave", "plots-fill", () => { map.getCanvas().style.cursor = ""; });
     map.on("mouseenter", "reference-labels", () => { map.getCanvas().style.cursor = "pointer"; });
     map.on("mouseleave", "reference-labels", () => { map.getCanvas().style.cursor = ""; });
     map.on("mouseenter", "reference-marker", () => { map.getCanvas().style.cursor = "pointer"; });
     map.on("mouseleave", "reference-marker", () => { map.getCanvas().style.cursor = ""; });
+
+    map.on("click", "neighbours-fill", (event) => {
+      const rendered = event.features && event.features[0];
+      if (rendered) showNeighbourPopup(rendered, event.lngLat);
+    });
 
     map.on("click", "plots-fill", (event) => {
       const rendered = event.features && event.features[0];
@@ -503,6 +593,17 @@
       const rendered = event.features && event.features[0];
       const original = rendered && state.featuresById.get(featureLookupKey(rendered.properties.__site, String(rendered.properties.uuid)));
       if (original) selectFeature(original, true);
+    });
+
+    map.on("click", (event) => {
+      if (!state.activeNeighbourCandidateKey) return;
+      const interactiveLayers = ["neighbours-fill", "plots-fill", "reference-labels", "reference-marker"]
+        .filter((layerId) => map.getLayer(layerId));
+      const hits = map.queryRenderedFeatures(event.point, { layers: interactiveLayers });
+      if (hits.length) return;
+      clearNeighbourContext({ removePopup: true });
+      els.similarHint.textContent = "Neighbouring plots hidden. Select a similar plot to browse its context again.";
+      setStatus("Neighbouring plots hidden");
     });
 
     startDashAnimation();
@@ -598,7 +699,186 @@
     }
   }
 
+
+  function clearNeighbourContext({ removePopup = false } = {}) {
+    state.neighbourRequestId += 1;
+    state.activeNeighbourCandidateKey = null;
+    state.activeNeighbours = [];
+    const neighbours = state.map && state.map.getSource("neighbours");
+    const selection = state.map && state.map.getSource("neighbour-selection");
+    if (neighbours) neighbours.setData(EMPTY_COLLECTION);
+    if (selection) selection.setData(EMPTY_COLLECTION);
+    if (removePopup && state.popup) {
+      state.popup.remove();
+      state.popup = null;
+    }
+  }
+
+  function prepareNeighbours(collection, siteId, candidateUuid) {
+    return collection.features.flatMap((feature) => {
+      const source = (feature.properties.sources || []).find((item) => item.uuid === candidateUuid);
+      if (!source) return [];
+      const p = feature.properties;
+      return [{
+        ...feature,
+        properties: {
+          __site: siteId,
+          neighbour_uuid: p.neighbour_uuid,
+          zone: normalizeZone(p.zone),
+          zone_color: neighbourZoneColor(p.zone),
+          relationship: neighbourRouteLabel(source.routes),
+          site_area_m2: p.site_area_m2,
+          allowable_gfa_min_m2: p.allowable_gfa_min_m2,
+          allowable_gfa_max_m2: p.allowable_gfa_max_m2,
+          master_plan_gpr: p.master_plan_gpr,
+          width_m: p.width_m,
+          aspect_ratio: p.aspect_ratio,
+          rectangularity: p.rectangularity,
+          programmes_label: (p.programmes || []).map(normalizeZone).join(", "),
+          storeys_label: (p.storeys || []).join(", "),
+          setbacks_label: (p.setbacks_m || []).join(", "),
+          regulation_types_label: (p.regulation_types || []).map(normalizeZone).join(", ")
+        }
+      }];
+    });
+  }
+
+  async function loadNeighbourCollection(dataset) {
+    if (dataset.neighbourCollection) return dataset.neighbourCollection;
+    if (!dataset.neighbourPromise) {
+      dataset.neighbourPromise = fetchGeoJson(dataset.neighbourUrl, 30000)
+        .then((collection) => {
+          dataset.neighbourCollection = collection;
+          return collection;
+        })
+        .catch((error) => {
+          dataset.neighbourPromise = null;
+          throw error;
+        });
+    }
+    return dataset.neighbourPromise;
+  }
+
+  function focusNeighbourContext(candidate, neighbours) {
+    const bounds = new mapboxgl.LngLatBounds();
+    getCoordinates(candidate.geometry).forEach((coordinate) => bounds.extend(coordinate));
+    neighbours.forEach((feature) => {
+      getCoordinates(feature.geometry).forEach((coordinate) => bounds.extend(coordinate));
+    });
+    if (bounds.isEmpty()) return;
+    const mobile = window.innerWidth <= 700;
+    state.map.fitBounds(bounds, {
+      padding: mobile
+        ? { top: 88, right: 24, bottom: Math.round(window.innerHeight * 0.47) + 28, left: 24 }
+        : { top: 105, right: 80, bottom: 70, left: 420 },
+      maxZoom: 16.8,
+      pitch: 48,
+      bearing: 10,
+      duration: 1100,
+      essential: true
+    });
+    setBuildings(true);
+  }
+
+  function neighbourSummaryHtml(neighbours) {
+    if (!Array.isArray(neighbours)) return "";
+    const zoneCounts = new Map();
+    neighbours.forEach((feature) => {
+      const zone = feature.properties.zone || "Not specified";
+      zoneCounts.set(zone, (zoneCounts.get(zone) || 0) + 1);
+    });
+    const chips = [...zoneCounts.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .slice(0, 4)
+      .map(([zone, count]) => `<span><i style="background:${neighbourZoneColor(zone)}"></i>${escapeHtml(zone)} &middot; ${count}</span>`)
+      .join("");
+    return `<div class="neighbour-summary">
+      <strong>${neighbours.length} neighbouring KG plot${neighbours.length === 1 ? "" : "s"}</strong>
+      <div class="neighbour-chips">${chips}</div>
+      <small>Select a coloured neighbour to browse its land-use and development characteristics. Click empty map space to close this context.</small>
+    </div>`;
+  }
+
+  function optionalMetric(value, formatter) {
+    if (value === null || value === undefined || value === "") return "Not available";
+    return formatter ? formatter(value) : escapeHtml(String(value));
+  }
+
+  function neighbourGfaLabel(p) {
+    const minimum = p.allowable_gfa_min_m2 === null || p.allowable_gfa_min_m2 === undefined ? NaN : Number(p.allowable_gfa_min_m2);
+    const maximum = p.allowable_gfa_max_m2 === null || p.allowable_gfa_max_m2 === undefined ? NaN : Number(p.allowable_gfa_max_m2);
+    if (!Number.isFinite(minimum) && !Number.isFinite(maximum)) return "Not available";
+    if (Number.isFinite(minimum) && Number.isFinite(maximum) && Math.abs(minimum - maximum) > 0.5) {
+      return `${formatNumber(minimum, 0)}-${formatNumber(maximum, 0)} m\u00b2`;
+    }
+    return `${formatNumber(Number.isFinite(maximum) ? maximum : minimum, 0)} m\u00b2`;
+  }
+
+  function showNeighbourPopup(feature, lngLat) {
+    const p = feature.properties;
+    const selection = state.map.getSource("neighbour-selection");
+    if (selection) selection.setData({ type: "FeatureCollection", features: [feature] });
+    if (state.popup) state.popup.remove();
+    const programmes = p.programmes_label || "Not specified";
+    const controls = [
+      p.storeys_label ? `${escapeHtml(p.storeys_label)} storey control` : "",
+      p.setbacks_label ? `${escapeHtml(p.setbacks_label)} m setbacks` : ""
+    ].filter(Boolean).join(" &middot; ") || "Not specified";
+    const html = `<div class="map-popup neighbour-popup">
+      <div class="popup-kicker">NEIGHBOURING KG PLOT</div>
+      <h4>${escapeHtml(p.zone || "Neighbouring plot")}</h4>
+      <dl>
+        <dt>Relationship</dt><dd>${escapeHtml(p.relationship)}</dd>
+        <dt>Planning zone</dt><dd>${escapeHtml(p.zone)}</dd>
+        <dt>Site area</dt><dd>${optionalMetric(p.site_area_m2, formatArea)}</dd>
+        <dt>Allowable GFA</dt><dd>${neighbourGfaLabel(p)}</dd>
+        <dt>Plot ratio</dt><dd>${optionalMetric(p.master_plan_gpr, (value) => formatNumber(value, 1))}</dd>
+        <dt>Plot width</dt><dd>${optionalMetric(p.width_m, (value) => `${formatNumber(value, 1)} m`)}</dd>
+        <dt>Aspect ratio</dt><dd>${optionalMetric(p.aspect_ratio, (value) => formatNumber(value, 2))}</dd>
+        <dt>KG programmes</dt><dd>${escapeHtml(programmes)}</dd>
+        <dt>KG controls</dt><dd>${controls}</dd>
+        <dt>KG records</dt><dd>${escapeHtml(p.regulation_types_label || "Not specified")}</dd>
+        <dt>KG ID</dt><dd class="kg-id">${escapeHtml(compactKgId(p.neighbour_uuid))}</dd>
+      </dl>
+    </div>`;
+    state.popup = new mapboxgl.Popup({ offset: 12, closeButton: true, maxWidth: "320px" })
+      .setLngLat(lngLat)
+      .setHTML(html)
+      .addTo(state.map);
+    setStatus(`${p.zone || "Neighbouring plot"} KG information`);
+  }
+
+  async function showNeighbourContext(candidate) {
+    const p = candidate.properties;
+    const dataset = state.datasets[p.__site];
+    const candidateUuid = String(p.UUID || candidate.id);
+    const candidateKey = featureLookupKey(dataset.id, candidateUuid);
+    const requestId = state.neighbourRequestId;
+    state.activeNeighbourCandidateKey = candidateKey;
+    els.similarHint.textContent = "Loading neighbouring KG plots...";
+    setStatus("Loading neighbouring KG plots", false, true);
+    try {
+      const collection = await loadNeighbourCollection(dataset);
+      if (requestId !== state.neighbourRequestId || state.activeNeighbourCandidateKey !== candidateKey) return;
+      const neighbours = prepareNeighbours(collection, dataset.id, candidateUuid);
+      state.activeNeighbours = neighbours;
+      const source = state.map.getSource("neighbours");
+      if (source) source.setData({ type: "FeatureCollection", features: neighbours });
+      makePopup(candidate, neighbours);
+      focusNeighbourContext(candidate, neighbours);
+      els.similarHint.textContent = `${neighbours.length} neighbouring KG plots shown. Select a coloured plot to browse its characteristics.`;
+      setStatus(`${neighbours.length} neighbouring KG plots shown`);
+    } catch (error) {
+      console.error(error);
+      if (requestId !== state.neighbourRequestId) return;
+      state.activeNeighbourCandidateKey = null;
+      els.similarHint.textContent = "Neighbouring KG information could not be loaded. Select the plot to try again.";
+      setStatus("Neighbouring KG information could not be loaded", true);
+    }
+  }
+
   function clearSimilar({ resetMode = false } = {}) {
+    clearNeighbourContext({ removePopup: true });
     state.retrievalRequestId += 1;
     state.activeSimilaritySite = null;
     state.activeCandidates = [];
@@ -627,7 +907,7 @@
     }
   }
 
-  function makePopup(feature) {
+  function makePopup(feature, neighbours = null) {
     if (state.popup) state.popup.remove();
     const p = feature.properties;
     const dataset = state.datasets[p.__site];
@@ -635,6 +915,7 @@
     const roleLabel = isReference ? dataset.label : `${dataset.label} · Similar plot`;
     const matchRow = isReference ? "" : `<dt>Matched by</dt><dd>${escapeHtml(matchBasis(feature))}</dd>`;
     const zoneRow = isReference ? "" : `<dt>Planning zone</dt><dd>${escapeHtml(normalizeZone(p.Zone))}</dd>`;
+    const neighbourSummary = isReference ? "" : neighbourSummaryHtml(neighbours);
     const html = `<div class="map-popup">
       <div class="popup-kicker">${escapeHtml(roleLabel.toUpperCase())}</div>
       <h4>${escapeHtml(plotDisplayName(feature))}</h4>
@@ -645,6 +926,7 @@
         <dt>Plot ratio</dt><dd>${escapeHtml(formatNumber(p["Master Plan GPR"], 1))}</dd>
         ${matchRow}
       </dl>
+      ${neighbourSummary}
     </div>`;
     state.popup = new mapboxgl.Popup({ offset: 14, closeButton: true })
       .setLngLat(getCenter(feature))
@@ -660,6 +942,7 @@
     state.selectedFeature = feature;
     const dataset = state.datasets[p.__site];
     const isReference = p.Role === "Reference";
+    clearNeighbourContext({ removePopup: false });
     const visibleCandidates = state.activeSimilaritySite === dataset.id ? state.activeCandidates : [];
     let candidatePosition = visibleCandidates.findIndex((candidate) => candidate.properties.UUID === p.UUID);
     if (candidatePosition < 0) candidatePosition = dataset.candidates.findIndex((candidate) => candidate.properties.UUID === p.UUID);
@@ -698,6 +981,7 @@
     makePopup(feature);
     if (shouldFocus) focusFeature(feature);
     setStatus(`${isReference ? dataset.label : "Similar plot"} selected`);
+    if (!isReference) void showNeighbourContext(feature);
   }
 
   function renderResults(dataset, candidates, activeUuid) {
@@ -781,6 +1065,7 @@
 
   function showOverview() {
     if (!state.map) return;
+    clearNeighbourContext({ removePopup: false });
     const mobile = window.innerWidth <= 700;
     state.map.fitBounds(SINGAPORE_BOUNDS, {
       padding: mobile ? { top: 88, right: 28, bottom: Math.round(window.innerHeight * 0.47) + 25, left: 28 } : { top: 105, right: 70, bottom: 58, left: 390 },
@@ -922,6 +1207,7 @@
       attributionControl: true,
       config: { basemap: { theme: "monochrome", lightPreset: "day", show3dObjects: false, showPointOfInterestLabels: false, showTransitLabels: false } }
     });
+    if (new URLSearchParams(window.location.search).has("qa")) window.__qaMap = state.map;
     state.map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), "bottom-right");
     state.map.addControl(new mapboxgl.ScaleControl({ maxWidth: 110, unit: "metric" }), "bottom-right");
 
