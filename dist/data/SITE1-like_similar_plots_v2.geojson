@@ -130,7 +130,11 @@
         "Non-residential share": 0.26865671641791045,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Access\":2,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":16,\"Park\":1,\"Residential\":46,\"ResidentialWithCommercialAtFirstStorey\":3,\"Utility\":1}"
+        "Context zone counts": "{\"Business1\":16,\"Park\":1,\"Residential\":46,\"ResidentialWithCommercialAtFirstStorey\":3,\"Utility\":1}",
+        "Short address": "40 Jalan Pemimpin",
+        "Full address": "40 Jalan Pemimpin, Bishan, Singapore 577185",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -342,7 +346,11 @@
         "Non-residential share": 0.8,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Access\":2}",
-        "Context zone counts": "{\"Business1\":2,\"Commercial\":1,\"CommercialAndResidential\":1,\"Park\":1}"
+        "Context zone counts": "{\"Business1\":2,\"Commercial\":1,\"CommercialAndResidential\":1,\"Park\":1}",
+        "Short address": "1007 Bukit Merah Lane 3",
+        "Full address": "1007 Bukit Merah Lane 3, Bukit Merah, Singapore 159721",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -526,7 +534,11 @@
         "Non-residential share": 0.92,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":2}",
-        "Context zone counts": "{\"Business1\":10,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":1,\"PlaceOfWorship\":2,\"Residential\":2,\"TransportFacilities\":3,\"Utility\":2,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":10,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":1,\"PlaceOfWorship\":2,\"Residential\":2,\"TransportFacilities\":3,\"Utility\":2,\"Waterbody\":2}",
+        "Short address": "2 Bukit Batok Street 24",
+        "Full address": "2 Bukit Batok Street 24, Bukit Batok, Singapore 659480",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -642,7 +654,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":3,\"Business2\":3,\"CivicAndCommunityInstitutionZone\":2,\"Waterbody\":1}"
+        "Context zone counts": "{\"Business1\":3,\"Business2\":3,\"CivicAndCommunityInstitutionZone\":2,\"Waterbody\":1}",
+        "Short address": "Near Upper Jurong Road",
+        "Full address": "Upper Jurong Road, Singapore",
+        "Address feature type": "street",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -970,7 +986,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Collector/Primary Access\":3}",
-        "Context zone counts": "{\"Business1\":11,\"CivicAndCommunityInstitutionZone\":1,\"Utility\":2,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":11,\"CivicAndCommunityInstitutionZone\":1,\"Utility\":2,\"Waterbody\":2}",
+        "Short address": "81 Ubi Avenue 4",
+        "Full address": "81 Ubi Avenue 4, Geylang, Singapore 408830",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -1326,7 +1346,11 @@
         "Non-residential share": 0.7857142857142857,
         "Bordering road plots": 2,
         "Road type counts": "{\"no category\":1,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":1,\"Business2\":2,\"OpenSpace\":2,\"Park\":1,\"PlaceOfWorship\":1,\"Residential\":3,\"TransportFacilities\":1,\"Waterbody\":3}"
+        "Context zone counts": "{\"Business1\":1,\"Business2\":2,\"OpenSpace\":2,\"Park\":1,\"PlaceOfWorship\":1,\"Residential\":3,\"TransportFacilities\":1,\"Waterbody\":3}",
+        "Short address": "662 Tampines Street 64",
+        "Full address": "662 Tampines Street 64, Tampines, Singapore 520662",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -1870,7 +1894,11 @@
         "Non-residential share": 0.782608695652174,
         "Bordering road plots": 5,
         "Road type counts": "{\"Local Access\":3,\"Expressway\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":10,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"HealthAndMedicalCare\":3,\"Park\":1,\"ReserveSite\":1,\"Residential\":5,\"SportsAndRecreation\":1}"
+        "Context zone counts": "{\"Business1\":10,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"HealthAndMedicalCare\":3,\"Park\":1,\"ReserveSite\":1,\"Residential\":5,\"SportsAndRecreation\":1}",
+        "Short address": "1005 Aljunied Avenue 5",
+        "Full address": "1005 Aljunied Avenue 5, Geylang, Singapore 389886",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -1962,7 +1990,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":8,\"EducationalInstitution\":1,\"Park\":1,\"ReserveSite\":1,\"Utility\":1}"
+        "Context zone counts": "{\"Business1\":8,\"EducationalInstitution\":1,\"Park\":1,\"ReserveSite\":1,\"Utility\":1}",
+        "Short address": "5 Bedok South Road",
+        "Full address": "5 Bedok South Road, Bedok, Singapore 469270",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -2070,7 +2102,11 @@
         "Non-residential share": 0.8571428571428571,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Access\":2}",
-        "Context zone counts": "{\"Business1\":1,\"Park\":3,\"Residential\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":1,\"Park\":3,\"Residential\":1,\"Waterbody\":2}",
+        "Short address": "102 Pasir Panjang Road",
+        "Full address": "102 Pasir Panjang Road, Queenstown, Singapore 118528",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -2350,7 +2386,11 @@
         "Non-residential share": 0.9473684210526315,
         "Bordering road plots": 4,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":1,\"Local Access\":2,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":3,\"Business2\":4,\"HealthAndMedicalCare\":1,\"OpenSpace\":2,\"Park\":1,\"PlaceOfWorship\":3,\"ReserveSite\":1,\"Residential\":1,\"Utility\":2,\"Waterbody\":1}"
+        "Context zone counts": "{\"Business1\":3,\"Business2\":4,\"HealthAndMedicalCare\":1,\"OpenSpace\":2,\"Park\":1,\"PlaceOfWorship\":3,\"ReserveSite\":1,\"Residential\":1,\"Utility\":2,\"Waterbody\":1}",
+        "Short address": "Near Bedok North Road",
+        "Full address": "Bedok North Road, Singapore",
+        "Address feature type": "street",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -2938,7 +2978,11 @@
         "Non-residential share": 0.7,
         "Bordering road plots": 4,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Local Access\":3}",
-        "Context zone counts": "{\"Business1\":1,\"Business2\":1,\"EducationalInstitution\":1,\"OpenSpace\":2,\"Park\":6,\"PlaceOfWorship\":1,\"Residential\":6,\"Utility\":1,\"Waterbody\":1}"
+        "Context zone counts": "{\"Business1\":1,\"Business2\":1,\"EducationalInstitution\":1,\"OpenSpace\":2,\"Park\":6,\"PlaceOfWorship\":1,\"Residential\":6,\"Utility\":1,\"Waterbody\":1}",
+        "Short address": "103a Woodlands Avenue 12",
+        "Full address": "103a Woodlands Avenue 12, Woodlands, Singapore 738989",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -3018,7 +3062,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":7,\"Business2\":5,\"CivicAndCommunityInstitutionZone\":1,\"SpecialUseZone\":1}"
+        "Context zone counts": "{\"Business1\":7,\"Business2\":5,\"CivicAndCommunityInstitutionZone\":1,\"SpecialUseZone\":1}",
+        "Short address": "10 Ang Mo Kio Street 65",
+        "Full address": "10 Ang Mo Kio Street 65, Ang Mo Kio, Singapore 569059",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -3486,7 +3534,11 @@
         "Non-residential share": 0.7333333333333333,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":4,\"EducationalInstitution\":1,\"Park\":3,\"PlaceOfWorship\":1,\"Residential\":4,\"Utility\":1,\"Waterbody\":1}"
+        "Context zone counts": "{\"Business1\":4,\"EducationalInstitution\":1,\"Park\":3,\"PlaceOfWorship\":1,\"Residential\":4,\"Utility\":1,\"Waterbody\":1}",
+        "Short address": "7 Gambas Crescent",
+        "Full address": "7 Gambas Crescent, Sembawang, Singapore 757087",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -3594,7 +3646,11 @@
         "Non-residential share": 0.9545454545454546,
         "Bordering road plots": 1,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":15,\"Commercial\":1,\"CommercialAndResidential\":1,\"HotelZone\":1,\"OpenSpace\":1,\"Park\":2,\"PlaceOfWorship\":1}"
+        "Context zone counts": "{\"Business1\":15,\"Commercial\":1,\"CommercialAndResidential\":1,\"HotelZone\":1,\"OpenSpace\":1,\"Park\":2,\"PlaceOfWorship\":1}",
+        "Short address": "301 Alexandra Road",
+        "Full address": "301 Alexandra Road, Bukit Merah, Singapore 159968",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -3746,7 +3802,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":12,\"CivicAndCommunityInstitutionZone\":1}"
+        "Context zone counts": "{\"Business1\":12,\"CivicAndCommunityInstitutionZone\":1}",
+        "Short address": "51 Bukit Batok Crescent",
+        "Full address": "51 Bukit Batok Crescent, Bukit Batok, Singapore 658077",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -3838,7 +3898,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Collector/Primary Access\":2,\"no category\":1}",
-        "Context zone counts": "{\"Business1\":25,\"CivicAndCommunityInstitutionZone\":1,\"Utility\":3}"
+        "Context zone counts": "{\"Business1\":25,\"CivicAndCommunityInstitutionZone\":1,\"Utility\":3}",
+        "Short address": "52 Ubi Avenue 3",
+        "Full address": "52 Ubi Avenue 3, Geylang, Singapore 408866",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -4066,7 +4130,11 @@
         "Non-residential share": 0.9545454545454546,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":10,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":1,\"PlaceOfWorship\":2,\"Residential\":1,\"TransportFacilities\":2,\"Utility\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":10,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":1,\"PlaceOfWorship\":2,\"Residential\":1,\"TransportFacilities\":2,\"Utility\":1,\"Waterbody\":2}",
+        "Short address": "2 Bukit Batok Street 23",
+        "Full address": "2 Bukit Batok Street 23, Bukit Batok, Singapore 659554",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -4382,7 +4450,11 @@
         "Non-residential share": 0.9090909090909091,
         "Bordering road plots": 2,
         "Road type counts": "{\"Slip Road\":1,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":7,\"CivicAndCommunityInstitutionZone\":1,\"Park\":2,\"Residential\":1}"
+        "Context zone counts": "{\"Business1\":7,\"CivicAndCommunityInstitutionZone\":1,\"Park\":2,\"Residential\":1}",
+        "Short address": "120 Lower Delta Road",
+        "Full address": "120 Lower Delta Road, Bukit Merah, Singapore 169208",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -4834,7 +4906,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Access\":2,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":3,\"Business2\":5,\"HealthAndMedicalCare\":1,\"OpenSpace\":2,\"PlaceOfWorship\":2,\"Utility\":1}"
+        "Context zone counts": "{\"Business1\":3,\"Business2\":5,\"HealthAndMedicalCare\":1,\"OpenSpace\":2,\"PlaceOfWorship\":2,\"Utility\":1}",
+        "Short address": "Near Kaki Bukit Avenue 5",
+        "Full address": "Kaki Bukit Avenue 5, Singapore",
+        "Address feature type": "street",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -4990,7 +5066,11 @@
         "Non-residential share": 0.8181818181818182,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":9,\"Residential\":2}"
+        "Context zone counts": "{\"Business1\":9,\"Residential\":2}",
+        "Short address": "49 Jalan Pemimpin",
+        "Full address": "49 Jalan Pemimpin, Bishan, Singapore 577203",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -5094,7 +5174,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Access\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":21,\"Business2\":7,\"CivicAndCommunityInstitutionZone\":1,\"Park\":1,\"TransportFacilities\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":21,\"Business2\":7,\"CivicAndCommunityInstitutionZone\":1,\"Park\":1,\"TransportFacilities\":1,\"Waterbody\":2}",
+        "Short address": "37 Defu Lane 10",
+        "Full address": "37 Defu Lane 10, Hougang, Singapore 539214",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -5286,7 +5370,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":20,\"Business2\":5,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":20,\"Business2\":5,\"Waterbody\":2}",
+        "Short address": "1 Defu Lane 10",
+        "Full address": "1 Defu Lane 10, Hougang, Singapore 539182",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -5546,7 +5634,11 @@
         "Non-residential share": 0.9090909090909091,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":3,\"Business2\":1,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"HealthAndMedicalCare\":1,\"Park\":3,\"Residential\":1}"
+        "Context zone counts": "{\"Business1\":3,\"Business2\":1,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"HealthAndMedicalCare\":1,\"Park\":3,\"Residential\":1}",
+        "Short address": "31 Woodlands Close",
+        "Full address": "31 Woodlands Close, Woodlands, Singapore 737855",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -5718,7 +5810,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":9,\"CivicAndCommunityInstitutionZone\":1}"
+        "Context zone counts": "{\"Business1\":9,\"CivicAndCommunityInstitutionZone\":1}",
+        "Short address": "20 Bukit Batok Street 23",
+        "Full address": "20 Bukit Batok Street 23, Bukit Batok, Singapore 658080",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -5806,7 +5902,11 @@
         "Non-residential share": 0.9545454545454546,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":18,\"OpenSpace\":1,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":1}"
+        "Context zone counts": "{\"Business1\":18,\"OpenSpace\":1,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":1}",
+        "Short address": "45 Leng Kee Road",
+        "Full address": "45 Leng Kee Road, Bukit Merah, Singapore 159103",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -5930,7 +6030,11 @@
         "Non-residential share": 0.5625,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"no category\":1}",
-        "Context zone counts": "{\"Business1\":2,\"Business2\":4,\"CommercialAndResidential\":4,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":3,\"Waterbody\":1}"
+        "Context zone counts": "{\"Business1\":2,\"Business2\":4,\"CommercialAndResidential\":4,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":3,\"Waterbody\":1}",
+        "Short address": "18 Yung Ho Road",
+        "Full address": "18 Yung Ho Road, Jurong West, Singapore 618591",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -6174,7 +6278,11 @@
         "Non-residential share": 0.9166666666666666,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Slip Road\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":6,\"BusinessPark\":1,\"BusinessParkWhite\":1,\"HealthAndMedicalCare\":1,\"OpenSpace\":1,\"ReserveSite\":1,\"Residential\":2,\"SportsAndRecreation\":1,\"Utility\":2,\"Waterbody\":8}"
+        "Context zone counts": "{\"Business1\":6,\"BusinessPark\":1,\"BusinessParkWhite\":1,\"HealthAndMedicalCare\":1,\"OpenSpace\":1,\"ReserveSite\":1,\"Residential\":2,\"SportsAndRecreation\":1,\"Utility\":2,\"Waterbody\":8}",
+        "Short address": "10 Toh Guan Road",
+        "Full address": "10 Toh Guan Road, Jurong East, Singapore 608838",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -6354,7 +6462,11 @@
         "Non-residential share": 0.8518518518518519,
         "Bordering road plots": 4,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":3,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":8,\"Business2\":8,\"PlaceOfWorship\":2,\"ReserveSite\":1,\"Residential\":4,\"TransportFacilities\":1,\"Utility\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":8,\"Business2\":8,\"PlaceOfWorship\":2,\"ReserveSite\":1,\"Residential\":4,\"TransportFacilities\":1,\"Utility\":1,\"Waterbody\":2}",
+        "Short address": "200 Yishun Avenue 7",
+        "Full address": "200 Yishun Avenue 7, Yishun, Singapore 768927",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -6558,7 +6670,11 @@
         "Non-residential share": 0.6065573770491803,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Collector/Primary Access\":2,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":22,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"EducationalInstitution\":1,\"OpenSpace\":1,\"Park\":1,\"PlaceOfWorship\":2,\"ReserveSite\":1,\"Residential\":24,\"TransportFacilities\":3,\"Utility\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":22,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"EducationalInstitution\":1,\"OpenSpace\":1,\"Park\":1,\"PlaceOfWorship\":2,\"ReserveSite\":1,\"Residential\":24,\"TransportFacilities\":3,\"Utility\":1,\"Waterbody\":2}",
+        "Short address": "1 Bukit Batok Crescent",
+        "Full address": "1 Bukit Batok Crescent, Bukit Batok, Singapore 658064",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -6890,7 +7006,11 @@
         "Non-residential share": 0.7037037037037037,
         "Bordering road plots": 3,
         "Road type counts": "{\"no category\":2,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":2,\"Business2\":3,\"CommercialAndResidential\":1,\"OpenSpace\":2,\"Park\":3,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":7,\"TransportFacilities\":1,\"Utility\":2,\"Waterbody\":4}"
+        "Context zone counts": "{\"Business1\":2,\"Business2\":3,\"CommercialAndResidential\":1,\"OpenSpace\":2,\"Park\":3,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":7,\"TransportFacilities\":1,\"Utility\":2,\"Waterbody\":4}",
+        "Short address": "660 Tampines Street 64",
+        "Full address": "660 Tampines Street 64, Tampines, Singapore 520660",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -6954,7 +7074,11 @@
         "Non-residential share": 0.5,
         "Bordering road plots": 2,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":2}",
-        "Context zone counts": "{\"Business1\":5,\"EducationalInstitution\":1,\"Residential\":6}"
+        "Context zone counts": "{\"Business1\":5,\"EducationalInstitution\":1,\"Residential\":6}",
+        "Short address": "200 Bedok South Avenue 1",
+        "Full address": "200 Bedok South Avenue 1, Bedok, Singapore 469331",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -7098,7 +7222,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Access\":2,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":3,\"EducationalInstitution\":1,\"PlaceOfWorship\":1,\"Waterbody\":4}"
+        "Context zone counts": "{\"Business1\":3,\"EducationalInstitution\":1,\"PlaceOfWorship\":1,\"Waterbody\":4}",
+        "Short address": "1000 Toa Payoh North",
+        "Full address": "1000 Toa Payoh North, Toa Payoh, Singapore 318994",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -7250,7 +7378,11 @@
         "Non-residential share": 0.7142857142857143,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":4,\"PlaceOfWorship\":1,\"Residential\":2}"
+        "Context zone counts": "{\"Business1\":4,\"PlaceOfWorship\":1,\"Residential\":2}",
+        "Short address": "705 Sims Drive",
+        "Full address": "705 Sims Drive, Geylang, Singapore 387384",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -7338,7 +7470,11 @@
         "Non-residential share": 0.8421052631578947,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":6,\"CivicAndCommunityInstitutionZone\":1,\"OpenSpace\":1,\"Park\":3,\"PlaceOfWorship\":3,\"ReserveSite\":2,\"Residential\":3}"
+        "Context zone counts": "{\"Business1\":6,\"CivicAndCommunityInstitutionZone\":1,\"OpenSpace\":1,\"Park\":3,\"PlaceOfWorship\":3,\"ReserveSite\":2,\"Residential\":3}",
+        "Short address": "213 Pandan Gardens",
+        "Full address": "213 Pandan Gardens, Jurong East, Singapore 609340",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -7490,7 +7626,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 2,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":1,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":3,\"EducationalInstitution\":2,\"PlaceOfWorship\":1,\"Waterbody\":3}"
+        "Context zone counts": "{\"Business1\":3,\"EducationalInstitution\":2,\"PlaceOfWorship\":1,\"Waterbody\":3}",
+        "Short address": "998 Toa Payoh North",
+        "Full address": "998 Toa Payoh North, Toa Payoh, Singapore 318992",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -7614,7 +7754,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Collector/Primary Access\":2,\"no category\":1}",
-        "Context zone counts": "{\"Business1\":15,\"TransportFacilities\":1,\"Utility\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":15,\"TransportFacilities\":1,\"Utility\":1,\"Waterbody\":2}",
+        "Short address": "1 Ubi View",
+        "Full address": "1 Ubi View, Geylang, Singapore 408555",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -8098,7 +8242,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Major Arterials/Minor Arterials\":1,\"Slip Road\":1}",
-        "Context zone counts": "{\"Business1\":22,\"Business2\":6,\"Park\":1,\"TransportFacilities\":2,\"Waterbody\":1}"
+        "Context zone counts": "{\"Business1\":22,\"Business2\":6,\"Park\":1,\"TransportFacilities\":2,\"Waterbody\":1}",
+        "Short address": "60 MacPherson Road",
+        "Full address": "60 MacPherson Road, Geylang, Singapore 348615",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -8386,7 +8534,11 @@
         "Non-residential share": 0.9,
         "Bordering road plots": 2,
         "Road type counts": "{\"Expressway\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":3,\"EducationalInstitution\":2,\"OpenSpace\":1,\"Park\":1,\"Residential\":1,\"Utility\":2}"
+        "Context zone counts": "{\"Business1\":3,\"EducationalInstitution\":2,\"OpenSpace\":1,\"Park\":1,\"Residential\":1,\"Utility\":2}",
+        "Short address": "501 Ang Mo Kio Industrial Park 1",
+        "Full address": "501 Ang Mo Kio Industrial Park 1, Ang Mo Kio, Singapore 569621",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -8458,7 +8610,11 @@
         "Non-residential share": 0.9545454545454546,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":10,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":1,\"PlaceOfWorship\":2,\"Residential\":1,\"TransportFacilities\":2,\"Utility\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":10,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":1,\"PlaceOfWorship\":2,\"Residential\":1,\"TransportFacilities\":2,\"Utility\":1,\"Waterbody\":2}",
+        "Short address": "511 Bukit Batok Street 23",
+        "Full address": "511 Bukit Batok Street 23, Bukit Batok, Singapore 659545",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -8546,7 +8702,11 @@
         "Non-residential share": 0.7142857142857143,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Major Arterials/Minor Arterials\":1,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":5,\"Residential\":2}"
+        "Context zone counts": "{\"Business1\":5,\"Residential\":2}",
+        "Short address": "629 Lorong 4 Toa Payoh",
+        "Full address": "629 Lorong 4 Toa Payoh, Toa Payoh, Singapore 319521",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -8806,7 +8966,11 @@
         "Non-residential share": 0.8888888888888888,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":4,\"Business2\":4,\"CivicAndCommunityInstitutionZone\":4,\"PlaceOfWorship\":3,\"Residential\":2,\"TransportFacilities\":1}"
+        "Context zone counts": "{\"Business1\":4,\"Business2\":4,\"CivicAndCommunityInstitutionZone\":4,\"PlaceOfWorship\":3,\"Residential\":2,\"TransportFacilities\":1}",
+        "Short address": "29 Sin Ming Drive",
+        "Full address": "29 Sin Ming Drive, Bishan, Singapore 575703",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -8934,7 +9098,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Local Access\":2}",
-        "Context zone counts": "{\"Business1\":41,\"Business2\":16}"
+        "Context zone counts": "{\"Business1\":41,\"Business2\":16}",
+        "Short address": "70 Tannery Lane",
+        "Full address": "70 Tannery Lane, Geylang, Singapore 347810",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -9822,7 +9990,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Collector/Primary Access\":2,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":10,\"Business2\":2,\"CivicAndCommunityInstitutionZone\":2,\"Utility\":2,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":10,\"Business2\":2,\"CivicAndCommunityInstitutionZone\":2,\"Utility\":2,\"Waterbody\":2}",
+        "Short address": "15 Yishun Industrial Street 1",
+        "Full address": "15 Yishun Industrial Street 1, Yishun, Singapore 768091",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -9894,7 +10066,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":9,\"EducationalInstitution\":1,\"Park\":1,\"ReserveSite\":1,\"Utility\":2}"
+        "Context zone counts": "{\"Business1\":9,\"EducationalInstitution\":1,\"Park\":1,\"ReserveSite\":1,\"Utility\":2}",
+        "Short address": "20 Bedok South Road",
+        "Full address": "20 Bedok South Road, Bedok, Singapore 469277",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -10190,7 +10366,11 @@
         "Non-residential share": 0.9259259259259259,
         "Bordering road plots": 4,
         "Road type counts": "{\"Local Access\":1,\"Local Collector/Primary Access\":2,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":36,\"Business1White\":4,\"Park\":4,\"ReserveSite\":1,\"Residential\":4,\"Utility\":2,\"Waterbody\":3}"
+        "Context zone counts": "{\"Business1\":36,\"Business1White\":4,\"Park\":4,\"ReserveSite\":1,\"Residential\":4,\"Utility\":2,\"Waterbody\":3}",
+        "Short address": "103 Kallang Avenue",
+        "Full address": "103 Kallang Avenue, Kallang, Singapore 339505",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -11218,7 +11398,11 @@
         "Non-residential share": 0.6470588235294118,
         "Bordering road plots": 2,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":1,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":4,\"EducationalInstitution\":1,\"Park\":3,\"PlaceOfWorship\":1,\"Residential\":6,\"TransportFacilities\":1,\"Utility\":1}"
+        "Context zone counts": "{\"Business1\":4,\"EducationalInstitution\":1,\"Park\":3,\"PlaceOfWorship\":1,\"Residential\":6,\"TransportFacilities\":1,\"Utility\":1}",
+        "Short address": "50 Gambas Crescent",
+        "Full address": "50 Gambas Crescent, Sembawang, Singapore 757022",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -11570,7 +11754,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":2}",
-        "Context zone counts": "{\"Business1\":5,\"Business2\":1,\"Utility\":1}"
+        "Context zone counts": "{\"Business1\":5,\"Business2\":1,\"Utility\":1}",
+        "Short address": "6 Yishun Industrial Street 1",
+        "Full address": "6 Yishun Industrial Street 1, Yishun, Singapore 768090",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -11890,7 +12078,11 @@
         "Non-residential share": 0.9090909090909091,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":3,\"Business2\":1,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"HealthAndMedicalCare\":1,\"Park\":3,\"Residential\":1}"
+        "Context zone counts": "{\"Business1\":3,\"Business2\":1,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"HealthAndMedicalCare\":1,\"Park\":3,\"Residential\":1}",
+        "Short address": "21 Woodlands Close",
+        "Full address": "21 Woodlands Close, Woodlands, Singapore 737854",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -12334,7 +12526,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Access\":1,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":21,\"Business2\":6,\"CivicAndCommunityInstitutionZone\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":21,\"Business2\":6,\"CivicAndCommunityInstitutionZone\":1,\"Waterbody\":2}",
+        "Short address": "3 Defu Lane 10",
+        "Full address": "3 Defu Lane 10, Hougang, Singapore 539184",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -12490,7 +12686,11 @@
         "Non-residential share": 0.84,
         "Bordering road plots": 4,
         "Road type counts": "{\"Local Access\":1,\"Local Collector/Primary Access\":1,\"no category\":1,\"Expressway\":1}",
-        "Context zone counts": "{\"Business1\":2,\"Business1White\":3,\"Business2\":5,\"CivicAndCommunityInstitutionZone\":1,\"OpenSpace\":1,\"Park\":2,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":4,\"Utility\":1,\"Waterbody\":4}"
+        "Context zone counts": "{\"Business1\":2,\"Business1White\":3,\"Business2\":5,\"CivicAndCommunityInstitutionZone\":1,\"OpenSpace\":1,\"Park\":2,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":4,\"Utility\":1,\"Waterbody\":4}",
+        "Short address": "780 Pasir Ris Street 71",
+        "Full address": "780 Pasir Ris Street 71, Tampines, Singapore 520665",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -12634,7 +12834,11 @@
         "Non-residential share": 0.9583333333333334,
         "Bordering road plots": 3,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":2,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":20,\"Park\":1,\"ReserveSite\":1,\"Residential\":1,\"Utility\":1}"
+        "Context zone counts": "{\"Business1\":20,\"Park\":1,\"ReserveSite\":1,\"Residential\":1,\"Utility\":1}",
+        "Short address": "680 Upper Thomson Road",
+        "Full address": "680 Upper Thomson Road, Ang Mo Kio, Singapore 787103",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -13066,7 +13270,11 @@
         "Non-residential share": 0.75,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"EducationalInstitution\":1,\"HotelZone\":2,\"OpenSpace\":1,\"PlaceOfWorship\":1,\"Residential\":4,\"TransportFacilities\":1,\"Utility\":1,\"Waterbody\":5}"
+        "Context zone counts": "{\"EducationalInstitution\":1,\"HotelZone\":2,\"OpenSpace\":1,\"PlaceOfWorship\":1,\"Residential\":4,\"TransportFacilities\":1,\"Utility\":1,\"Waterbody\":5}",
+        "Short address": "315 Outram Road",
+        "Full address": "315 Outram Road, Bukit Merah, Singapore 169074",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -13154,7 +13362,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Access\":3}",
-        "Context zone counts": "{\"Business1\":29,\"Business1White\":1,\"Waterbody\":4}"
+        "Context zone counts": "{\"Business1\":29,\"Business1White\":1,\"Waterbody\":4}",
+        "Short address": "8 Burn Road",
+        "Full address": "8 Burn Road, Toa Payoh, Singapore 369977",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -13486,7 +13698,11 @@
         "Non-residential share": 0.9772727272727273,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":2}",
-        "Context zone counts": "{\"Business1\":41,\"Park\":1,\"PlaceOfWorship\":1,\"Residential\":1}"
+        "Context zone counts": "{\"Business1\":41,\"Park\":1,\"PlaceOfWorship\":1,\"Residential\":1}",
+        "Short address": "37 Ubi Crescent",
+        "Full address": "37 Ubi Crescent, Geylang, Singapore 408586",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -13682,7 +13898,11 @@
         "Non-residential share": 0.896551724137931,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":17,\"Business2\":5,\"CivicAndCommunityInstitutionZone\":1,\"Commercial\":1,\"Residential\":3,\"TransportFacilities\":1,\"Waterbody\":1}"
+        "Context zone counts": "{\"Business1\":17,\"Business2\":5,\"CivicAndCommunityInstitutionZone\":1,\"Commercial\":1,\"Residential\":3,\"TransportFacilities\":1,\"Waterbody\":1}",
+        "Short address": "6 Serangoon North Avenue 5",
+        "Full address": "6 Serangoon North Avenue 5, Serangoon, Singapore 554910",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -13906,7 +14126,11 @@
         "Non-residential share": 0.4,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":2}",
-        "Context zone counts": "{\"Business1\":3,\"Business2\":1,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":3,\"PlaceOfWorship\":3,\"Residential\":18,\"TransportFacilities\":1}"
+        "Context zone counts": "{\"Business1\":3,\"Business2\":1,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":3,\"PlaceOfWorship\":3,\"Residential\":18,\"TransportFacilities\":1}",
+        "Short address": "176 Sin Ming Drive",
+        "Full address": "176 Sin Ming Drive, Bishan, Singapore 575721",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -13982,7 +14206,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":14,\"CivicAndCommunityInstitutionZone\":1,\"Utility\":1}"
+        "Context zone counts": "{\"Business1\":14,\"CivicAndCommunityInstitutionZone\":1,\"Utility\":1}",
+        "Short address": "62 Ubi Road 1",
+        "Full address": "62 Ubi Road 1, Geylang, Singapore 408734",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -14582,7 +14810,11 @@
         "Non-residential share": 0.9393939393939394,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":24,\"Commercial\":1,\"CommercialAndResidential\":1,\"HotelZone\":1,\"Park\":2,\"PlaceOfWorship\":2,\"ReserveSite\":1,\"Residential\":1}"
+        "Context zone counts": "{\"Business1\":24,\"Commercial\":1,\"CommercialAndResidential\":1,\"HotelZone\":1,\"Park\":2,\"PlaceOfWorship\":2,\"ReserveSite\":1,\"Residential\":1}",
+        "Short address": "30 Leng Kee Road",
+        "Full address": "30 Leng Kee Road, Bukit Merah, Singapore 159937",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -14742,7 +14974,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Access\":1,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":29,\"Business1White\":4}"
+        "Context zone counts": "{\"Business1\":29,\"Business1White\":4}",
+        "Short address": "25 Kallang Avenue",
+        "Full address": "25 Kallang Avenue, Kallang, Singapore 339416",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -15070,7 +15306,11 @@
         "Non-residential share": 0.92,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Access\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":10,\"Business2\":9,\"ReserveSite\":1,\"Residential\":2,\"TransportFacilities\":2,\"Utility\":1}"
+        "Context zone counts": "{\"Business1\":10,\"Business2\":9,\"ReserveSite\":1,\"Residential\":2,\"TransportFacilities\":2,\"Utility\":1}",
+        "Short address": "2 Yishun Avenue 7",
+        "Full address": "2 Yishun Avenue 7, Yishun, Singapore 768924",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -15446,7 +15686,11 @@
         "Non-residential share": 0.9166666666666666,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":2}",
-        "Context zone counts": "{\"Business1\":15,\"CivicAndCommunityInstitutionZone\":3,\"Park\":1,\"Residential\":2,\"Waterbody\":3}"
+        "Context zone counts": "{\"Business1\":15,\"CivicAndCommunityInstitutionZone\":3,\"Park\":1,\"Residential\":2,\"Waterbody\":3}",
+        "Short address": "3026 Ubi Road 1",
+        "Full address": "3026 Ubi Road 1, Geylang, Singapore 408719",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -15834,7 +16078,11 @@
         "Non-residential share": 0.7428571428571429,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Access\":2}",
-        "Context zone counts": "{\"Business1\":21,\"CivicAndCommunityInstitutionZone\":1,\"Park\":1,\"Residential\":5,\"ResidentialWithCommercialAtFirstStorey\":4,\"Utility\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":21,\"CivicAndCommunityInstitutionZone\":1,\"Park\":1,\"Residential\":5,\"ResidentialWithCommercialAtFirstStorey\":4,\"Utility\":1,\"Waterbody\":2}",
+        "Short address": "135 Joo Seng Road",
+        "Full address": "135 Joo Seng Road, Toa Payoh, Singapore 368363",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -15998,7 +16246,11 @@
         "Non-residential share": 1,
         "Bordering road plots": 1,
         "Road type counts": "{\"no category\":1}",
-        "Context zone counts": "{\"Business1\":2,\"Waterbody\":3}"
+        "Context zone counts": "{\"Business1\":2,\"Waterbody\":3}",
+        "Short address": "1008 Toa Payoh North",
+        "Full address": "1008 Toa Payoh North, Toa Payoh, Singapore 318996",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -16110,7 +16362,11 @@
         "Non-residential share": 0.9655172413793104,
         "Bordering road plots": 2,
         "Road type counts": "{\"Slip Road\":1,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":20,\"Business2\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":2,\"ReserveSite\":1,\"Residential\":1,\"TransportFacilities\":1,\"Waterbody\":1}"
+        "Context zone counts": "{\"Business1\":20,\"Business2\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":2,\"ReserveSite\":1,\"Residential\":1,\"TransportFacilities\":1,\"Waterbody\":1}",
+        "Short address": "31 Bukit Batok Crescent",
+        "Full address": "31 Bukit Batok Crescent, Bukit Batok, Singapore 658070",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -16266,7 +16522,11 @@
         "Non-residential share": 0.9148936170212766,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":19,\"Business2\":12,\"EducationalInstitution\":3,\"HealthAndMedicalCare\":1,\"Park\":4,\"Residential\":4,\"TransportFacilities\":2,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":19,\"Business2\":12,\"EducationalInstitution\":3,\"HealthAndMedicalCare\":1,\"Park\":4,\"Residential\":4,\"TransportFacilities\":2,\"Waterbody\":2}",
+        "Short address": "10 Kallang Way",
+        "Full address": "10 Kallang Way, Geylang, Singapore 349215",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -16494,7 +16754,11 @@
         "Non-residential share": 0.4666666666666667,
         "Bordering road plots": 2,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":1,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":15,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"OpenSpace\":1,\"Park\":1,\"ReserveSite\":1,\"Residential\":24,\"TransportFacilities\":1}"
+        "Context zone counts": "{\"Business1\":15,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"OpenSpace\":1,\"Park\":1,\"ReserveSite\":1,\"Residential\":24,\"TransportFacilities\":1}",
+        "Short address": "21 Bukit Batok Crescent",
+        "Full address": "21 Bukit Batok Crescent, Bukit Batok, Singapore 658065",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -17218,7 +17482,11 @@
         "Non-residential share": 0.6333333333333333,
         "Bordering road plots": 3,
         "Road type counts": "{\"no category\":1,\"Local Access\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":3,\"Business2\":6,\"EducationalInstitution\":1,\"OpenSpace\":3,\"Park\":3,\"Residential\":11,\"Utility\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":3,\"Business2\":6,\"EducationalInstitution\":1,\"OpenSpace\":3,\"Park\":3,\"Residential\":11,\"Utility\":1,\"Waterbody\":2}",
+        "Short address": "371 Sembawang Link",
+        "Full address": "371 Sembawang Link, Sembawang, Singapore 750371",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -17322,7 +17590,11 @@
         "Non-residential share": 0.26865671641791045,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Access\":2,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":16,\"Park\":1,\"Residential\":46,\"ResidentialWithCommercialAtFirstStorey\":3,\"Utility\":1}"
+        "Context zone counts": "{\"Business1\":16,\"Park\":1,\"Residential\":46,\"ResidentialWithCommercialAtFirstStorey\":3,\"Utility\":1}",
+        "Short address": "40 Jalan Pemimpin",
+        "Full address": "40 Jalan Pemimpin, Bishan, Singapore 577185",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -17534,7 +17806,11 @@
         "Non-residential share": 0.8,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Access\":2}",
-        "Context zone counts": "{\"Business1\":2,\"Commercial\":1,\"CommercialAndResidential\":1,\"Park\":1}"
+        "Context zone counts": "{\"Business1\":2,\"Commercial\":1,\"CommercialAndResidential\":1,\"Park\":1}",
+        "Short address": "1007 Bukit Merah Lane 3",
+        "Full address": "1007 Bukit Merah Lane 3, Bukit Merah, Singapore 159721",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -17718,7 +17994,11 @@
         "Non-residential share": 0.92,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":2}",
-        "Context zone counts": "{\"Business1\":10,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":1,\"PlaceOfWorship\":2,\"Residential\":2,\"TransportFacilities\":3,\"Utility\":2,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":10,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":1,\"PlaceOfWorship\":2,\"Residential\":2,\"TransportFacilities\":3,\"Utility\":2,\"Waterbody\":2}",
+        "Short address": "2 Bukit Batok Street 24",
+        "Full address": "2 Bukit Batok Street 24, Bukit Batok, Singapore 659480",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -18074,7 +18354,11 @@
         "Non-residential share": 0.7857142857142857,
         "Bordering road plots": 2,
         "Road type counts": "{\"no category\":1,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":1,\"Business2\":2,\"OpenSpace\":2,\"Park\":1,\"PlaceOfWorship\":1,\"Residential\":3,\"TransportFacilities\":1,\"Waterbody\":3}"
+        "Context zone counts": "{\"Business1\":1,\"Business2\":2,\"OpenSpace\":2,\"Park\":1,\"PlaceOfWorship\":1,\"Residential\":3,\"TransportFacilities\":1,\"Waterbody\":3}",
+        "Short address": "662 Tampines Street 64",
+        "Full address": "662 Tampines Street 64, Tampines, Singapore 520662",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -18618,7 +18902,11 @@
         "Non-residential share": 0.782608695652174,
         "Bordering road plots": 5,
         "Road type counts": "{\"Local Access\":3,\"Expressway\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":10,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"HealthAndMedicalCare\":3,\"Park\":1,\"ReserveSite\":1,\"Residential\":5,\"SportsAndRecreation\":1}"
+        "Context zone counts": "{\"Business1\":10,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"HealthAndMedicalCare\":3,\"Park\":1,\"ReserveSite\":1,\"Residential\":5,\"SportsAndRecreation\":1}",
+        "Short address": "1005 Aljunied Avenue 5",
+        "Full address": "1005 Aljunied Avenue 5, Geylang, Singapore 389886",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -18726,7 +19014,11 @@
         "Non-residential share": 0.8571428571428571,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Access\":2}",
-        "Context zone counts": "{\"Business1\":1,\"Park\":3,\"Residential\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":1,\"Park\":3,\"Residential\":1,\"Waterbody\":2}",
+        "Short address": "102 Pasir Panjang Road",
+        "Full address": "102 Pasir Panjang Road, Queenstown, Singapore 118528",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -19006,7 +19298,11 @@
         "Non-residential share": 0.9473684210526315,
         "Bordering road plots": 4,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":1,\"Local Access\":2,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":3,\"Business2\":4,\"HealthAndMedicalCare\":1,\"OpenSpace\":2,\"Park\":1,\"PlaceOfWorship\":3,\"ReserveSite\":1,\"Residential\":1,\"Utility\":2,\"Waterbody\":1}"
+        "Context zone counts": "{\"Business1\":3,\"Business2\":4,\"HealthAndMedicalCare\":1,\"OpenSpace\":2,\"Park\":1,\"PlaceOfWorship\":3,\"ReserveSite\":1,\"Residential\":1,\"Utility\":2,\"Waterbody\":1}",
+        "Short address": "Near Bedok North Road",
+        "Full address": "Bedok North Road, Singapore",
+        "Address feature type": "street",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -19594,7 +19890,11 @@
         "Non-residential share": 0.7,
         "Bordering road plots": 4,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Local Access\":3}",
-        "Context zone counts": "{\"Business1\":1,\"Business2\":1,\"EducationalInstitution\":1,\"OpenSpace\":2,\"Park\":6,\"PlaceOfWorship\":1,\"Residential\":6,\"Utility\":1,\"Waterbody\":1}"
+        "Context zone counts": "{\"Business1\":1,\"Business2\":1,\"EducationalInstitution\":1,\"OpenSpace\":2,\"Park\":6,\"PlaceOfWorship\":1,\"Residential\":6,\"Utility\":1,\"Waterbody\":1}",
+        "Short address": "103a Woodlands Avenue 12",
+        "Full address": "103a Woodlands Avenue 12, Woodlands, Singapore 738989",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -20062,7 +20362,11 @@
         "Non-residential share": 0.7333333333333333,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":4,\"EducationalInstitution\":1,\"Park\":3,\"PlaceOfWorship\":1,\"Residential\":4,\"Utility\":1,\"Waterbody\":1}"
+        "Context zone counts": "{\"Business1\":4,\"EducationalInstitution\":1,\"Park\":3,\"PlaceOfWorship\":1,\"Residential\":4,\"Utility\":1,\"Waterbody\":1}",
+        "Short address": "7 Gambas Crescent",
+        "Full address": "7 Gambas Crescent, Sembawang, Singapore 757087",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -20170,7 +20474,11 @@
         "Non-residential share": 0.9545454545454546,
         "Bordering road plots": 1,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":15,\"Commercial\":1,\"CommercialAndResidential\":1,\"HotelZone\":1,\"OpenSpace\":1,\"Park\":2,\"PlaceOfWorship\":1}"
+        "Context zone counts": "{\"Business1\":15,\"Commercial\":1,\"CommercialAndResidential\":1,\"HotelZone\":1,\"OpenSpace\":1,\"Park\":2,\"PlaceOfWorship\":1}",
+        "Short address": "301 Alexandra Road",
+        "Full address": "301 Alexandra Road, Bukit Merah, Singapore 159968",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -20398,7 +20706,11 @@
         "Non-residential share": 0.9545454545454546,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":10,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":1,\"PlaceOfWorship\":2,\"Residential\":1,\"TransportFacilities\":2,\"Utility\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":10,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":1,\"PlaceOfWorship\":2,\"Residential\":1,\"TransportFacilities\":2,\"Utility\":1,\"Waterbody\":2}",
+        "Short address": "2 Bukit Batok Street 23",
+        "Full address": "2 Bukit Batok Street 23, Bukit Batok, Singapore 659554",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -20714,7 +21026,11 @@
         "Non-residential share": 0.9090909090909091,
         "Bordering road plots": 2,
         "Road type counts": "{\"Slip Road\":1,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":7,\"CivicAndCommunityInstitutionZone\":1,\"Park\":2,\"Residential\":1}"
+        "Context zone counts": "{\"Business1\":7,\"CivicAndCommunityInstitutionZone\":1,\"Park\":2,\"Residential\":1}",
+        "Short address": "120 Lower Delta Road",
+        "Full address": "120 Lower Delta Road, Bukit Merah, Singapore 169208",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -20870,7 +21186,11 @@
         "Non-residential share": 0.8181818181818182,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":9,\"Residential\":2}"
+        "Context zone counts": "{\"Business1\":9,\"Residential\":2}",
+        "Short address": "49 Jalan Pemimpin",
+        "Full address": "49 Jalan Pemimpin, Bishan, Singapore 577203",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -21130,7 +21450,11 @@
         "Non-residential share": 0.9090909090909091,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":3,\"Business2\":1,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"HealthAndMedicalCare\":1,\"Park\":3,\"Residential\":1}"
+        "Context zone counts": "{\"Business1\":3,\"Business2\":1,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"HealthAndMedicalCare\":1,\"Park\":3,\"Residential\":1}",
+        "Short address": "31 Woodlands Close",
+        "Full address": "31 Woodlands Close, Woodlands, Singapore 737855",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -21218,7 +21542,11 @@
         "Non-residential share": 0.9545454545454546,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":18,\"OpenSpace\":1,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":1}"
+        "Context zone counts": "{\"Business1\":18,\"OpenSpace\":1,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":1}",
+        "Short address": "45 Leng Kee Road",
+        "Full address": "45 Leng Kee Road, Bukit Merah, Singapore 159103",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -21342,7 +21670,11 @@
         "Non-residential share": 0.5625,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"no category\":1}",
-        "Context zone counts": "{\"Business1\":2,\"Business2\":4,\"CommercialAndResidential\":4,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":3,\"Waterbody\":1}"
+        "Context zone counts": "{\"Business1\":2,\"Business2\":4,\"CommercialAndResidential\":4,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":3,\"Waterbody\":1}",
+        "Short address": "18 Yung Ho Road",
+        "Full address": "18 Yung Ho Road, Jurong West, Singapore 618591",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -21586,7 +21918,11 @@
         "Non-residential share": 0.9166666666666666,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Slip Road\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":6,\"BusinessPark\":1,\"BusinessParkWhite\":1,\"HealthAndMedicalCare\":1,\"OpenSpace\":1,\"ReserveSite\":1,\"Residential\":2,\"SportsAndRecreation\":1,\"Utility\":2,\"Waterbody\":8}"
+        "Context zone counts": "{\"Business1\":6,\"BusinessPark\":1,\"BusinessParkWhite\":1,\"HealthAndMedicalCare\":1,\"OpenSpace\":1,\"ReserveSite\":1,\"Residential\":2,\"SportsAndRecreation\":1,\"Utility\":2,\"Waterbody\":8}",
+        "Short address": "10 Toh Guan Road",
+        "Full address": "10 Toh Guan Road, Jurong East, Singapore 608838",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -21766,7 +22102,11 @@
         "Non-residential share": 0.8518518518518519,
         "Bordering road plots": 4,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":3,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":8,\"Business2\":8,\"PlaceOfWorship\":2,\"ReserveSite\":1,\"Residential\":4,\"TransportFacilities\":1,\"Utility\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":8,\"Business2\":8,\"PlaceOfWorship\":2,\"ReserveSite\":1,\"Residential\":4,\"TransportFacilities\":1,\"Utility\":1,\"Waterbody\":2}",
+        "Short address": "200 Yishun Avenue 7",
+        "Full address": "200 Yishun Avenue 7, Yishun, Singapore 768927",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -21970,7 +22310,11 @@
         "Non-residential share": 0.6065573770491803,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Collector/Primary Access\":2,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":22,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"EducationalInstitution\":1,\"OpenSpace\":1,\"Park\":1,\"PlaceOfWorship\":2,\"ReserveSite\":1,\"Residential\":24,\"TransportFacilities\":3,\"Utility\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":22,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"EducationalInstitution\":1,\"OpenSpace\":1,\"Park\":1,\"PlaceOfWorship\":2,\"ReserveSite\":1,\"Residential\":24,\"TransportFacilities\":3,\"Utility\":1,\"Waterbody\":2}",
+        "Short address": "1 Bukit Batok Crescent",
+        "Full address": "1 Bukit Batok Crescent, Bukit Batok, Singapore 658064",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -22302,7 +22646,11 @@
         "Non-residential share": 0.7037037037037037,
         "Bordering road plots": 3,
         "Road type counts": "{\"no category\":2,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":2,\"Business2\":3,\"CommercialAndResidential\":1,\"OpenSpace\":2,\"Park\":3,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":7,\"TransportFacilities\":1,\"Utility\":2,\"Waterbody\":4}"
+        "Context zone counts": "{\"Business1\":2,\"Business2\":3,\"CommercialAndResidential\":1,\"OpenSpace\":2,\"Park\":3,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":7,\"TransportFacilities\":1,\"Utility\":2,\"Waterbody\":4}",
+        "Short address": "660 Tampines Street 64",
+        "Full address": "660 Tampines Street 64, Tampines, Singapore 520660",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -22366,7 +22714,11 @@
         "Non-residential share": 0.5,
         "Bordering road plots": 2,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":2}",
-        "Context zone counts": "{\"Business1\":5,\"EducationalInstitution\":1,\"Residential\":6}"
+        "Context zone counts": "{\"Business1\":5,\"EducationalInstitution\":1,\"Residential\":6}",
+        "Short address": "200 Bedok South Avenue 1",
+        "Full address": "200 Bedok South Avenue 1, Bedok, Singapore 469331",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -22518,7 +22870,11 @@
         "Non-residential share": 0.7142857142857143,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":4,\"PlaceOfWorship\":1,\"Residential\":2}"
+        "Context zone counts": "{\"Business1\":4,\"PlaceOfWorship\":1,\"Residential\":2}",
+        "Short address": "705 Sims Drive",
+        "Full address": "705 Sims Drive, Geylang, Singapore 387384",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -22606,7 +22962,11 @@
         "Non-residential share": 0.8421052631578947,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":6,\"CivicAndCommunityInstitutionZone\":1,\"OpenSpace\":1,\"Park\":3,\"PlaceOfWorship\":3,\"ReserveSite\":2,\"Residential\":3}"
+        "Context zone counts": "{\"Business1\":6,\"CivicAndCommunityInstitutionZone\":1,\"OpenSpace\":1,\"Park\":3,\"PlaceOfWorship\":3,\"ReserveSite\":2,\"Residential\":3}",
+        "Short address": "213 Pandan Gardens",
+        "Full address": "213 Pandan Gardens, Jurong East, Singapore 609340",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -22894,7 +23254,11 @@
         "Non-residential share": 0.9,
         "Bordering road plots": 2,
         "Road type counts": "{\"Expressway\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":3,\"EducationalInstitution\":2,\"OpenSpace\":1,\"Park\":1,\"Residential\":1,\"Utility\":2}"
+        "Context zone counts": "{\"Business1\":3,\"EducationalInstitution\":2,\"OpenSpace\":1,\"Park\":1,\"Residential\":1,\"Utility\":2}",
+        "Short address": "501 Ang Mo Kio Industrial Park 1",
+        "Full address": "501 Ang Mo Kio Industrial Park 1, Ang Mo Kio, Singapore 569621",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -22966,7 +23330,11 @@
         "Non-residential share": 0.9545454545454546,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":10,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":1,\"PlaceOfWorship\":2,\"Residential\":1,\"TransportFacilities\":2,\"Utility\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":10,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":1,\"PlaceOfWorship\":2,\"Residential\":1,\"TransportFacilities\":2,\"Utility\":1,\"Waterbody\":2}",
+        "Short address": "511 Bukit Batok Street 23",
+        "Full address": "511 Bukit Batok Street 23, Bukit Batok, Singapore 659545",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -23054,7 +23422,11 @@
         "Non-residential share": 0.7142857142857143,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Major Arterials/Minor Arterials\":1,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":5,\"Residential\":2}"
+        "Context zone counts": "{\"Business1\":5,\"Residential\":2}",
+        "Short address": "629 Lorong 4 Toa Payoh",
+        "Full address": "629 Lorong 4 Toa Payoh, Toa Payoh, Singapore 319521",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -23314,7 +23686,11 @@
         "Non-residential share": 0.8888888888888888,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":4,\"Business2\":4,\"CivicAndCommunityInstitutionZone\":4,\"PlaceOfWorship\":3,\"Residential\":2,\"TransportFacilities\":1}"
+        "Context zone counts": "{\"Business1\":4,\"Business2\":4,\"CivicAndCommunityInstitutionZone\":4,\"PlaceOfWorship\":3,\"Residential\":2,\"TransportFacilities\":1}",
+        "Short address": "29 Sin Ming Drive",
+        "Full address": "29 Sin Ming Drive, Bishan, Singapore 575703",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -23610,7 +23986,11 @@
         "Non-residential share": 0.9259259259259259,
         "Bordering road plots": 4,
         "Road type counts": "{\"Local Access\":1,\"Local Collector/Primary Access\":2,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":36,\"Business1White\":4,\"Park\":4,\"ReserveSite\":1,\"Residential\":4,\"Utility\":2,\"Waterbody\":3}"
+        "Context zone counts": "{\"Business1\":36,\"Business1White\":4,\"Park\":4,\"ReserveSite\":1,\"Residential\":4,\"Utility\":2,\"Waterbody\":3}",
+        "Short address": "103 Kallang Avenue",
+        "Full address": "103 Kallang Avenue, Kallang, Singapore 339505",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -24638,7 +25018,11 @@
         "Non-residential share": 0.6470588235294118,
         "Bordering road plots": 2,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":1,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":4,\"EducationalInstitution\":1,\"Park\":3,\"PlaceOfWorship\":1,\"Residential\":6,\"TransportFacilities\":1,\"Utility\":1}"
+        "Context zone counts": "{\"Business1\":4,\"EducationalInstitution\":1,\"Park\":3,\"PlaceOfWorship\":1,\"Residential\":6,\"TransportFacilities\":1,\"Utility\":1}",
+        "Short address": "50 Gambas Crescent",
+        "Full address": "50 Gambas Crescent, Sembawang, Singapore 757022",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -24958,7 +25342,11 @@
         "Non-residential share": 0.9090909090909091,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":3,\"Business2\":1,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"HealthAndMedicalCare\":1,\"Park\":3,\"Residential\":1}"
+        "Context zone counts": "{\"Business1\":3,\"Business2\":1,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"HealthAndMedicalCare\":1,\"Park\":3,\"Residential\":1}",
+        "Short address": "21 Woodlands Close",
+        "Full address": "21 Woodlands Close, Woodlands, Singapore 737854",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -25114,7 +25502,11 @@
         "Non-residential share": 0.84,
         "Bordering road plots": 4,
         "Road type counts": "{\"Local Access\":1,\"Local Collector/Primary Access\":1,\"no category\":1,\"Expressway\":1}",
-        "Context zone counts": "{\"Business1\":2,\"Business1White\":3,\"Business2\":5,\"CivicAndCommunityInstitutionZone\":1,\"OpenSpace\":1,\"Park\":2,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":4,\"Utility\":1,\"Waterbody\":4}"
+        "Context zone counts": "{\"Business1\":2,\"Business1White\":3,\"Business2\":5,\"CivicAndCommunityInstitutionZone\":1,\"OpenSpace\":1,\"Park\":2,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":4,\"Utility\":1,\"Waterbody\":4}",
+        "Short address": "780 Pasir Ris Street 71",
+        "Full address": "780 Pasir Ris Street 71, Tampines, Singapore 520665",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -25258,7 +25650,11 @@
         "Non-residential share": 0.9583333333333334,
         "Bordering road plots": 3,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":2,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":20,\"Park\":1,\"ReserveSite\":1,\"Residential\":1,\"Utility\":1}"
+        "Context zone counts": "{\"Business1\":20,\"Park\":1,\"ReserveSite\":1,\"Residential\":1,\"Utility\":1}",
+        "Short address": "680 Upper Thomson Road",
+        "Full address": "680 Upper Thomson Road, Ang Mo Kio, Singapore 787103",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -25590,7 +25986,11 @@
         "Non-residential share": 0.9772727272727273,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":2}",
-        "Context zone counts": "{\"Business1\":41,\"Park\":1,\"PlaceOfWorship\":1,\"Residential\":1}"
+        "Context zone counts": "{\"Business1\":41,\"Park\":1,\"PlaceOfWorship\":1,\"Residential\":1}",
+        "Short address": "37 Ubi Crescent",
+        "Full address": "37 Ubi Crescent, Geylang, Singapore 408586",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -25786,7 +26186,11 @@
         "Non-residential share": 0.896551724137931,
         "Bordering road plots": 1,
         "Road type counts": "{\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":17,\"Business2\":5,\"CivicAndCommunityInstitutionZone\":1,\"Commercial\":1,\"Residential\":3,\"TransportFacilities\":1,\"Waterbody\":1}"
+        "Context zone counts": "{\"Business1\":17,\"Business2\":5,\"CivicAndCommunityInstitutionZone\":1,\"Commercial\":1,\"Residential\":3,\"TransportFacilities\":1,\"Waterbody\":1}",
+        "Short address": "6 Serangoon North Avenue 5",
+        "Full address": "6 Serangoon North Avenue 5, Serangoon, Singapore 554910",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -26386,7 +26790,11 @@
         "Non-residential share": 0.9393939393939394,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":24,\"Commercial\":1,\"CommercialAndResidential\":1,\"HotelZone\":1,\"Park\":2,\"PlaceOfWorship\":2,\"ReserveSite\":1,\"Residential\":1}"
+        "Context zone counts": "{\"Business1\":24,\"Commercial\":1,\"CommercialAndResidential\":1,\"HotelZone\":1,\"Park\":2,\"PlaceOfWorship\":2,\"ReserveSite\":1,\"Residential\":1}",
+        "Short address": "30 Leng Kee Road",
+        "Full address": "30 Leng Kee Road, Bukit Merah, Singapore 159937",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -26714,7 +27122,11 @@
         "Non-residential share": 0.92,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Access\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":10,\"Business2\":9,\"ReserveSite\":1,\"Residential\":2,\"TransportFacilities\":2,\"Utility\":1}"
+        "Context zone counts": "{\"Business1\":10,\"Business2\":9,\"ReserveSite\":1,\"Residential\":2,\"TransportFacilities\":2,\"Utility\":1}",
+        "Short address": "2 Yishun Avenue 7",
+        "Full address": "2 Yishun Avenue 7, Yishun, Singapore 768924",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -27090,7 +27502,11 @@
         "Non-residential share": 0.9166666666666666,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Collector/Primary Access\":2}",
-        "Context zone counts": "{\"Business1\":15,\"CivicAndCommunityInstitutionZone\":3,\"Park\":1,\"Residential\":2,\"Waterbody\":3}"
+        "Context zone counts": "{\"Business1\":15,\"CivicAndCommunityInstitutionZone\":3,\"Park\":1,\"Residential\":2,\"Waterbody\":3}",
+        "Short address": "3026 Ubi Road 1",
+        "Full address": "3026 Ubi Road 1, Geylang, Singapore 408719",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -27478,7 +27894,11 @@
         "Non-residential share": 0.7428571428571429,
         "Bordering road plots": 2,
         "Road type counts": "{\"Local Access\":2}",
-        "Context zone counts": "{\"Business1\":21,\"CivicAndCommunityInstitutionZone\":1,\"Park\":1,\"Residential\":5,\"ResidentialWithCommercialAtFirstStorey\":4,\"Utility\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":21,\"CivicAndCommunityInstitutionZone\":1,\"Park\":1,\"Residential\":5,\"ResidentialWithCommercialAtFirstStorey\":4,\"Utility\":1,\"Waterbody\":2}",
+        "Short address": "135 Joo Seng Road",
+        "Full address": "135 Joo Seng Road, Toa Payoh, Singapore 368363",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -27590,7 +28010,11 @@
         "Non-residential share": 0.9655172413793104,
         "Bordering road plots": 2,
         "Road type counts": "{\"Slip Road\":1,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":20,\"Business2\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":2,\"ReserveSite\":1,\"Residential\":1,\"TransportFacilities\":1,\"Waterbody\":1}"
+        "Context zone counts": "{\"Business1\":20,\"Business2\":1,\"CivicAndCommunityInstitutionZone\":2,\"Park\":2,\"ReserveSite\":1,\"Residential\":1,\"TransportFacilities\":1,\"Waterbody\":1}",
+        "Short address": "31 Bukit Batok Crescent",
+        "Full address": "31 Bukit Batok Crescent, Bukit Batok, Singapore 658070",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -27818,7 +28242,11 @@
         "Non-residential share": 0.4666666666666667,
         "Bordering road plots": 2,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":1,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":15,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"OpenSpace\":1,\"Park\":1,\"ReserveSite\":1,\"Residential\":24,\"TransportFacilities\":1}"
+        "Context zone counts": "{\"Business1\":15,\"CivicAndCommunityInstitutionZone\":1,\"EducationalInstitution\":1,\"OpenSpace\":1,\"Park\":1,\"ReserveSite\":1,\"Residential\":24,\"TransportFacilities\":1}",
+        "Short address": "21 Bukit Batok Crescent",
+        "Full address": "21 Bukit Batok Crescent, Bukit Batok, Singapore 658065",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -28542,7 +28970,11 @@
         "Non-residential share": 0.6333333333333333,
         "Bordering road plots": 3,
         "Road type counts": "{\"no category\":1,\"Local Access\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":3,\"Business2\":6,\"EducationalInstitution\":1,\"OpenSpace\":3,\"Park\":3,\"Residential\":11,\"Utility\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":3,\"Business2\":6,\"EducationalInstitution\":1,\"OpenSpace\":3,\"Park\":3,\"Residential\":11,\"Utility\":1,\"Waterbody\":2}",
+        "Short address": "371 Sembawang Link",
+        "Full address": "371 Sembawang Link, Sembawang, Singapore 750371",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -28646,7 +29078,11 @@
         "Non-residential share": 0.26865671641791045,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Access\":2,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":16,\"Park\":1,\"Residential\":46,\"ResidentialWithCommercialAtFirstStorey\":3,\"Utility\":1}"
+        "Context zone counts": "{\"Business1\":16,\"Park\":1,\"Residential\":46,\"ResidentialWithCommercialAtFirstStorey\":3,\"Utility\":1}",
+        "Short address": "40 Jalan Pemimpin",
+        "Full address": "40 Jalan Pemimpin, Bishan, Singapore 577185",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -28926,7 +29362,11 @@
         "Non-residential share": 0.9473684210526315,
         "Bordering road plots": 4,
         "Road type counts": "{\"Major Arterials/Minor Arterials\":1,\"Local Access\":2,\"Local Collector/Primary Access\":1}",
-        "Context zone counts": "{\"Business1\":3,\"Business2\":4,\"HealthAndMedicalCare\":1,\"OpenSpace\":2,\"Park\":1,\"PlaceOfWorship\":3,\"ReserveSite\":1,\"Residential\":1,\"Utility\":2,\"Waterbody\":1}"
+        "Context zone counts": "{\"Business1\":3,\"Business2\":4,\"HealthAndMedicalCare\":1,\"OpenSpace\":2,\"Park\":1,\"PlaceOfWorship\":3,\"ReserveSite\":1,\"Residential\":1,\"Utility\":2,\"Waterbody\":1}",
+        "Short address": "Near Bedok North Road",
+        "Full address": "Bedok North Road, Singapore",
+        "Address feature type": "street",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -29170,7 +29610,11 @@
         "Non-residential share": 0.9166666666666666,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Slip Road\":1,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":6,\"BusinessPark\":1,\"BusinessParkWhite\":1,\"HealthAndMedicalCare\":1,\"OpenSpace\":1,\"ReserveSite\":1,\"Residential\":2,\"SportsAndRecreation\":1,\"Utility\":2,\"Waterbody\":8}"
+        "Context zone counts": "{\"Business1\":6,\"BusinessPark\":1,\"BusinessParkWhite\":1,\"HealthAndMedicalCare\":1,\"OpenSpace\":1,\"ReserveSite\":1,\"Residential\":2,\"SportsAndRecreation\":1,\"Utility\":2,\"Waterbody\":8}",
+        "Short address": "10 Toh Guan Road",
+        "Full address": "10 Toh Guan Road, Jurong East, Singapore 608838",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -29374,7 +29818,11 @@
         "Non-residential share": 0.6065573770491803,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Collector/Primary Access\":2,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":22,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"EducationalInstitution\":1,\"OpenSpace\":1,\"Park\":1,\"PlaceOfWorship\":2,\"ReserveSite\":1,\"Residential\":24,\"TransportFacilities\":3,\"Utility\":1,\"Waterbody\":2}"
+        "Context zone counts": "{\"Business1\":22,\"Cemetery\":1,\"CivicAndCommunityInstitutionZone\":2,\"EducationalInstitution\":1,\"OpenSpace\":1,\"Park\":1,\"PlaceOfWorship\":2,\"ReserveSite\":1,\"Residential\":24,\"TransportFacilities\":3,\"Utility\":1,\"Waterbody\":2}",
+        "Short address": "1 Bukit Batok Crescent",
+        "Full address": "1 Bukit Batok Crescent, Bukit Batok, Singapore 658064",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -29462,7 +29910,11 @@
         "Non-residential share": 0.7142857142857143,
         "Bordering road plots": 3,
         "Road type counts": "{\"Local Collector/Primary Access\":1,\"Major Arterials/Minor Arterials\":1,\"Local Access\":1}",
-        "Context zone counts": "{\"Business1\":5,\"Residential\":2}"
+        "Context zone counts": "{\"Business1\":5,\"Residential\":2}",
+        "Short address": "629 Lorong 4 Toa Payoh",
+        "Full address": "629 Lorong 4 Toa Payoh, Toa Payoh, Singapore 319521",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -29758,7 +30210,11 @@
         "Non-residential share": 0.9259259259259259,
         "Bordering road plots": 4,
         "Road type counts": "{\"Local Access\":1,\"Local Collector/Primary Access\":2,\"Major Arterials/Minor Arterials\":1}",
-        "Context zone counts": "{\"Business1\":36,\"Business1White\":4,\"Park\":4,\"ReserveSite\":1,\"Residential\":4,\"Utility\":2,\"Waterbody\":3}"
+        "Context zone counts": "{\"Business1\":36,\"Business1White\":4,\"Park\":4,\"ReserveSite\":1,\"Residential\":4,\"Utility\":2,\"Waterbody\":3}",
+        "Short address": "103 Kallang Avenue",
+        "Full address": "103 Kallang Avenue, Kallang, Singapore 339505",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
@@ -29914,7 +30370,11 @@
         "Non-residential share": 0.84,
         "Bordering road plots": 4,
         "Road type counts": "{\"Local Access\":1,\"Local Collector/Primary Access\":1,\"no category\":1,\"Expressway\":1}",
-        "Context zone counts": "{\"Business1\":2,\"Business1White\":3,\"Business2\":5,\"CivicAndCommunityInstitutionZone\":1,\"OpenSpace\":1,\"Park\":2,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":4,\"Utility\":1,\"Waterbody\":4}"
+        "Context zone counts": "{\"Business1\":2,\"Business1White\":3,\"Business2\":5,\"CivicAndCommunityInstitutionZone\":1,\"OpenSpace\":1,\"Park\":2,\"PlaceOfWorship\":1,\"ReserveSite\":1,\"Residential\":4,\"Utility\":1,\"Waterbody\":4}",
+        "Short address": "780 Pasir Ris Street 71",
+        "Full address": "780 Pasir Ris Street 71, Tampines, Singapore 520665",
+        "Address feature type": "address",
+        "Address source": "Mapbox Geocoding v6"
       }
     },
     {
