@@ -61,6 +61,8 @@
     detailRole: document.getElementById("detailRole"),
     detailTitle: document.getElementById("detailTitle"),
     detailBadge: document.getElementById("detailBadge"),
+    detailAddressRow: document.getElementById("detailAddressRow"),
+    detailAddress: document.getElementById("detailAddress"),
     metricArea: document.getElementById("metricArea"),
     metricGfa: document.getElementById("metricGfa"),
     metricGpr: document.getElementById("metricGpr"),
@@ -101,6 +103,11 @@
       .replace(/Zone$/i, "")
       .replace(/Business\s*1/i, "Business 1")
       .trim();
+  }
+
+  function plotDisplayName(feature) {
+    if (feature.properties.Role === "Reference") return normalizeZone(feature.properties.Zone);
+    return feature.properties["Short address"] || normalizeZone(feature.properties.Zone);
   }
 
   function formatNumber(value, digits) {
@@ -627,10 +634,12 @@
     const isReference = p.Role === "Reference";
     const roleLabel = isReference ? dataset.label : `${dataset.label} · Similar plot`;
     const matchRow = isReference ? "" : `<dt>Matched by</dt><dd>${escapeHtml(matchBasis(feature))}</dd>`;
+    const zoneRow = isReference ? "" : `<dt>Planning zone</dt><dd>${escapeHtml(normalizeZone(p.Zone))}</dd>`;
     const html = `<div class="map-popup">
       <div class="popup-kicker">${escapeHtml(roleLabel.toUpperCase())}</div>
-      <h4>${escapeHtml(normalizeZone(p.Zone))}</h4>
+      <h4>${escapeHtml(plotDisplayName(feature))}</h4>
       <dl>
+        ${zoneRow}
         <dt>Site area</dt><dd>${escapeHtml(formatArea(p["KG site area m²"]))}</dd>
         <dt>Allowable GFA</dt><dd>${escapeHtml(formatGfa(p["Final allowable GFA m²"]))}</dd>
         <dt>Plot ratio</dt><dd>${escapeHtml(formatNumber(p["Master Plan GPR"], 1))}</dd>
@@ -660,8 +669,10 @@
     els.selectionEmpty.classList.add("hidden");
     els.siteDetails.classList.remove("hidden");
     els.detailRole.textContent = isReference ? "REFERENCE SITE" : `SIMILAR PLOT ${String(candidatePosition + 1).padStart(2, "0")}`;
-    els.detailTitle.textContent = isReference ? dataset.label : `${dataset.label} match ${String(candidatePosition + 1).padStart(2, "0")}`;
+    els.detailTitle.textContent = isReference ? dataset.label : plotDisplayName(feature);
     els.detailBadge.textContent = normalizeZone(p.Zone);
+    els.detailAddressRow.classList.toggle("hidden", isReference || !p["Full address"]);
+    els.detailAddress.textContent = isReference ? "—" : (p["Full address"] || "Address not available");
     els.metricArea.textContent = formatArea(p["KG site area m²"]);
     els.metricGfa.textContent = formatGfa(p["Final allowable GFA m²"]);
     els.metricGpr.textContent = formatNumber(p["Master Plan GPR"], 1);
@@ -703,10 +714,11 @@
       button.className = "result-item";
       if (p.UUID === activeUuid) button.setAttribute("aria-current", "true");
       const basis = matchBasis(feature);
-      button.setAttribute("aria-label", `${normalizeZone(p.Zone)}, ${formatArea(p["KG site area m²"])}, matched by ${basis}`);
+      const displayName = plotDisplayName(feature);
+      button.setAttribute("aria-label", `${displayName}, ${formatArea(p["KG site area m²"])}, matched by ${basis}`);
       button.innerHTML = `
         <span class="result-rank">${String(index + 1).padStart(2, "0")}</span>
-        <span class="result-copy"><strong>${escapeHtml(normalizeZone(p.Zone))}</strong><small>${escapeHtml(formatArea(p["KG site area m²"]))}</small></span>
+        <span class="result-copy"><strong>${escapeHtml(displayName)}</strong><small>${escapeHtml(formatArea(p["KG site area m²"]))}</small></span>
         <span class="match-basis">${escapeHtml(basis)}</span>`;
       button.addEventListener("click", () => selectFeature(feature, true));
       els.resultsList.appendChild(button);
