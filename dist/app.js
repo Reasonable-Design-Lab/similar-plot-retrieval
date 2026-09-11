@@ -2,26 +2,31 @@
   "use strict";
 
   const SINGAPORE_BOUNDS = [[103.59, 1.13], [104.08, 1.49]];
-  const COLORS = { site1: "#ff6b35", site2: "#9d7bff" };
+  const COLORS = { site1: "#C9ACD1", site2: "#F4C18B" };
+  const OUTLINE_COLORS = { site1: "#76507F", site2: "#9A5B19" };
   const EMPTY_COLLECTION = { type: "FeatureCollection", features: [] };
+  const MANUAL_EXCLUSIONS = new Set([
+    // Data-quality review: a 165 m² sliver was returned against the 19,679 m² Site 1 reference.
+    "site1::UUID_18673aed-cba2-418b-9e65-f1fa6aa9bc8a"
+  ]);
   const FILTER_LEVELS = [
     {
       id: "1+2",
-      label: "Plot similarity",
+      label: "Similar plots",
       stage: "Filter 1+2",
-      explanation: "Matches Business 1 land use and either (a) both plot width and shape (aspect ratio) are within ±20%, or (b) final allowable gross floor area (GFA) is within ±20% of the selected site."
+      explanation: "Starts with Business 1 land use. A plot is included when either both its width and aspect ratio are within ±20% of the reference, or its final allowable GFA is within ±20%. This is an OR rule, so similar development capacity can qualify even when a plot looks different."
     },
     {
       id: "1+2+3",
-      label: "Plot + nearby land use",
+      label: "Similar neighbours",
       stage: "Filter 1+2+3",
-      explanation: "Includes Plot similarity, then checks neighbouring non-road plots: 0–2 educational plots, at least 1 residential plot, and at least 1 B1-family (Business 1-related) plot."
+      explanation: "Keeps the plot matches, then compares nearby non-road land uses: 0–2 educational plots, at least 1 residential plot, and at least 1 Business 1-family plot."
     },
     {
       id: "1+2+3+4",
-      label: "Plot + land use + roads",
+      label: "Similar road frontage",
       stage: "Filter 1+2+3+4",
-      explanation: "Includes Plot + nearby land use, then checks bordering roads. Both the total road count and the count for each road type must be within ±1 of the selected site."
+      explanation: "Keeps the plot and neighbour matches, then compares bordering roads. The total number of roads and the number of each road type must both be within ±1 of the reference site."
     }
   ];
   const DEFAULT_FILTER_LEVEL = FILTER_LEVELS[0].id;
@@ -41,8 +46,10 @@
     buildingsEnabled: false,
     activeSimilaritySite: null,
     activeCandidates: [],
-    selectedFilterLevel: DEFAULT_FILTER_LEVEL,
+    selectedFilterLevel: null,
     expandedFilterInfo: null,
+    retrievalRequestId: 0,
+    isRetrieving: false,
     webMcpLifecycle: null
   };
 
@@ -59,12 +66,13 @@
     metricGpr: document.getElementById("metricGpr"),
     metricAspect: document.getElementById("metricAspect"),
     filterControls: document.getElementById("filterControls"),
-    filterInputs: Array.from(document.querySelectorAll('input[name="filterCombination"]')),
+    filterModeButtons: Array.from(document.querySelectorAll(".filter-choice[data-filter-mode]")),
     filterInfoButtons: Array.from(document.querySelectorAll(".filter-info-button")),
     filterExplanation: document.getElementById("filterExplanation"),
     filterExplanationTitle: document.getElementById("filterExplanationTitle"),
     filterExplanationText: document.getElementById("filterExplanationText"),
-    findSimilarButton: document.getElementById("findSimilarButton"),
+    similarityLoading: document.getElementById("similarityLoading"),
+    similarityLoadingText: document.getElementById("similarityLoadingText"),
     similarHint: document.getElementById("similarHint"),
     resultsSection: document.getElementById("resultsSection"),
     resultsList: document.getElementById("resultsList"),
@@ -75,8 +83,9 @@
     site2Zone: document.getElementById("site2Zone")
   };
 
-  function setStatus(message, isError) {
+  function setStatus(message, isError, isLoading) {
     els.mapStatus.classList.toggle("error", Boolean(isError));
+    els.mapStatus.classList.toggle("loading", Boolean(isLoading));
     els.mapStatus.lastElementChild.textContent = message;
   }
 
@@ -107,6 +116,10 @@
     const number = Number(value);
     return Number.isFinite(number) ? `${formatNumber(number, 0)} m²` : "—";
   }
+  function formatGfa(value) {
+    const number = Number(value);
+    return Number.isFinite(number) && number > 0 ? `${formatNumber(number, 0)} m²` : "Not available";
+  }
 
   function featureLookupKey(siteId, uuid) {
     return `${siteId}::${uuid}`;
@@ -117,14 +130,17 @@
   }
 
   function getCandidatesForLevel(dataset, level) {
-    if (!dataset) return [];
-    return dataset.candidatesByLevel[level || state.selectedFilterLevel] || [];
+    const selectedLevel = level || state.selectedFilterLevel;
+    if (!dataset || !selectedLevel) return [];
+    return dataset.candidatesByLevel[selectedLevel] || [];
   }
 
   function setFilterLevel(level) {
-    const selected = getFilterDefinition(level);
-    state.selectedFilterLevel = selected.id;
-    els.filterInputs.forEach((input) => { input.checked = input.value === selected.id; });
+    const selected = level ? getFilterDefinition(level) : null;
+    state.selectedFilterLevel = selected ? selected.id : null;
+    els.filterModeButtons.forEach((button) => {
+      button.setAttribute("aria-pressed", String(Boolean(selected && button.dataset.filterMode === selected.id)));
+    });
     hideFilterExplanation();
   }
 
@@ -179,14 +195,32 @@
     return [(bounds[0][0] + bounds[1][0]) / 2, (bounds[0][1] + bounds[1][1]) / 2];
   }
 
+  function isTrue(value) {
+    return value === true || String(value).toLowerCase() === "true";
+  }
+
+  function matchBasis(feature) {
+    const p = feature.properties || {};
+    const dimensions = isTrue(p["Width and aspect match"]);
+    const gfa = isTrue(p["GFA match"]);
+    if (dimensions && gfa) return "Dimensions + GFA";
+    if (dimensions) return "Dimensions";
+    if (gfa) return "Allowable GFA";
+    return "Filter match";
+  }
+
   function matchScore(feature) {
-    const p = feature.properties;
-    const diffs = [p["Width diff"], p["Aspect diff"], p["GFA diff"]]
-      .map(Number)
-      .filter(Number.isFinite)
-      .map(Math.abs);
-    if (!diffs.length) return 1;
-    return Math.max(0, Math.min(1, 1 - diffs.reduce((a, b) => a + b, 0) / diffs.length));
+    const p = feature.properties || {};
+    const routes = [];
+    const widthDiff = Math.abs(Number(p["Width diff"]));
+    const aspectDiff = Math.abs(Number(p["Aspect diff"]));
+    const gfaDiff = Math.abs(Number(p["GFA diff"]));
+    if (isTrue(p["Width and aspect match"]) && Number.isFinite(widthDiff) && Number.isFinite(aspectDiff)) {
+      routes.push((widthDiff + aspectDiff) / 2);
+    }
+    if (isTrue(p["GFA match"]) && Number.isFinite(gfaDiff)) routes.push(gfaDiff);
+    if (!routes.length) return 0;
+    return Math.max(0, Math.min(1, 1 - Math.min(...routes)));
   }
 
   function curveBetween(start, end) {
@@ -210,22 +244,42 @@
     return coords;
   }
 
+  async function fetchGeoJson(url) {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 15000);
+    try {
+      const response = await fetch(url, { signal: controller.signal });
+      if (!response.ok) throw new Error(`${url} returned HTTP ${response.status}`);
+      const collection = await response.json();
+      if (!collection || collection.type !== "FeatureCollection" || !Array.isArray(collection.features)) {
+        throw new Error(`${url} is not a valid GeoJSON FeatureCollection`);
+      }
+      return collection;
+    } finally {
+      window.clearTimeout(timeout);
+    }
+  }
+
   async function loadDatasets() {
     const loaded = await Promise.all(DATASETS.map(async (dataset) => {
-      const response = await fetch(dataset.url);
-      if (!response.ok) throw new Error(`Could not load ${dataset.url}`);
-      const collection = await response.json();
-      const sourceFeatures = collection.features.map((feature, index) => {
-        const cloned = JSON.parse(JSON.stringify(feature));
-        cloned.properties = {
-          ...cloned.properties,
-          __site: dataset.id,
-          __datasetLabel: dataset.label,
-          __featureIndex: index
-        };
-        cloned.id = `${dataset.id}-${index}`;
-        return cloned;
-      });
+      const collection = await fetchGeoJson(dataset.url);
+      const sourceFeatures = collection.features
+        .filter((feature) => feature && feature.properties && feature.geometry && ["Polygon", "MultiPolygon"].includes(feature.geometry.type))
+        .filter((feature) => {
+          if (feature.properties.Role !== "Candidate") return true;
+          return !MANUAL_EXCLUSIONS.has(featureLookupKey(dataset.id, String(feature.properties.UUID || "")));
+        })
+        .map((feature, index) => {
+          const cloned = JSON.parse(JSON.stringify(feature));
+          cloned.properties = {
+            ...cloned.properties,
+            __site: dataset.id,
+            __datasetLabel: dataset.label,
+            __featureIndex: index
+          };
+          cloned.id = `${dataset.id}-${index}`;
+          return cloned;
+        });
       const reference = sourceFeatures.find((feature) => feature.properties.Role === "Reference") || sourceFeatures[0];
       const candidateMap = new Map();
       const candidateIdsByLevel = Object.fromEntries(FILTER_LEVELS.map((filter) => [filter.id, new Set()]));
@@ -271,9 +325,9 @@
       layout: { "line-cap": "round", "line-join": "round" },
       paint: {
         "line-color": ["get", "color"],
-        "line-width": 5,
-        "line-opacity": 0.06,
-        "line-blur": 4
+        "line-width": 3,
+        "line-opacity": 0.025,
+        "line-blur": 3
       }
     });
 
@@ -285,8 +339,8 @@
       layout: { "line-cap": "butt", "line-join": "round" },
       paint: {
         "line-color": ["get", "color"],
-        "line-width": ["interpolate", ["linear"], ["zoom"], 9, 1.2, 13, 2.2],
-        "line-opacity": 0.5,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 9, 0.75, 13, 1.35],
+        "line-opacity": 0.28,
         "line-dasharray": [0, 3, 2]
       }
     });
@@ -299,7 +353,7 @@
       filter: ["==", ["get", "Role"], "Reference"],
       paint: {
         "fill-color": ["match", ["get", "__site"], "site1", COLORS.site1, COLORS.site2],
-        "fill-opacity": ["case", ["==", ["get", "Role"], "Reference"], 0.78, 0.62]
+        "fill-opacity": ["case", ["==", ["get", "Role"], "Reference"], 0.84, 0.76]
       }
     });
 
@@ -310,8 +364,8 @@
       slot: "top",
       filter: ["==", ["get", "Role"], "Reference"],
       paint: {
-        "line-color": ["match", ["get", "__site"], "site1", "#d94816", "#7048e8"],
-        "line-width": ["case", ["==", ["get", "Role"], "Reference"], 4.5, 2.8],
+        "line-color": ["match", ["get", "__site"], "site1", OUTLINE_COLORS.site1, OUTLINE_COLORS.site2],
+        "line-width": ["case", ["==", ["get", "Role"], "Reference"], 3.8, 2.4],
         "line-opacity": ["case", ["==", ["get", "Role"], "Reference"], 1, 0.96]
       }
     });
@@ -321,7 +375,7 @@
       type: "fill",
       source: "selection",
       slot: "top",
-      paint: { "fill-color": ["get", "color"], "fill-opacity": 0.72 }
+      paint: { "fill-color": ["get", "color"], "fill-opacity": 0.82 }
     });
 
     map.addLayer({
@@ -332,9 +386,9 @@
       layout: { "line-join": "round" },
       paint: {
         "line-color": ["get", "color"],
-        "line-width": 16,
-        "line-opacity": 0.4,
-        "line-blur": 5
+        "line-width": 12,
+        "line-opacity": 0.24,
+        "line-blur": 4
       }
     });
 
@@ -346,7 +400,7 @@
       layout: { "line-join": "round" },
       paint: {
         "line-color": "#ffffff",
-        "line-width": 9,
+        "line-width": 7,
         "line-opacity": 0.98
       }
     });
@@ -359,7 +413,7 @@
       layout: { "line-join": "round" },
       paint: {
         "line-color": ["get", "color"],
-        "line-width": 5,
+        "line-width": 4,
         "line-opacity": 1
       }
     });
@@ -411,7 +465,7 @@
         "text-allow-overlap": true
       },
       paint: {
-        "text-color": ["match", ["get", "__site"], "site1", "#c83c0d", "#6438dc"],
+        "text-color": ["match", ["get", "__site"], "site1", OUTLINE_COLORS.site1, OUTLINE_COLORS.site2],
         "text-halo-color": "#ffffff",
         "text-halo-width": 3,
         "text-halo-blur": 0.5
@@ -448,6 +502,7 @@
   }
 
   function startDashAnimation() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const sequence = [
       [0, 3, 2], [0.5, 3, 1.5], [1, 3, 1], [1.5, 3, 0.5],
       [2, 3, 0], [0, 0.5, 2, 2.5], [0, 1, 2, 2], [0, 1.5, 2, 1.5], [0, 2, 2, 1]
@@ -455,7 +510,7 @@
     let lastStep = -1;
     const animate = (timestamp) => {
       if (state.map && state.map.getLayer("links-dashed")) {
-        const step = Math.floor(timestamp / 90) % sequence.length;
+        const step = Math.floor(timestamp / 120) % sequence.length;
         if (step !== lastStep) {
           state.map.setPaintProperty("links-dashed", "line-dasharray", sequence[step]);
           lastStep = step;
@@ -522,10 +577,27 @@
     });
   }
 
-  function clearSimilar() {
+  function setSimilarityLoading(isLoading, filter) {
+    state.isRetrieving = isLoading;
+    els.filterControls.setAttribute("aria-busy", String(isLoading));
+    els.filterModeButtons.forEach((button) => { button.disabled = isLoading; });
+    els.filterInfoButtons.forEach((button) => { button.disabled = isLoading; });
+    els.similarityLoading.classList.toggle("hidden", !isLoading);
+    if (isLoading) {
+      els.similarityLoadingText.textContent = `Updating ${filter.label.toLowerCase()}`;
+      setStatus(`Updating ${filter.label.toLowerCase()}`, false, true);
+    } else {
+      els.mapStatus.classList.remove("loading");
+    }
+  }
+
+  function clearSimilar({ resetMode = false } = {}) {
+    state.retrievalRequestId += 1;
     state.activeSimilaritySite = null;
     state.activeCandidates = [];
+    setSimilarityLoading(false);
     hideFilterExplanation();
+    if (resetMode) setFilterLevel(null);
     setCandidateVisibility(null);
     const links = state.map && state.map.getSource("links");
     if (links) links.setData(EMPTY_COLLECTION);
@@ -535,17 +607,16 @@
   }
 
   function updateRetrievalControls(dataset) {
+    if (!state.selectedFilterLevel) {
+      els.similarHint.textContent = "Choose a view to display matching plots.";
+      return;
+    }
     const candidates = getCandidatesForLevel(dataset);
     const filter = getFilterDefinition(state.selectedFilterLevel);
-    const isShowing = state.activeSimilaritySite === dataset.id;
-    els.findSimilarButton.disabled = candidates.length === 0;
-    els.findSimilarButton.querySelector("span").textContent = "Find similar plots";
     if (!candidates.length) {
       els.similarHint.textContent = `No plots match “${filter.label}” for this site.`;
-    } else if (isShowing) {
-      els.similarHint.textContent = `Showing ${candidates.length} plots with “${filter.label}”.`;
     } else {
-      els.similarHint.textContent = `“${filter.label}” returns ${candidates.length} plots. Run the retrieval to display them.`;
+      els.similarHint.textContent = `Showing ${candidates.length} plots in “${filter.label}”. Select another view to compare.`;
     }
   }
 
@@ -553,14 +624,17 @@
     if (state.popup) state.popup.remove();
     const p = feature.properties;
     const dataset = state.datasets[p.__site];
-    const roleLabel = p.Role === "Reference" ? dataset.label : `${dataset.label} · Similar plot`;
+    const isReference = p.Role === "Reference";
+    const roleLabel = isReference ? dataset.label : `${dataset.label} · Similar plot`;
+    const matchRow = isReference ? "" : `<dt>Matched by</dt><dd>${escapeHtml(matchBasis(feature))}</dd>`;
     const html = `<div class="map-popup">
       <div class="popup-kicker">${escapeHtml(roleLabel.toUpperCase())}</div>
       <h4>${escapeHtml(normalizeZone(p.Zone))}</h4>
       <dl>
         <dt>Site area</dt><dd>${escapeHtml(formatArea(p["KG site area m²"]))}</dd>
-        <dt>Allowable GFA</dt><dd>${escapeHtml(formatArea(p["Final allowable GFA m²"]))}</dd>
+        <dt>Allowable GFA</dt><dd>${escapeHtml(formatGfa(p["Final allowable GFA m²"]))}</dd>
         <dt>Plot ratio</dt><dd>${escapeHtml(formatNumber(p["Master Plan GPR"], 1))}</dd>
+        ${matchRow}
       </dl>
     </div>`;
     state.popup = new mapboxgl.Popup({ offset: 14, closeButton: true })
@@ -572,14 +646,12 @@
   function selectFeature(feature, shouldFocus) {
     const p = feature.properties;
     const previousSite = state.selectedFeature && state.selectedFeature.properties.__site;
-    if (state.activeSimilaritySite && state.activeSimilaritySite !== p.__site) clearSimilar();
-    if (p.Role === "Reference" && previousSite && previousSite !== p.__site) setFilterLevel(DEFAULT_FILTER_LEVEL);
+    if (state.activeSimilaritySite && state.activeSimilaritySite !== p.__site) clearSimilar({ resetMode: true });
+    if (p.Role === "Reference" && previousSite && previousSite !== p.__site) clearSimilar({ resetMode: true });
     state.selectedFeature = feature;
     const dataset = state.datasets[p.__site];
     const isReference = p.Role === "Reference";
-    const visibleCandidates = state.activeSimilaritySite === dataset.id
-      ? state.activeCandidates
-      : getCandidatesForLevel(dataset);
+    const visibleCandidates = state.activeSimilaritySite === dataset.id ? state.activeCandidates : [];
     let candidatePosition = visibleCandidates.findIndex((candidate) => candidate.properties.UUID === p.UUID);
     if (candidatePosition < 0) candidatePosition = dataset.candidates.findIndex((candidate) => candidate.properties.UUID === p.UUID);
 
@@ -591,17 +663,15 @@
     els.detailTitle.textContent = isReference ? dataset.label : `${dataset.label} match ${String(candidatePosition + 1).padStart(2, "0")}`;
     els.detailBadge.textContent = normalizeZone(p.Zone);
     els.metricArea.textContent = formatArea(p["KG site area m²"]);
-    els.metricGfa.textContent = formatArea(p["Final allowable GFA m²"]);
+    els.metricGfa.textContent = formatGfa(p["Final allowable GFA m²"]);
     els.metricGpr.textContent = formatNumber(p["Master Plan GPR"], 1);
     els.metricAspect.textContent = formatNumber(p["Aspect ratio"], 2);
 
-    els.filterControls.classList.toggle("hidden", !isReference);
+    els.filterControls.classList.remove("hidden");
     if (isReference) {
       updateRetrievalControls(dataset);
     } else {
-      els.findSimilarButton.disabled = true;
-      els.findSimilarButton.querySelector("span").textContent = "Viewing similar plot";
-      els.similarHint.textContent = `${Math.round(matchScore(feature) * 100)}% composite similarity to ${dataset.label}.`;
+      els.similarHint.textContent = `Matched by ${matchBasis(feature).toLowerCase()}.`;
     }
 
     if (!isReference) {
@@ -623,7 +693,7 @@
     els.resultCount.textContent = String(candidates.length);
     els.resultsList.innerHTML = "";
     if (!candidates.length) {
-      els.resultsList.innerHTML = '<p class="empty-results">No plots matched this filter combination.</p>';
+      els.resultsList.innerHTML = '<p class="empty-results">No plots matched this view.</p>';
       return;
     }
     candidates.forEach((feature, index) => {
@@ -632,10 +702,12 @@
       button.type = "button";
       button.className = "result-item";
       if (p.UUID === activeUuid) button.setAttribute("aria-current", "true");
+      const basis = matchBasis(feature);
+      button.setAttribute("aria-label", `${normalizeZone(p.Zone)}, ${formatArea(p["KG site area m²"])}, matched by ${basis}`);
       button.innerHTML = `
         <span class="result-rank">${String(index + 1).padStart(2, "0")}</span>
         <span class="result-copy"><strong>${escapeHtml(normalizeZone(p.Zone))}</strong><small>${escapeHtml(formatArea(p["KG site area m²"]))}</small></span>
-        <span class="match-score">${Math.round(matchScore(feature) * 100)}%</span>`;
+        <span class="match-basis">${escapeHtml(basis)}</span>`;
       button.addEventListener("click", () => selectFeature(feature, true));
       els.resultsList.appendChild(button);
     });
@@ -643,7 +715,7 @@
 
   function revealSimilar() {
     const reference = state.selectedFeature;
-    if (!reference || reference.properties.Role !== "Reference") return;
+    if (!reference || reference.properties.Role !== "Reference" || !state.selectedFilterLevel) return false;
     const dataset = state.datasets[reference.properties.__site];
     const candidates = getCandidatesForLevel(dataset);
     const filter = getFilterDefinition(state.selectedFilterLevel);
@@ -666,8 +738,33 @@
     updateRetrievalControls(dataset);
     showOverview();
     setStatus(candidates.length
-      ? `${candidates.length} plots connected · ${filter.label}`
+      ? `${candidates.length} plots shown · ${filter.label}`
       : `No plots match ${filter.label}`);
+    return true;
+  }
+
+  async function activateFilterMode(level) {
+    const selected = state.selectedFeature;
+    if (!selected) return;
+    const dataset = state.datasets[selected.properties.__site];
+    const reference = dataset && dataset.reference;
+    if (!reference) return;
+    if (selected !== reference) selectFeature(reference, false);
+    const filter = getFilterDefinition(level);
+    const requestId = state.retrievalRequestId + 1;
+    state.retrievalRequestId = requestId;
+    setFilterLevel(filter.id);
+    setSimilarityLoading(true, filter);
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    if (requestId !== state.retrievalRequestId || state.selectedFeature !== reference) return;
+    try {
+      revealSimilar();
+    } catch (error) {
+      console.error(error);
+      setStatus("Similar plots could not be updated", true);
+    } finally {
+      if (requestId === state.retrievalRequestId) setSimilarityLoading(false);
+    }
   }
 
   function showOverview() {
@@ -688,27 +785,17 @@
   function wireControls() {
     document.querySelectorAll(".site-tab").forEach((button) => {
       button.addEventListener("click", () => {
-        clearSimilar();
-        setFilterLevel(DEFAULT_FILTER_LEVEL);
+        clearSimilar({ resetMode: true });
         const dataset = state.datasets[button.dataset.site];
         if (dataset && dataset.reference) selectFeature(dataset.reference, true);
       });
     });
-    els.filterInputs.forEach((input) => {
-      input.addEventListener("change", () => {
-        if (!input.checked) return;
-        setFilterLevel(input.value);
-        const selected = state.selectedFeature;
-        if (!selected || selected.properties.Role !== "Reference") return;
-        const dataset = state.datasets[selected.properties.__site];
-        if (state.activeSimilaritySite === dataset.id) revealSimilar();
-        else updateRetrievalControls(dataset);
-      });
+    els.filterModeButtons.forEach((button) => {
+      button.addEventListener("click", () => { void activateFilterMode(button.dataset.filterMode); });
     });
     els.filterInfoButtons.forEach((button) => {
       button.addEventListener("click", () => toggleFilterExplanation(button.dataset.filterInfo));
     });
-    els.findSimilarButton.addEventListener("click", revealSimilar);
     els.overviewButton.addEventListener("click", showOverview);
     els.pitchButton.addEventListener("click", () => {
       const enabled = !state.buildingsEnabled;
@@ -739,12 +826,12 @@
       void Promise.resolve(context.registerTool({
         name: "explore_site_matches",
         title: "Explore site matches",
-        description: "Select Site 1 or Site 2 on the visible Singapore map and optionally reveal the similar parcels returned by one filter combination.",
+        description: "Select Site 1 or Site 2 on the visible Singapore map and optionally show the similar plots returned by one comparison mode.",
         inputSchema: {
           type: "object",
           properties: {
             site: { type: "string", enum: ["site1", "site2"], description: "Reference site to explore." },
-            filterCombination: { type: "string", enum: ["1+2", "1+2+3", "1+2+3+4"], description: "Filter combination used for similarity retrieval." },
+            filterCombination: { type: "string", enum: ["1+2", "1+2+3", "1+2+3+4"], description: "Comparison mode used to show similar plots." },
             revealSimilar: { type: "boolean", description: "Whether to return to the overview and draw animated links to matching candidates." }
           },
           required: ["site"],
@@ -778,13 +865,35 @@
     }
   }
 
+  function waitForMapLoad(map) {
+    return new Promise((resolve, reject) => {
+      let firstResourceError = null;
+      const onError = (event) => {
+        if (!firstResourceError) firstResourceError = event.error || new Error("Map resource failed");
+      };
+      const timeout = window.setTimeout(() => {
+        map.off("error", onError);
+        reject(firstResourceError || new Error("Map style timed out"));
+      }, 20000);
+      map.on("error", onError);
+      map.once("load", () => {
+        window.clearTimeout(timeout);
+        map.off("error", onError);
+        resolve();
+      });
+    });
+  }
   async function initialise() {
     if (!hasValidToken()) {
       els.tokenNotice.classList.remove("hidden");
       setStatus("Mapbox token required", true);
       return;
     }
-    if (!window.mapboxgl || !mapboxgl.supported()) {
+    if (!window.mapboxgl) {
+      setStatus("The map library could not be loaded", true);
+      return;
+    }
+    if (!mapboxgl.supported()) {
       setStatus("WebGL is not supported in this browser", true);
       return;
     }
@@ -805,12 +914,8 @@
     state.map.addControl(new mapboxgl.ScaleControl({ maxWidth: 110, unit: "metric" }), "bottom-right");
 
     try {
-      const dataPromise = loadDatasets();
-      await new Promise((resolve, reject) => {
-        state.map.once("load", resolve);
-        state.map.once("error", (event) => reject(event.error || new Error("Map style failed to load")));
-      });
-      const allPlots = await dataPromise;
+      setStatus("Loading map and plot data", false, true);
+      const [allPlots] = await Promise.all([loadDatasets(), waitForMapLoad(state.map)]);
       addMapContent(allPlots);
       wireControls();
       registerWebMcpTool();
@@ -823,7 +928,8 @@
       showOverview();
     } catch (error) {
       console.error(error);
-      setStatus("The map data could not be loaded", true);
+      const dataProblem = error && (error.name === "AbortError" || /GeoJSON|data\//i.test(error.message || ""));
+      setStatus(dataProblem ? "Plot data could not be loaded" : "The base map could not be loaded", true);
     }
   }
 
