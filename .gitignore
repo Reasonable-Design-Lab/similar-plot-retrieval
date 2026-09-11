@@ -2,3 +2,9 @@
 Thumbs.db
 *.log
 mapbox-token.txt
+/*.qa.png
+/SITE1-like_similar_plots_v2.geojson
+/SITE2-like_similar_plots_v2.geojson
+/SITE1_similar_plot_nonroad_neighbours.geojson
+/SITE2_similar_plot_nonroad_neighbours.geojson
+/similar_sites_3.xlsx

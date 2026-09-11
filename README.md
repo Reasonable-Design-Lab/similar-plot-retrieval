@@ -1,10 +1,14 @@
-# Singapore Site Similarity Explorer
+# Similar Plot Retrieval
 
-An English-language, interactive Mapbox GL JS site for comparing two Singapore reference parcels with their similar plots. It supports:
+An English-language Mapbox GL JS explorer for comparing two Singapore reference parcels with progressively stricter similar-plot results. It supports:
 
-- colour-coded Site 01 and Site 02 families;
+- colour-coded Site 1 and Site 2 families;
+- three selectable plot, neighbour and road-frontage matching views;
 - click-to-inspect parcel planning metrics;
+- concise addresses for similar plots;
+- on-demand Knowledge Graph (KG) context for every selected similar plot, including direct and across-road neighbours, planning use, development capacity, programmes and controls;
 - animated dashed similarity links;
+- click-to-browse individual neighbouring plots, with an empty-map click to close the neighbourhood context;
 - smooth transitions from the Singapore overview to a selected parcel; and
 - pitched 3D building views using the Mapbox Standard style.
 
@@ -32,16 +36,26 @@ You can also use any static file server and point it at the `dist` directory.
 
 ## Publish with GitHub Pages
 
-The included workflow publishes `dist` whenever the `main` branch is updated. In the GitHub repository, open **Settings → Pages** and choose **GitHub Actions** as the source if it is not already selected.
+The included workflow publishes `dist` whenever the `main` branch is updated. In the GitHub repository, open **Settings -> Pages** and choose **GitHub Actions** as the source if it is not already selected.
 
 ## Update the data
 
-Replace the two files in `dist/data` while keeping these names:
+The searchable plot collections are:
 
-- `SITE1-like_similar_plots.geojson`
-- `SITE2-like_similar_plots.geojson`
+- `dist/data/SITE1-like_similar_plots_v2.geojson`
+- `dist/data/SITE2-like_similar_plots_v2.geojson`
 
-Each collection should contain one feature with `Role: "Reference"`; any features with `Role: "Candidate"` become searchable similar plots automatically.
+Each collection should contain one feature with `Role: "Reference"`. Candidate features are grouped by their `Filter stage` value.
 
-The current data contains four candidates for Site 01. Site 02 currently contains only its reference parcel, so the interface displays a clear empty-candidate state until candidate features are added.
+Neighbour relationships are prepared from these local source files in the repository root (they are not published):
 
+- `SITE1_similar_plot_nonroad_neighbours.geojson`
+- `SITE2_similar_plot_nonroad_neighbours.geojson`
+
+After replacing either source file, run:
+
+```powershell
+node .\scripts\prepare-neighbour-data.mjs
+```
+
+This creates compact, web-ready copies in `dist/data`. They retain geometry, source-candidate UUID relationships, direct/across-road routes, planning zones, parcel metrics and KG regulation summaries while avoiding a large initial page download. The browser loads the relevant neighbour collection only after a user selects a similar plot.
