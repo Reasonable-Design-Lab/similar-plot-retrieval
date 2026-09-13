@@ -99,9 +99,39 @@ const qaUrl = `${BASE_URL}${BASE_URL.includes("?") ? "&" : "?"}qa=1`;
 await send("Page.navigate", { url: qaUrl });
 await waitFor("window.__qaMap && window.__qaMap.getSource('plots') && document.querySelectorAll('.site-tab').length === 2", "Mapbox map", 45000);
 
-const report = { desktop: {}, stress: {}, mobile: {} };
+const report = { information: {}, desktop: {}, stress: {}, mobile: {} };
+
+await click("document.getElementById('informationButton')");
+await waitFor("document.getElementById('informationOverlay').dataset.open === 'true' && document.activeElement === document.getElementById('informationSheet')", "information sheet open");
+await waitFor("document.querySelector('.research-figure img').complete && document.querySelector('.research-figure img').naturalWidth > 0", "research figure");
+await waitFor("(() => { const rect = document.getElementById('informationSheet').getBoundingClientRect(); return rect.top >= 0 && rect.bottom <= window.innerHeight; })()", "information sheet transition");
+report.information = await evaluate(`(() => {
+  const sheet = document.getElementById('informationSheet');
+  const links = [...sheet.querySelectorAll('a')].map((link) => link.href);
+  return {
+    title: document.getElementById('informationTitle').textContent,
+    hasLabCredit: sheet.innerText.includes('Reasonable Design Lab'),
+    hasPaperCredit: sheet.innerText.includes('Grisiute') && sheet.innerText.includes('Raubal') && sheet.innerText.includes('Herthogs'),
+    hasDisclaimer: sheet.innerText.includes('proof of concept only') && sheet.innerText.includes('not intended to be a software engineering product'),
+    hasLinkedIn: links.includes('https://www.linkedin.com/company/reasonable-design-lab/'),
+    hasDoi: links.includes('https://doi.org/10.5194/agile-giss-6-3-2025'),
+    hasRepository: links.includes('https://github.com/mie-lab/3d-landuse-planning'),
+    figureWidth: document.querySelector('.research-figure img').naturalWidth,
+    fitsViewport: sheet.getBoundingClientRect().top >= 0 && sheet.getBoundingClientRect().bottom <= window.innerHeight
+  };
+})()`);
+if (Object.entries(report.information).some(([key, value]) => key !== 'title' && key !== 'figureWidth' && value !== true)) {
+  throw new Error(`Information sheet is incomplete: ${JSON.stringify(report.information)}`);
+}
+report.desktop.linkLineOpacity = await evaluate("window.__qaMap.getPaintProperty('links-dashed', 'line-opacity')");
+report.desktop.linkLineWidth = await evaluate("window.__qaMap.getPaintProperty('links-dashed', 'line-width')");
+if (report.desktop.linkLineOpacity !== 0.42) throw new Error(`Unexpected link opacity: ${report.desktop.linkLineOpacity}`);
+await send("Input.dispatchKeyEvent", { type: "keyDown", key: "Escape", code: "Escape" });
+await send("Input.dispatchKeyEvent", { type: "keyUp", key: "Escape", code: "Escape" });
+await waitFor("document.getElementById('informationOverlay').dataset.open === 'false' && document.activeElement === document.getElementById('informationButton')", "information sheet close");
 
 await click("document.querySelector('[data-site=\"site1\"]')");
+if (await evaluate("document.getElementById('metricAreaLabel').textContent") !== "Site area") throw new Error("Reference area is not labelled as Site area");
 await click("document.querySelector('[data-filter-mode=\"1+2\"]')");
 await waitFor("document.querySelectorAll('.result-item').length > 0 && !document.querySelector('.similarity-loading:not(.hidden)')", "Site 1 results");
 report.desktop.site1Results = await evaluate("document.querySelectorAll('.result-item').length");
@@ -119,6 +149,7 @@ await click("document.querySelector('[data-filter-mode=\"1+2\"]')");
 await waitFor("document.querySelectorAll('.result-item').length === 66 && !document.querySelector('.similarity-loading:not(.hidden)')", "Site 1 base results restored");
 await click("document.querySelector('.result-item')");
 await waitFor("document.querySelector('.neighbour-summary') && window.__qaMap.getSource('neighbours')._data.features.length > 0", "Site 1 neighbours", 30000);
+if (await evaluate("document.getElementById('metricAreaLabel').textContent") !== "Plot area") throw new Error("Similar boundary area is not labelled as Plot area");
 report.desktop.site1Neighbours = await evaluate("window.__qaMap.getSource('neighbours')._data.features.length");
 report.desktop.summary = await evaluate("document.querySelector('.neighbour-summary').innerText");
 await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -140,6 +171,9 @@ const neighbourPoint = await evaluate(`(() => {
 if (!neighbourPoint) throw new Error("No rendered neighbouring plot was found");
 await mouseClick(neighbourPoint);
 await waitFor("document.querySelector('.neighbour-popup') && document.querySelectorAll('.gfa-scheme-tab').length > 1", "multi-scheme neighbour KG popup");
+if (!await evaluate("document.querySelector('.neighbour-popup').innerText.includes('Plot area') && !document.querySelector('.neighbour-popup').innerText.includes('Site area')")) {
+  throw new Error("Neighbouring boundary area is not consistently labelled as Plot area");
+}
 if (!await evaluate("document.querySelector('.neighbour-popup-shell').classList.contains('mapboxgl-popup-anchor-bottom')")) {
   throw new Error("Neighbour popup is not anchored above the selected plot");
 }

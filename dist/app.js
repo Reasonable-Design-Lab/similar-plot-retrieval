@@ -75,6 +75,7 @@
     detailBadge: document.getElementById("detailBadge"),
     detailAddressRow: document.getElementById("detailAddressRow"),
     detailAddress: document.getElementById("detailAddress"),
+    metricAreaLabel: document.getElementById("metricAreaLabel"),
     metricArea: document.getElementById("metricArea"),
     metricGfa: document.getElementById("metricGfa"),
     metricGpr: document.getElementById("metricGpr"),
@@ -93,9 +94,59 @@
     resultCount: document.getElementById("resultCount"),
     overviewButton: document.getElementById("overviewButton"),
     pitchButton: document.getElementById("pitchButton"),
+    informationButton: document.getElementById("informationButton"),
+    informationOverlay: document.getElementById("informationOverlay"),
+    informationSheet: document.getElementById("informationSheet"),
+    informationClose: document.getElementById("informationClose"),
     site1Zone: document.getElementById("site1Zone"),
     site2Zone: document.getElementById("site2Zone")
   };
+
+  let lastInformationFocus = null;
+
+  function setInformationOpen(open) {
+    if (!els.informationOverlay) return;
+    els.informationOverlay.dataset.open = String(open);
+    els.informationOverlay.setAttribute("aria-hidden", String(!open));
+    els.informationButton.setAttribute("aria-expanded", String(open));
+    document.body.classList.toggle("information-open", open);
+    if (open) {
+      lastInformationFocus = document.activeElement;
+      requestAnimationFrame(() => els.informationSheet.focus());
+    } else {
+      const focusTarget = lastInformationFocus && lastInformationFocus !== document.body ? lastInformationFocus : els.informationButton;
+      if (focusTarget && typeof focusTarget.focus === "function") focusTarget.focus();
+    }
+  }
+
+  function wireInformationPanel() {
+    if (!els.informationButton || !els.informationOverlay || !els.informationSheet || !els.informationClose) return;
+    els.informationButton.addEventListener("click", () => setInformationOpen(true));
+    els.informationClose.addEventListener("click", () => setInformationOpen(false));
+    els.informationOverlay.addEventListener("click", (event) => {
+      if (event.target === els.informationOverlay) setInformationOpen(false);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (els.informationOverlay.dataset.open !== "true") return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setInformationOpen(false);
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const focusable = Array.from(els.informationSheet.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'));
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+  }
 
   function setStatus(message, isError, isLoading) {
     els.mapStatus.classList.toggle("error", Boolean(isError));
@@ -377,9 +428,9 @@
       layout: { "line-cap": "round", "line-join": "round" },
       paint: {
         "line-color": ["get", "color"],
-        "line-width": 3,
-        "line-opacity": 0.025,
-        "line-blur": 3
+        "line-width": 4,
+        "line-opacity": 0.055,
+        "line-blur": 2.5
       }
     });
 
@@ -391,8 +442,8 @@
       layout: { "line-cap": "butt", "line-join": "round" },
       paint: {
         "line-color": ["get", "color"],
-        "line-width": ["interpolate", ["linear"], ["zoom"], 9, 0.75, 13, 1.35],
-        "line-opacity": 0.28,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 9, 0.95, 13, 1.55],
+        "line-opacity": 0.42,
         "line-dasharray": [0, 3, 2]
       }
     });
@@ -916,7 +967,7 @@
       <dl>
         <dt>Relationship</dt><dd>${escapeHtml(p.relationship)}</dd>
         <dt>Planning zone</dt><dd>${escapeHtml(p.zone)}</dd>
-        <dt>Site area</dt><dd>${optionalMetric(p.site_area_m2, formatArea)}</dd>
+        <dt>Plot area</dt><dd>${optionalMetric(p.site_area_m2, formatArea)}</dd>
         <dt>Plot width</dt><dd>${optionalMetric(p.width_m, (value) => `${formatNumber(value, 1)} m`)}</dd>
         <dt>Aspect ratio</dt><dd>${optionalMetric(p.aspect_ratio, (value) => formatNumber(value, 2))}</dd>
         ${fallbackGfa}
@@ -1008,7 +1059,7 @@
       <h4>${escapeHtml(plotDisplayName(feature))}</h4>
       <dl>
         ${zoneRow}
-        <dt>Site area</dt><dd>${escapeHtml(formatArea(p["KG site area m²"]))}</dd>
+        <dt>${isReference ? "Site area" : "Plot area"}</dt><dd>${escapeHtml(formatArea(p["KG site area m²"]))}</dd>
         <dt>Allowable GFA</dt><dd>${escapeHtml(formatGfa(p["Final allowable GFA m²"]))}</dd>
         <dt>Plot ratio</dt><dd>${escapeHtml(formatNumber(p["Master Plan GPR"], 1))}</dd>
         ${matchRow}
@@ -1043,6 +1094,7 @@
     els.detailBadge.textContent = normalizeZone(p.Zone);
     els.detailAddressRow.classList.toggle("hidden", isReference || !p["Full address"]);
     els.detailAddress.textContent = isReference ? "—" : (p["Full address"] || "Address not available");
+    els.metricAreaLabel.textContent = isReference ? "Site area" : "Plot area";
     els.metricArea.textContent = formatArea(p["KG site area m²"]);
     els.metricGfa.textContent = formatGfa(p["Final allowable GFA m²"]);
     els.metricGpr.textContent = formatNumber(p["Master Plan GPR"], 1);
@@ -1240,7 +1292,7 @@
             selectedSite: dataset.label,
             filterCombination: state.selectedFilterLevel,
             similarPlotsShown: input.revealSimilar === false ? 0 : candidates.length,
-            view: input.revealSimilar === false ? "parcel" : "singapore-overview"
+            view: input.revealSimilar === false ? "site-detail" : "singapore-overview"
           };
         }
       }, { signal: state.webMcpLifecycle.signal })).catch((error) => console.warn("WebMCP tool registration failed", error));
@@ -1268,6 +1320,7 @@
     });
   }
   async function initialise() {
+    wireInformationPanel();
     if (!hasValidToken()) {
       els.tokenNotice.classList.remove("hidden");
       setStatus("Mapbox token required", true);

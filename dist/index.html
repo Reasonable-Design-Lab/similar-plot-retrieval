@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="Retrieve similar Singapore land parcels from two reference sites on an interactive 3D map." />
+    <meta name="description" content="Retrieve similar Singapore plots from two reference sites on an interactive 3D map." />
     <meta name="theme-color" content="#f3f4f5" />
     <title>Similar Plot Retrieval</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2317191c'/%3E%3Cpath d='M7 21 11 8l9-2 5 6-3 12-10 2Z' fill='%23c9acd1' stroke='%23fff' stroke-width='1.5'/%3E%3Ccircle cx='20' cy='13' r='3.5' fill='%23f4c18b'/%3E%3C/svg%3E" />
@@ -18,7 +18,7 @@
       <aside class="side-panel" aria-label="Similar plot retrieval">
         <div class="panel-intro">
           <h1>Similar Plot Retrieval</h1>
-          <p>Select a reference site, then choose how much of its plot and surroundings should match.</p>
+          <p>Select a reference site, then choose which plot and surrounding characteristics should match.</p>
         </div>
 
         <div class="site-switcher" role="group" aria-label="Reference sites">
@@ -48,7 +48,7 @@
           <dl class="detail-list">
             <div><dt>Planning zone</dt><dd id="detailBadge">Business 1</dd></div>
             <div id="detailAddressRow" class="address-row hidden"><dt>Nearest address</dt><dd id="detailAddress">—</dd></div>
-            <div><dt>Site area</dt><dd id="metricArea">—</dd></div>
+            <div><dt id="metricAreaLabel">Site area</dt><dd id="metricArea">—</dd></div>
             <div><dt>Allowable GFA</dt><dd id="metricGfa">—</dd></div>
             <div><dt>Plot ratio</dt><dd id="metricGpr">—</dd></div>
             <div><dt>Aspect ratio</dt><dd id="metricAspect">—</dd></div>
@@ -115,6 +115,70 @@
 
       <div id="mapStatus" class="map-status" role="status" aria-live="polite">
         <span class="status-dot"></span><span>Preparing map</span>
+      </div>
+
+      <div class="information-bar">
+        <button id="informationButton" class="information-button" type="button" aria-haspopup="dialog" aria-controls="informationSheet" aria-expanded="false">
+          <span class="information-icon" aria-hidden="true">i</span>
+          <span><strong>Information &amp; methodology</strong><small>Reasonable Design Lab</small></span>
+          <span class="information-arrow" aria-hidden="true">↑</span>
+        </button>
+      </div>
+
+      <div id="informationOverlay" class="information-overlay" aria-hidden="true" data-open="false">
+        <section id="informationSheet" class="information-sheet" role="dialog" aria-modal="true" aria-labelledby="informationTitle" tabindex="-1">
+          <header class="information-header">
+            <div>
+              <p class="eyebrow">ABOUT THIS VIEWER</p>
+              <h2 id="informationTitle">Information &amp; methodology</h2>
+            </div>
+            <button id="informationClose" class="information-close" type="button" aria-label="Close information">×</button>
+          </header>
+
+          <div class="information-body">
+            <div class="information-layout">
+              <div class="information-copy">
+                <section>
+                  <h3>Reasonable Design Lab</h3>
+                  <p>Similar Plot Retrieval is a research prototype made by the <a href="https://www.linkedin.com/company/reasonable-design-lab/" target="_blank" rel="noreferrer">Reasonable Design Lab ↗</a>.</p>
+                </section>
+
+                <section>
+                  <h3>How to read the viewer</h3>
+                  <p><strong>Site 1</strong> and <strong>Site 2</strong> are the two reference sites. Every other highlighted boundary is a plot returned for comparison.</p>
+                  <p>Similarity is evaluated progressively: first by plot characteristics, then by neighbouring non-road plots within 75 m, and finally by road frontage.</p>
+                </section>
+
+                <section>
+                  <h3>Research basis</h3>
+                  <p>This viewer builds on work by Ayda Grisiute, Martin Raubal and Pieter Herthogs. Their ontology-driven workflow turns planning regulations into structured knowledge-graph data and measurable estimates of allowable three-dimensional development space.</p>
+                  <p class="citation">Grisiute, A., Raubal, M., &amp; Herthogs, P. (2025). “3D Land Use Planning: Making Future Cities Measurable with Ontology-Driven Representations of Planning Regulations.” <em>AGILE: GIScience Series</em>, 6, 3.</p>
+                  <div class="information-links">
+                    <a href="https://doi.org/10.5194/agile-giss-6-3-2025" target="_blank" rel="noreferrer">Paper and DOI ↗</a>
+                    <a href="https://github.com/mie-lab/3d-landuse-planning" target="_blank" rel="noreferrer">Code and data ↗</a>
+                  </div>
+                </section>
+
+                <section>
+                  <h3>About the GFA information</h3>
+                  <p>Allowable Gross Floor Area (GFA) values are estimates extracted from the cited academic dataset, which automated GFA determinations from URA planning regulations. Where different programmes produce different results, the viewer provides programme-specific GFA schemes.</p>
+                  <p>GPR and storey controls provide additional density context when a single GFA value is not sufficient. These records support exploration rather than an official planning determination.</p>
+                  <p>The lab is adapting this workflow to support the extrapolation component of its typology-development methodology.</p>
+                </section>
+              </div>
+
+              <figure class="research-figure">
+                <img src="assets/ontology-workflow.png" alt="Workflow linking regulatory data, machine-readable formats, ontologies, a graph database, a spatial policy model and planning applications" loading="lazy" />
+                <figcaption><strong>Figure 1.</strong> The ontology-driven workflow presented by Grisiute, Raubal and Herthogs, from regulatory data to knowledge-graph-enabled planning applications. Source: <a href="https://doi.org/10.5194/agile-giss-6-3-2025" target="_blank" rel="noreferrer">Grisiute et al. (2025) ↗</a></figcaption>
+              </figure>
+            </div>
+
+            <aside class="information-disclaimer" aria-label="Disclaimer">
+              <strong>Proof-of-concept disclaimer</strong>
+              <p>This viewer is a research proof of concept only. It is not intended to be a software engineering product, an official planning service or a substitute for independent verification.</p>
+            </aside>
+          </div>
+        </section>
       </div>
 
       <div id="tokenNotice" class="token-notice hidden" role="dialog" aria-labelledby="tokenTitle">
