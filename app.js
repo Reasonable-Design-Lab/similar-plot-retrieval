@@ -29,7 +29,7 @@
       id: "1+2+3",
       label: "Similar neighbours",
       stage: "Filter 1+2+3",
-      explanation: "Keeps the plot matches, then compares nearby non-road land uses: 0–2 educational plots, at least 1 residential plot, and at least 1 Business 1-family plot."
+      explanation: "Keeps the plot matches, then compares non-road plots within 75 m of each candidate: 0–2 educational plots, at least 1 residential plot, and at least 1 Business 1-family plot."
     },
     {
       id: "1+2+3+4",
@@ -113,6 +113,7 @@
     return String(value)
       .replace(/([a-z])([A-Z])/g, "$1 $2")
       .replace(/Zone$/i, "")
+      .replace(/([A-Za-z])(\d)/g, "$1 $2")
       .replace(/Business\s*1/i, "Business 1")
       .trim();
   }
@@ -135,6 +136,7 @@
 
   function neighbourRouteLabel(routes) {
     const values = Array.isArray(routes) ? routes : [];
+    if (values.includes("within-75m-polygon-buffer")) return "Within 75 m";
     if (values.includes("direct") && values.includes("across-road")) return "Direct / across one road";
     if (values.includes("direct")) return "Direct neighbour";
     if (values.includes("across-road")) return "Across one road";
@@ -144,6 +146,11 @@
   function compactKgId(value) {
     const text = String(value || "").replace(/^UUID_/i, "");
     return text ? `…${text.slice(-8)}` : "Not available";
+  }
+
+  function compactBuildableId(value) {
+    const text = String(value || "");
+    return text ? `${text.slice(0, 8)}…` : "Not available";
   }
 
   function formatNumber(value, digits) {
@@ -737,6 +744,7 @@
           programmes_label: (p.programmes || []).map(normalizeZone).join(", "),
           storeys_label: (p.storeys || []).join(", "),
           setbacks_label: (p.setbacks_m || []).join(", "),
+          gfa_schemes_json: JSON.stringify(p.gfa_schemes || []),
           regulation_types_label: (p.regulation_types || []).map(normalizeZone).join(", ")
         }
       }];
@@ -813,6 +821,59 @@
     }
     return `${formatNumber(Number.isFinite(maximum) ? maximum : minimum, 0)} m\u00b2`;
   }
+  function parseGfaSchemes(value) {
+    if (Array.isArray(value)) return value;
+    if (typeof value !== "string" || !value) return [];
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function schemeValues(values, formatter) {
+    const list = Array.isArray(values) ? values.filter((value) => Number.isFinite(Number(value))) : [];
+    if (!list.length) return "Not specified";
+    return list.map((value) => formatter(value)).join(", ");
+  }
+
+  function gfaSchemesHtml(schemes) {
+    if (!schemes.length) return "";
+    const tabs = schemes.length > 1 ? `<div class="gfa-scheme-tabs" role="tablist" aria-label="Allowable GFA schemes">
+      ${schemes.map((scheme, index) => `<button id="gfa-scheme-tab-${index}" type="button" role="tab" class="gfa-scheme-tab" data-scheme-index="${index}" aria-selected="${index === 0}" aria-controls="gfa-scheme-panel-${index}">${escapeHtml(normalizeZone(scheme.label))}</button>`).join("")}
+    </div>` : "";
+    const panels = schemes.map((scheme, index) => {
+      const difference = scheme.diff_from_reference_pct === null || scheme.diff_from_reference_pct === undefined ? NaN : Number(scheme.diff_from_reference_pct);
+      const differenceLabel = Number.isFinite(difference)
+        ? `${difference >= 0 ? "+" : ""}${formatNumber(difference * 100, 0)}%`
+        : "Not specified";
+      return `<section id="gfa-scheme-panel-${index}" class="gfa-scheme-panel${index === 0 ? "" : " hidden"}" role="tabpanel" ${schemes.length > 1 ? `aria-labelledby="gfa-scheme-tab-${index}"` : ""}>
+        <div class="gfa-scheme-heading"><span>SCHEME ${index + 1} OF ${schemes.length}</span><strong>${escapeHtml(normalizeZone(scheme.label))}</strong></div>
+        <div class="gfa-scheme-value"><span>Allowable GFA</span><strong>${formatArea(scheme.allowable_gfa_m2)}</strong></div>
+        <dl class="gfa-scheme-details">
+          <dt>Vs reference GFA</dt><dd>${differenceLabel}</dd>
+          <dt>Plot ratio options</dt><dd>${schemeValues(scheme.gpr_values, (value) => formatNumber(value, 1))}</dd>
+          <dt>Storey options</dt><dd>${schemeValues(scheme.storeys, (value) => formatNumber(value, 0))}</dd>
+          <dt>Setback options</dt><dd>${schemeValues(scheme.setbacks_m, (value) => `${formatNumber(value, 1)} m`)}</dd>
+          <dt>Buildable-space ID</dt><dd class="kg-id">${escapeHtml(compactBuildableId(scheme.buildable_space_id))}</dd>
+        </dl>
+      </section>`;
+    }).join("");
+    return `<div class="gfa-schemes"><div class="gfa-schemes-title"><strong>Allowable GFA schemes</strong><span>${schemes.length}</span></div>${tabs}${panels}</div>`;
+  }
+
+  function wireGfaSchemeTabs(root) {
+    const tabs = Array.from(root.querySelectorAll(".gfa-scheme-tab"));
+    const panels = Array.from(root.querySelectorAll(".gfa-scheme-panel"));
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((item, itemIndex) => item.setAttribute("aria-selected", String(itemIndex === index)));
+        panels.forEach((panel, panelIndex) => panel.classList.toggle("hidden", panelIndex !== index));
+      });
+    });
+  }
+
 
   function showNeighbourPopup(feature, lngLat) {
     const p = feature.properties;
@@ -820,10 +881,16 @@
     if (selection) selection.setData({ type: "FeatureCollection", features: [feature] });
     if (state.popup) state.popup.remove();
     const programmes = p.programmes_label || "Not specified";
+    const schemes = parseGfaSchemes(p.gfa_schemes_json);
     const controls = [
       p.storeys_label ? `${escapeHtml(p.storeys_label)} storey control` : "",
       p.setbacks_label ? `${escapeHtml(p.setbacks_label)} m setbacks` : ""
     ].filter(Boolean).join(" &middot; ") || "Not specified";
+    const fallbackGfa = schemes.length ? "" : `
+      <dt>Allowable GFA</dt><dd>${neighbourGfaLabel(p)}</dd>
+      <dt>Plot ratio</dt><dd>${optionalMetric(p.master_plan_gpr, (value) => formatNumber(value, 1))}</dd>
+      <dt>KG programmes</dt><dd>${escapeHtml(programmes)}</dd>
+      <dt>KG controls</dt><dd>${controls}</dd>`;
     const html = `<div class="map-popup neighbour-popup">
       <div class="popup-kicker">NEIGHBOURING KG PLOT</div>
       <h4>${escapeHtml(p.zone || "Neighbouring plot")}</h4>
@@ -831,20 +898,19 @@
         <dt>Relationship</dt><dd>${escapeHtml(p.relationship)}</dd>
         <dt>Planning zone</dt><dd>${escapeHtml(p.zone)}</dd>
         <dt>Site area</dt><dd>${optionalMetric(p.site_area_m2, formatArea)}</dd>
-        <dt>Allowable GFA</dt><dd>${neighbourGfaLabel(p)}</dd>
-        <dt>Plot ratio</dt><dd>${optionalMetric(p.master_plan_gpr, (value) => formatNumber(value, 1))}</dd>
         <dt>Plot width</dt><dd>${optionalMetric(p.width_m, (value) => `${formatNumber(value, 1)} m`)}</dd>
         <dt>Aspect ratio</dt><dd>${optionalMetric(p.aspect_ratio, (value) => formatNumber(value, 2))}</dd>
-        <dt>KG programmes</dt><dd>${escapeHtml(programmes)}</dd>
-        <dt>KG controls</dt><dd>${controls}</dd>
+        ${fallbackGfa}
         <dt>KG records</dt><dd>${escapeHtml(p.regulation_types_label || "Not specified")}</dd>
         <dt>KG ID</dt><dd class="kg-id">${escapeHtml(compactKgId(p.neighbour_uuid))}</dd>
       </dl>
+      ${gfaSchemesHtml(schemes)}
     </div>`;
-    state.popup = new mapboxgl.Popup({ offset: 12, closeButton: true, maxWidth: "320px" })
+    state.popup = new mapboxgl.Popup({ offset: 12, closeButton: true, maxWidth: "360px", className: "neighbour-popup-shell" })
       .setLngLat(lngLat)
       .setHTML(html)
       .addTo(state.map);
+    wireGfaSchemeTabs(state.popup.getElement());
     setStatus(`${p.zone || "Neighbouring plot"} KG information`);
   }
 
