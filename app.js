@@ -874,7 +874,25 @@
     });
   }
 
-
+  function keepNeighbourPopupInDesktopViewport(popup) {
+    if (window.innerWidth < 900) return;
+    const fit = (attempt = 0) => {
+      const element = popup.getElement();
+      if (!element || !element.isConnected) return;
+      const rect = element.getBoundingClientRect();
+      const margin = 14;
+      let shiftX = 0;
+      let shiftY = 0;
+      if (rect.left < margin) shiftX = margin - rect.left;
+      else if (rect.right > window.innerWidth - margin) shiftX = window.innerWidth - margin - rect.right;
+      if (rect.top < margin) shiftY = margin - rect.top;
+      else if (rect.bottom > window.innerHeight - margin) shiftY = window.innerHeight - margin - rect.bottom;
+      if (!shiftX && !shiftY) return;
+      state.map.panBy([-shiftX, -shiftY], { duration: attempt === 0 ? 260 : 120 });
+      if (attempt < 2) window.setTimeout(() => fit(attempt + 1), attempt === 0 ? 300 : 150);
+    };
+    requestAnimationFrame(() => requestAnimationFrame(() => fit()));
+  }
   function showNeighbourPopup(feature, lngLat) {
     const p = feature.properties;
     const selection = state.map.getSource("neighbour-selection");
@@ -892,7 +910,8 @@
       <dt>KG programmes</dt><dd>${escapeHtml(programmes)}</dd>
       <dt>KG controls</dt><dd>${controls}</dd>`;
     const html = `<div class="map-popup neighbour-popup">
-      <div class="popup-kicker">NEIGHBOURING KG PLOT</div>
+      <div class="neighbour-popup-overview">
+        <div class="popup-kicker">NEIGHBOURING KG PLOT</div>
       <h4>${escapeHtml(p.zone || "Neighbouring plot")}</h4>
       <dl>
         <dt>Relationship</dt><dd>${escapeHtml(p.relationship)}</dd>
@@ -903,14 +922,16 @@
         ${fallbackGfa}
         <dt>KG records</dt><dd>${escapeHtml(p.regulation_types_label || "Not specified")}</dd>
         <dt>KG ID</dt><dd class="kg-id">${escapeHtml(compactKgId(p.neighbour_uuid))}</dd>
-      </dl>
+        </dl>
+      </div>
       ${gfaSchemesHtml(schemes)}
     </div>`;
-    state.popup = new mapboxgl.Popup({ anchor: "bottom", offset: 12, closeButton: true, maxWidth: "360px", className: "neighbour-popup-shell" })
+    state.popup = new mapboxgl.Popup({ anchor: "bottom", offset: 12, closeButton: true, maxWidth: "620px", className: "neighbour-popup-shell" })
       .setLngLat(lngLat)
       .setHTML(html)
       .addTo(state.map);
     wireGfaSchemeTabs(state.popup.getElement());
+    keepNeighbourPopupInDesktopViewport(state.popup);
     setStatus(`${p.zone || "Neighbouring plot"} KG information`);
   }
 
