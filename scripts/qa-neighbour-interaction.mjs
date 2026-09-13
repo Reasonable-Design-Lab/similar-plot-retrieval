@@ -105,6 +105,18 @@ await click("document.querySelector('[data-site=\"site1\"]')");
 await click("document.querySelector('[data-filter-mode=\"1+2\"]')");
 await waitFor("document.querySelectorAll('.result-item').length > 0 && !document.querySelector('.similarity-loading:not(.hidden)')", "Site 1 results");
 report.desktop.site1Results = await evaluate("document.querySelectorAll('.result-item').length");
+report.desktop.site1FilterCounts = { similarPlots: report.desktop.site1Results };
+await click("document.querySelector('[data-filter-mode=\"1+2+3\"]')");
+await waitFor("document.querySelectorAll('.result-item').length > 0 && !document.querySelector('.similarity-loading:not(.hidden)')", "Site 1 neighbour-filter results");
+report.desktop.site1FilterCounts.similarNeighbours = await evaluate("document.querySelectorAll('.result-item').length");
+await click("document.querySelector('[data-filter-mode=\"1+2+3+4\"]')");
+await waitFor("document.querySelectorAll('.result-item').length > 0 && !document.querySelector('.similarity-loading:not(.hidden)')", "Site 1 road-filter results");
+report.desktop.site1FilterCounts.similarRoadFrontage = await evaluate("document.querySelectorAll('.result-item').length");
+if (JSON.stringify(Object.values(report.desktop.site1FilterCounts)) !== JSON.stringify([66, 48, 8])) {
+  throw new Error(`Unexpected Site 1 filter counts: ${JSON.stringify(report.desktop.site1FilterCounts)}`);
+}
+await click("document.querySelector('[data-filter-mode=\"1+2\"]')");
+await waitFor("document.querySelectorAll('.result-item').length === 66 && !document.querySelector('.similarity-loading:not(.hidden)')", "Site 1 base results restored");
 await click("document.querySelector('.result-item')");
 await waitFor("document.querySelector('.neighbour-summary') && window.__qaMap.getSource('neighbours')._data.features.length > 0", "Site 1 neighbours", 30000);
 report.desktop.site1Neighbours = await evaluate("window.__qaMap.getSource('neighbours')._data.features.length");
@@ -116,15 +128,25 @@ const neighbourPoint = await evaluate(`(() => {
   const canvas = map.getCanvas();
   for (let y = 90; y < canvas.clientHeight - 80; y += 8) {
     for (let x = 390; x < canvas.clientWidth - 30; x += 8) {
-      if (document.elementFromPoint(x, y) === canvas && map.queryRenderedFeatures([x, y], { layers: ["neighbours-fill"] }).length) return { x, y };
+      const features = map.queryRenderedFeatures([x, y], { layers: ["neighbours-fill"] });
+      if (document.elementFromPoint(x, y) !== canvas || !features.length) continue;
+      try {
+        if (JSON.parse(features[0].properties.gfa_schemes_json || "[]").length > 1) return { x, y };
+      } catch {}
     }
   }
   return null;
 })()`);
 if (!neighbourPoint) throw new Error("No rendered neighbouring plot was found");
 await mouseClick(neighbourPoint);
-await waitFor("document.querySelector('.neighbour-popup')", "neighbour KG popup");
+await waitFor("document.querySelector('.neighbour-popup') && document.querySelectorAll('.gfa-scheme-tab').length > 1", "multi-scheme neighbour KG popup");
 report.desktop.neighbourPopup = await evaluate("document.querySelector('.neighbour-popup').innerText");
+report.desktop.gfaSchemeCount = await evaluate("document.querySelectorAll('.gfa-scheme-tab').length");
+await click("document.querySelectorAll('.gfa-scheme-tab')[1]");
+await waitFor("document.querySelectorAll('.gfa-scheme-tab')[1].getAttribute('aria-selected') === 'true' && !document.querySelectorAll('.gfa-scheme-panel')[1].classList.contains('hidden')", "second GFA scheme");
+report.desktop.secondGfaScheme = await evaluate("document.querySelectorAll('.gfa-scheme-panel')[1].innerText");
+report.desktop.schemeIds = await evaluate("[...document.querySelectorAll('.gfa-scheme-panel')].slice(0, 2).map((panel) => panel.querySelector('.kg-id').textContent)");
+if (report.desktop.schemeIds[0] === report.desktop.schemeIds[1]) throw new Error("GFA scheme IDs are not distinguishable");
 
 const blankPoint = await evaluate(`(() => {
   const map = window.__qaMap;

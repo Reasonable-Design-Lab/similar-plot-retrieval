@@ -6,7 +6,8 @@ An English-language Mapbox GL JS explorer for comparing two Singapore reference 
 - three selectable plot, neighbour and road-frontage matching views;
 - click-to-inspect parcel planning metrics;
 - concise addresses for similar plots;
-- on-demand Knowledge Graph (KG) context for every selected similar plot, including direct and across-road neighbours, planning use, development capacity, programmes and controls;
+- on-demand Knowledge Graph (KG) context for non-road plots within 75 m of every selected similar plot, including planning use, development capacity, programmes and controls;
+- switchable subpages for land-use-specific allowable GFA schemes, with their plot-ratio, storey, setback and buildable-space records;
 - animated dashed similarity links;
 - click-to-browse individual neighbouring plots, with an empty-map click to close the neighbourhood context;
 - smooth transitions from the Singapore overview to a selected parcel; and
@@ -36,7 +37,7 @@ You can also use any static file server and point it at the `dist` directory.
 
 ## Publish with GitHub Pages
 
-The included workflow publishes `dist` whenever the `main` branch is updated. In the GitHub repository, open **Settings -> Pages** and choose **GitHub Actions** as the source if it is not already selected.
+The public website is served from the `gh-pages` branch. The deploy branch contains the files from `dist` at its root.
 
 ## Update the data
 
@@ -49,8 +50,8 @@ Each collection should contain one feature with `Role: "Reference"`. Candidate f
 
 Neighbour relationships are prepared from these local source files in the repository root (they are not published):
 
-- `SITE1_similar_plot_nonroad_neighbours.geojson`
-- `SITE2_similar_plot_nonroad_neighbours.geojson`
+- `SITE1_similar_plot_nonroad_neighbours_v2.geojson`
+- `SITE2_similar_plot_nonroad_neighbours_v2.geojson`
 
 After replacing either source file, run:
 
@@ -58,4 +59,4 @@ After replacing either source file, run:
 node .\scripts\prepare-neighbour-data.mjs
 ```
 
-This creates compact, web-ready copies in `dist/data`. They retain geometry, source-candidate UUID relationships, direct/across-road routes, planning zones, parcel metrics and KG regulation summaries while avoiding a large initial page download. The browser loads the relevant neighbour collection only after a user selects a similar plot.
+This creates compact, web-ready copies in `dist/data`. They retain geometry, source-candidate filter membership, 75 m neighbour relationships, planning zones, parcel metrics, land-use-specific GFA schemes and KG regulation summaries while avoiding a large initial page download. The browser loads the relevant neighbour collection only after a user selects a similar plot.
