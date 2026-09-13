@@ -197,6 +197,14 @@ button { color: inherit; }
 .gfa-scheme-value strong { font-size: .9rem; }
 .map-popup .gfa-scheme-details { gap: 4px 10px; font-size: .7rem; }
 
+@media (min-width: 900px) {
+  .mapboxgl-popup.neighbour-popup-shell { max-width: min(620px, calc(100vw - 28px)) !important; }
+  .neighbour-popup { width: min(600px, calc(100vw - 48px)); max-height: min(42vh, 340px); display: grid; grid-template-columns: minmax(210px, .82fr) minmax(300px, 1.18fr); gap: 18px; }
+  .neighbour-popup-overview { min-width: 0; }
+  .neighbour-popup .gfa-schemes { min-width: 0; margin: 0; padding: 0 0 0 18px; border-top: 0; border-left: 1px solid var(--line); }
+  .neighbour-popup .gfa-schemes-title { padding-right: 22px; }
+}
+
 @media (max-width: 700px) {
   .side-panel { top: auto; left: 10px; right: 10px; bottom: 10px; width: auto; max-height: 56vh; border-radius: 11px; }
   .panel-intro { padding: 18px 18px 14px; }

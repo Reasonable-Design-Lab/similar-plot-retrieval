@@ -150,22 +150,32 @@ await waitFor("document.querySelectorAll('.gfa-scheme-tab')[1].getAttribute('ari
 report.desktop.secondGfaScheme = await evaluate("document.querySelectorAll('.gfa-scheme-panel')[1].innerText");
 report.desktop.schemeIds = await evaluate("[...document.querySelectorAll('.gfa-scheme-panel')].slice(0, 2).map((panel) => panel.querySelector('.kg-id').textContent)");
 if (report.desktop.schemeIds[0] === report.desktop.schemeIds[1]) throw new Error("GFA scheme IDs are not distinguishable");
+await waitFor(`(() => {
+  const rect = document.querySelector('.neighbour-popup-shell').getBoundingClientRect();
+  return rect.top >= 8 && rect.right <= window.innerWidth - 8 && rect.bottom <= window.innerHeight - 8 && rect.left >= 8;
+})()`, "desktop popup fully inside viewport");
 report.desktop.popupViewport = await evaluate(`(() => {
   const popup = document.querySelector('.neighbour-popup-shell');
   const scroller = popup.querySelector('.neighbour-popup');
   const rect = popup.getBoundingClientRect();
   return {
+    popupTop: Math.round(rect.top),
+    popupRight: Math.round(rect.right),
+    popupBottom: Math.round(rect.bottom),
+    popupLeft: Math.round(rect.left),
+    popupWidth: Math.round(rect.width),
     popupHeight: Math.round(rect.height),
     viewportHeight: window.innerHeight,
+    viewportWidth: window.innerWidth,
     scrollAreaHeight: scroller.clientHeight,
     scrollContentHeight: scroller.scrollHeight,
-    internallyScrollable: scroller.scrollHeight > scroller.clientHeight
+    internallyScrollable: scroller.scrollHeight > scroller.clientHeight,
+    twoColumn: getComputedStyle(scroller).gridTemplateColumns.split(' ').length === 2
   };
 })()`);
-if (report.desktop.popupViewport.popupHeight >= report.desktop.popupViewport.viewportHeight || !report.desktop.popupViewport.internallyScrollable) {
+if (report.desktop.popupViewport.popupTop < 8 || report.desktop.popupViewport.popupRight > report.desktop.popupViewport.viewportWidth - 8 || report.desktop.popupViewport.popupBottom > report.desktop.popupViewport.viewportHeight - 8 || report.desktop.popupViewport.popupLeft < 8 || report.desktop.popupViewport.popupHeight >= 500 || !report.desktop.popupViewport.twoColumn) {
   throw new Error(`Desktop neighbour popup is not viewport-safe: ${JSON.stringify(report.desktop.popupViewport)}`);
 }
-
 await send("Emulation.setDeviceMetricsOverride", { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
 await evaluate("window.__qaMap.resize(); true");
 await new Promise((resolve) => setTimeout(resolve, 400));
