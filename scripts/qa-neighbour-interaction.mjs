@@ -117,12 +117,18 @@ report.information = await evaluate(`(() => {
     hasDoi: links.includes('https://doi.org/10.5194/agile-giss-6-3-2025'),
     hasRepository: links.includes('https://github.com/mie-lab/3d-landuse-planning'),
     figureWidth: document.querySelector('.research-figure img').naturalWidth,
-    fitsViewport: sheet.getBoundingClientRect().top >= 0 && sheet.getBoundingClientRect().bottom <= window.innerHeight
+    fitsViewport: sheet.getBoundingClientRect().top >= 0 && sheet.getBoundingClientRect().bottom <= window.innerHeight,
+    hasAboutLabel: document.getElementById('informationButton').innerText.includes('About this website'),
+    hasCopyright: document.getElementById('informationButton').innerText.includes('© Reasonable Design Lab'),
+    infoIconOnRight: document.querySelector('#informationButton .information-icon').getBoundingClientRect().left > document.querySelector('#informationButton > span:first-child').getBoundingClientRect().right,
+    hasNoArrow: !document.querySelector('#informationButton .information-arrow')
   };
 })()`);
 if (Object.entries(report.information).some(([key, value]) => key !== 'title' && key !== 'figureWidth' && value !== true)) {
   throw new Error(`Information sheet is incomplete: ${JSON.stringify(report.information)}`);
 }
+report.desktop.scaleLabel = await evaluate("document.querySelector('.mapboxgl-ctrl-scale').textContent.trim()");
+if (report.desktop.scaleLabel !== '5 kilometers') throw new Error(`Unexpected scale label: ${report.desktop.scaleLabel}`);
 report.desktop.linkLineOpacity = await evaluate("window.__qaMap.getPaintProperty('links-dashed', 'line-opacity')");
 report.desktop.linkLineWidth = await evaluate("window.__qaMap.getPaintProperty('links-dashed', 'line-width')");
 if (report.desktop.linkLineOpacity !== 0.42) throw new Error(`Unexpected link opacity: ${report.desktop.linkLineOpacity}`);

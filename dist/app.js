@@ -1345,11 +1345,23 @@
       bearing: 0,
       antialias: true,
       attributionControl: true,
+      language: "en",
+
       config: { basemap: { theme: "monochrome", lightPreset: "day", show3dObjects: false, showPointOfInterestLabels: false, showTransitLabels: false } }
     });
     if (new URLSearchParams(window.location.search).has("qa")) window.__qaMap = state.map;
     state.map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), "bottom-right");
     state.map.addControl(new mapboxgl.ScaleControl({ maxWidth: 110, unit: "metric" }), "bottom-right");
+    const scaleLabel = state.map.getContainer().querySelector(".mapboxgl-ctrl-scale");
+    if (scaleLabel) {
+      const expandScaleUnit = () => {
+        const match = scaleLabel.textContent.trim().match(/^([\d.,]+)\s*(km|m)$/i);
+        if (!match) return;
+        scaleLabel.textContent = `${match[1]} ${match[2].toLowerCase() === "km" ? "kilometers" : "meters"}`;
+      };
+      new MutationObserver(expandScaleUnit).observe(scaleLabel, { childList: true, characterData: true, subtree: true });
+      expandScaleUnit();
+    }
 
     try {
       setStatus("Loading map and plot data", false, true);
