@@ -147,6 +147,45 @@ await waitFor("document.querySelectorAll('.gfa-scheme-tab')[1].getAttribute('ari
 report.desktop.secondGfaScheme = await evaluate("document.querySelectorAll('.gfa-scheme-panel')[1].innerText");
 report.desktop.schemeIds = await evaluate("[...document.querySelectorAll('.gfa-scheme-panel')].slice(0, 2).map((panel) => panel.querySelector('.kg-id').textContent)");
 if (report.desktop.schemeIds[0] === report.desktop.schemeIds[1]) throw new Error("GFA scheme IDs are not distinguishable");
+report.desktop.popupViewport = await evaluate(`(() => {
+  const popup = document.querySelector('.neighbour-popup-shell');
+  const scroller = popup.querySelector('.neighbour-popup');
+  const rect = popup.getBoundingClientRect();
+  return {
+    popupHeight: Math.round(rect.height),
+    viewportHeight: window.innerHeight,
+    scrollAreaHeight: scroller.clientHeight,
+    scrollContentHeight: scroller.scrollHeight,
+    internallyScrollable: scroller.scrollHeight > scroller.clientHeight
+  };
+})()`);
+if (report.desktop.popupViewport.popupHeight >= report.desktop.popupViewport.viewportHeight || !report.desktop.popupViewport.internallyScrollable) {
+  throw new Error(`Desktop neighbour popup is not viewport-safe: ${JSON.stringify(report.desktop.popupViewport)}`);
+}
+
+await send("Emulation.setDeviceMetricsOverride", { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
+await evaluate("window.__qaMap.resize(); true");
+await new Promise((resolve) => setTimeout(resolve, 400));
+report.mobile.popupViewport = await evaluate(`(() => {
+  const popup = document.querySelector('.neighbour-popup-shell');
+  const scroller = popup.querySelector('.neighbour-popup');
+  const rect = popup.getBoundingClientRect();
+  return {
+    popupWidth: Math.round(rect.width),
+    popupHeight: Math.round(rect.height),
+    viewportWidth: window.innerWidth,
+    viewportHeight: window.innerHeight,
+    scrollAreaHeight: scroller.clientHeight,
+    scrollContentHeight: scroller.scrollHeight,
+    internallyScrollable: scroller.scrollHeight > scroller.clientHeight
+  };
+})()`);
+if (report.mobile.popupViewport.popupWidth > report.mobile.popupViewport.viewportWidth - 18 || report.mobile.popupViewport.popupHeight >= report.mobile.popupViewport.viewportHeight || !report.mobile.popupViewport.internallyScrollable) {
+  throw new Error(`Mobile neighbour popup is not viewport-safe: ${JSON.stringify(report.mobile.popupViewport)}`);
+}
+await send("Emulation.setDeviceMetricsOverride", { width: 1440, height: 1000, deviceScaleFactor: 1, mobile: false });
+await evaluate("window.__qaMap.resize(); true");
+await new Promise((resolve) => setTimeout(resolve, 300));
 
 const blankPoint = await evaluate(`(() => {
   const map = window.__qaMap;
