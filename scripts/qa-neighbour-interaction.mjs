@@ -140,6 +140,9 @@ const neighbourPoint = await evaluate(`(() => {
 if (!neighbourPoint) throw new Error("No rendered neighbouring plot was found");
 await mouseClick(neighbourPoint);
 await waitFor("document.querySelector('.neighbour-popup') && document.querySelectorAll('.gfa-scheme-tab').length > 1", "multi-scheme neighbour KG popup");
+if (!await evaluate("document.querySelector('.neighbour-popup-shell').classList.contains('mapboxgl-popup-anchor-bottom')")) {
+  throw new Error("Neighbour popup is not anchored above the selected plot");
+}
 report.desktop.neighbourPopup = await evaluate("document.querySelector('.neighbour-popup').innerText");
 report.desktop.gfaSchemeCount = await evaluate("document.querySelectorAll('.gfa-scheme-tab').length");
 await click("document.querySelectorAll('.gfa-scheme-tab')[1]");

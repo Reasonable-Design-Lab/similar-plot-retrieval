@@ -906,7 +906,7 @@
       </dl>
       ${gfaSchemesHtml(schemes)}
     </div>`;
-    state.popup = new mapboxgl.Popup({ offset: 12, closeButton: true, maxWidth: "360px", className: "neighbour-popup-shell" })
+    state.popup = new mapboxgl.Popup({ anchor: "bottom", offset: 12, closeButton: true, maxWidth: "360px", className: "neighbour-popup-shell" })
       .setLngLat(lngLat)
       .setHTML(html)
       .addTo(state.map);
